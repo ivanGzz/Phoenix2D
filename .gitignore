@@ -9,6 +9,13 @@ Release/
 .project
 .settings
 
+# CodeBlocks files #
+####################
+*.cbp
+*.depend
+*.layout
+*.workspace
+
 # Compiled source #
 ###################
 *.com
@@ -17,6 +24,7 @@ Release/
 *.exe
 *.o
 *.so
+*.a
 
 # Packages #
 ############
