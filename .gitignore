@@ -51,3 +51,8 @@ Thumbs.db
 # Phoenix files #
 #################
 *.phx
+
+# Other files #
+###############
+*.xml
+*.pdf
