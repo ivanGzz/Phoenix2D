@@ -29,8 +29,7 @@
 /*! @addtogroup phoenix_main
  * @{
  */
-namespace Phoenix
-{
+namespace Phoenix {
 
 /*!
  * @brief <STRONG> Player <BR> </STRONG>
@@ -93,6 +92,7 @@ public:
 	bool bounded();
 	std::string print();
 };
+
 } // End namespace Phoenix
 /*! @} */
 

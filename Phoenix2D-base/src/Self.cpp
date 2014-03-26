@@ -28,11 +28,11 @@
 #include "Command.h"
 #include "Config.h"
 #include "Self.h"
-#include "Normal.h"
 #include "Server.h"
 #include "Game.h"
-namespace Phoenix
-{
+
+namespace Phoenix {
+
 int    *types_id;
 double *player_speed_max;
 double *stamina_inc_max;
@@ -627,30 +627,7 @@ void Self::localize(std::vector<Flag> flags) {
 		localize();
 		return;
 	}
-//	int point_counter = 0;
 	std::list<double> thetas;
-//	double total_x = 0.0, total_y = 0.0;
-//	if (Config::LOGGING && Game::PLAY_MODE.compare("play_on") == 0) {
-//		std::clog << Game::GAME_TIME;
-//		for (std::vector<Flag>::iterator it = flags.begin(); it != flags.end(); ++it) {
-//			std::clog << " (x: " << it->getX() << ", y: " << it->getY() << ", dis: " << it->getDistance() << ", dir: " << it->getDirection() << ")";
-//		}
-//		std::clog << std::endl;
-//		std::clog.flush();
-//	}
-//	for (std::vector<Flag>::iterator it_flag_0 = flags.begin(); it_flag_0 != flags.end() - 1; ++it_flag_0) {
-//		for (std::vector<Flag>::iterator it_flag_1 = it_flag_0 + 1; it_flag_1 != flags.end(); ++it_flag_1) {
-//			Flag* flag0 = &(*it_flag_0);
-//			Flag* flag1 = &(*it_flag_1);
-//			double x_t, y_t, theta_t, error_d;
-//			if (triangular(flag0, flag1, x_t, y_t, theta_t, error_d)) {
-//				total_x += x_t;
-//				total_y += y_t;
-//				thetas.push_back(theta_t);
-//				point_counter++;
-//			}
-//		}
-//	}
 	double x_e = x;
 	double y_e = y;
 	double tao = 0.6;
@@ -684,13 +661,6 @@ void Self::localize(std::vector<Flag> flags) {
 	x = x_e;
 	y = y_e;
 	theta = angleMean(thetas);
-//	if (point_counter > 0) {
-//		x = total_x / point_counter;
-//		y = total_y / point_counter;
-//		theta = angleMean(thetas);
-//	} else {
-//		localize();
-//	}
 }
 
 void Self::localize() {
@@ -830,4 +800,5 @@ int Self::getFoulChargedAtTime(unsigned int time) {
 std::string Self::getFoulCardAtTime(unsigned int time) {
 	return (time < Config::BUFFER_MAX_HISTORY) ? foul_card_buffer[time] : "";
 }
+
 }

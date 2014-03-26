@@ -31,8 +31,7 @@
 /*! @addtogroup phoenix_main
  * @{
  */
-namespace Phoenix
-{
+namespace Phoenix {
 
 class Command;
 /*! @addtogroup core

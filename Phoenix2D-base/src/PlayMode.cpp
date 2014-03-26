@@ -21,8 +21,9 @@
 #include "PlayMode.h"
 #include "Commands.h"
 #include "Parser.h"
-namespace Phoenix
-{
+
+namespace Phoenix {
+
 PlayMode::PlayMode(Commands *commands) {
 	this->commands = commands;
 }
@@ -46,4 +47,5 @@ void PlayMode::onPostExecute() {
 void PlayMode::onEnd() {
 
 }
+
 }

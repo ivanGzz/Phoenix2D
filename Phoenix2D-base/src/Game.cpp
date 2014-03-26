@@ -24,8 +24,9 @@
 #include "Self.h"
 #include "Game.h"
 #include "Config.h"
-namespace Phoenix
-{
+
+namespace Phoenix {
+
 std::string play_modes = "before_kick_off corner_kick_l corner_kick_r free_kick_l free_kick_r goal_kick_l goal_kick_r kick_in_l kick_in_r kick_off_l kick_off_r play_on";
 std::string events = "drop_ball goal_l goal_r offside_l offside_r";
 boost::regex goal_regex("goal_(l|r)_(\\d+)");
@@ -109,4 +110,5 @@ bool Game::nextCycle() {
 	}
 	return on_game;
 }
+
 }

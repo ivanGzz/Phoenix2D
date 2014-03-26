@@ -26,8 +26,7 @@
 /*! @addtogroup phoenix_main
  * @{
  */
-namespace Phoenix
-{
+namespace Phoenix {
 
 class Self;
 class World;

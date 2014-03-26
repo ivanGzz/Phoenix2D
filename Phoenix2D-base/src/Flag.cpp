@@ -24,8 +24,9 @@
 #include "Flag.h"
 #include "Self.h"
 #include "Server.h"
-namespace Phoenix
-{
+
+namespace Phoenix {
+
 _coordinate makeCoordinate(double x, double y) {
 	if (Self::SIDE.compare("r") == 0) {
 		x *= -1.0;
@@ -152,4 +153,5 @@ double Flag::getMaxDistance() {
 double Flag::getError() {
 	return error;
 }
+
 }

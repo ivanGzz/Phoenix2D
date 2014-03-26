@@ -26,8 +26,7 @@
 /*! @addtogroup phoenix_main
  * @{
  */
-namespace Phoenix
-{
+namespace Phoenix {
 
  /*!
  * @brief <STRONG> VECTOR_TYPE <BR> </STRONG>

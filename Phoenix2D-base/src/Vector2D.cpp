@@ -24,8 +24,9 @@
 #include <sstream>
 #include <iostream>
 #include <iomanip>
-namespace Phoenix
-{
+
+namespace Phoenix {
+
 Vector2D::Vector2D() {
 	dx = 0.0;
 	dy = 0.0;
@@ -103,4 +104,5 @@ std::string Vector2D::toString() {
 VECTOR_TYPE Vector2D::getType() {
 	return type;
 }
+
 }

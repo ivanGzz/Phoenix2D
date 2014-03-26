@@ -24,8 +24,9 @@
 #include "Player.h"
 #include "Self.h"
 #include "Controller.h"
-namespace Phoenix
-{
+
+namespace Phoenix {
+
 Player::Player() {
 	distance = 100.0;
 	direction = 0.0;
@@ -395,4 +396,5 @@ bool Player::bounded() {
 std::string Player::print() {
 	return "";
 }
+
 }

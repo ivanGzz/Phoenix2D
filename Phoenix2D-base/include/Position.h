@@ -26,8 +26,7 @@
 /*! @addtogroup phoenix_main
  * @{
  */
-namespace Phoenix
-{
+namespace Phoenix {
 
  /*!
  * @brief <STRONG> POSITION_TYPE <BR> </STRONG>
@@ -69,6 +68,7 @@ public:
 	POSITION_TYPE getPositionType();
 	std::string toString();
 };
+
 } // End namespace Phoenix
 /*! @} */
 

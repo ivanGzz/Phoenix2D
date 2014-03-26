@@ -27,8 +27,7 @@
 /*! @addtogroup phoenix_main
  * @{
  */
-namespace Phoenix
-{
+namespace Phoenix {
 /*!
  * @brief <STRONG> Game <BR> </STRONG>
  * The Game lorem Ipsum
@@ -46,6 +45,7 @@ public:
 	void updateTime(int game_time);
 	void updatePlayMode(std::string play_mode);
 };
+
 } // End namespace Phoenix
 /*! @} */
 

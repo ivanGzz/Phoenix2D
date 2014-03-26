@@ -26,8 +26,7 @@
 /*! @addtogroup phoenix_main
  * @{
  */
-namespace Phoenix
-{
+namespace Phoenix {
 /*!
  * @brief <STRONG> Logger <BR> </STRONG>
  * The Logger lorem Ipsum
@@ -39,6 +38,7 @@ public:
 	~Logger();
 	void log();
 };
+
 } // End namespace Phoenix
 /*! @} */
 

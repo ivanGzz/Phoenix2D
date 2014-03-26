@@ -29,8 +29,9 @@
 #include "Server.h"
 #include "Config.h"
 #include "Game.h"
-namespace Phoenix
-{
+
+namespace Phoenix {
+
 Connect* commands_connect_ptr = 0;
 std::list<Command> commands_history;
 std::list<Command*> commands_to_send;
@@ -214,4 +215,5 @@ int Commands::sendCommands() {
 	Self::setLastCommandsSet(commands_sent);
 	return commands_sent_counter;
 }
+
 }

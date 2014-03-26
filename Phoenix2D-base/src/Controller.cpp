@@ -29,8 +29,9 @@
 #include "Parser.h"
 #include "Commands.h"
 #include "World.h"
-namespace Phoenix
-{
+
+namespace Phoenix {
+
 char Controller::AGENT_TYPE = 'p';
 
 Controller::Controller(const char *teamName, char agentType, const char *hostname) {
@@ -172,4 +173,5 @@ World* Controller::getWorld() {
 Self* Controller::getSelf() {
 	return self;
 }
+
 }

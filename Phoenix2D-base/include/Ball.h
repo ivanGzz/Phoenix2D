@@ -28,8 +28,7 @@
 /*! @addtogroup phoenix_main
  * @{
  */
-namespace Phoenix
-{
+namespace Phoenix {
 
  /*!
  * @brief <STRONG> Ball <BR> </STRONG>

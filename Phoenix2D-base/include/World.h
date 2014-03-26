@@ -29,8 +29,7 @@
 /*! @addtogroup phoenix_main
  * @{
  */
-namespace Phoenix
-{
+namespace Phoenix {
 /*! @addtogroup core
  * @{
  */

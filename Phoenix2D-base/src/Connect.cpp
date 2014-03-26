@@ -26,8 +26,9 @@
 #include <iostream>
 #include "Connect.h"
 #include "Config.h"
-namespace Phoenix
-{
+
+namespace Phoenix {
+
 struct Socket {
 	int socketfd;
 	struct sockaddr_in server;
@@ -107,4 +108,5 @@ std::string Connect::receiveMessage() {
 		return std::string(msg);
 	}
 }
+
 }

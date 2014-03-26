@@ -24,8 +24,9 @@
 #include <iostream>
 #include "Config.h"
 #include "Self.h"
-namespace Phoenix
-{
+
+namespace Phoenix {
+
 boost::regex config_regex("\\(config\\s(\\w+)\\s(\\w+)\\)");
 boost::regex position_regex("\\(position\\s(\\d+)\\s([\\d\\.\\-]+)\\s([\\d\\.\\-]+)\\)");
 boost::regex logging_regex("\\(logging\\s(\\d+)\\)");
@@ -157,4 +158,5 @@ void Config::load() {
 		std::cerr << "Config::load() -> error opening " << filename << " file" << std::endl;
 	}
 }
+
 }

@@ -21,8 +21,9 @@
 #include <sstream>
 #include <cstdlib>
 #include "Line.h"
-namespace Phoenix
-{
+
+namespace Phoenix {
+
 Line::Line(std::string name, std::string position, int simulation_time) {
 	this->name = name;
 	this->simulation_time = simulation_time;
@@ -49,4 +50,5 @@ double Line::getDistance() {
 double Line::getDirection() {
 	return direction;
 }
+
 }

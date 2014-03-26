@@ -38,8 +38,9 @@
 #include "Trainer.h"
 #include "Config.h"
 #include "Logger.h"
-namespace Phoenix
-{
+
+namespace Phoenix {
+
 static std::string sense_body_message = "";
 static std::string see_message = "";
 static bool see_received = false;
@@ -280,4 +281,5 @@ void Parser::registerPlayMode(PlayMode* play_mode) {
 void Parser::registerTrainer(Trainer* trainer) {
 	trainer_ptr = trainer;
 }
+
 }

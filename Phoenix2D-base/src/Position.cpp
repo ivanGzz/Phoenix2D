@@ -24,8 +24,9 @@
 #include <sstream>
 #include <iostream>
 #include <iomanip>
-namespace Phoenix
-{
+
+namespace Phoenix {
+
 Position::Position() {
 	x = 0.0;
 	y = 0.0;
@@ -125,4 +126,5 @@ std::string Position::toString() {
 	std::getline(ss, stringPosition);
 	return stringPosition;
 }
+
 }

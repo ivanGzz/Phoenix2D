@@ -24,8 +24,9 @@
 //#include <iostream>
 #include "Game.h"
 #include <cmath>
-namespace Phoenix
-{
+
+namespace Phoenix {
+
 Actions::Actions(Commands *commands) {
 	this->commands = commands;
 }
@@ -66,4 +67,5 @@ void Actions::passToSection(Position position) {
 void Actions::attackSection(Position position) {
 
 }
+
 }

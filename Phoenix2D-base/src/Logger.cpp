@@ -26,8 +26,9 @@
 #include "Self.h"
 #include "Controller.h"
 #include "Config.h"
-namespace Phoenix
-{
+
+namespace Phoenix {
+
 std::filebuf buf;
 std::streambuf* oldbuf;
 
@@ -90,4 +91,5 @@ void Logger::log() {
 	buf.open(filename.c_str(), std::ios::out);
 	oldbuf = std::clog.rdbuf(&buf);
 }
+
 }

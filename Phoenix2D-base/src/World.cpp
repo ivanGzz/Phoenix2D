@@ -25,8 +25,9 @@
 #include "Config.h"
 #include "Self.h"
 #include "Controller.h"
-namespace Phoenix
-{
+
+namespace Phoenix {
+
 std::list<Player> players;
 Ball ball;
 
@@ -104,4 +105,5 @@ void World::updateObserverWorld(std::list<Player> new_players, Ball new_ball) {
 WorldModel World::getWorldModel() {
 	return WorldModel(players, ball);
 }
+
 }

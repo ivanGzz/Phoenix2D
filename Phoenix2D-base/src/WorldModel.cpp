@@ -19,8 +19,8 @@
  */
 
 #include "WorldModel.h"
-namespace Phoenix
-{
+
+namespace Phoenix {
 
 Position positionToCompare;
 
@@ -126,4 +126,5 @@ std::list<Player*> WorldModel::getUndPlayersOrderedByDistanceTo(Position positio
 Ball* WorldModel::getBall() {
 	return &ball;
 }
+
 }

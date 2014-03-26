@@ -24,8 +24,9 @@
 #include <cstdlib>
 #include "Self.h"
 #include <cmath>
-namespace Phoenix
-{
+
+namespace Phoenix {
+
 Ball::Ball() {
 	distance = 100.0;
 	direction = 0.0;
@@ -162,4 +163,5 @@ void Ball::boundTo(Ball* ball) {
 Ball* Ball::getBound() {
 	return bound;
 }
+
 }

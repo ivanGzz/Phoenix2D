@@ -28,8 +28,9 @@
 #include "Commands.h"
 #include "Config.h"
 #include "Game.h"
-namespace Phoenix
-{
+
+namespace Phoenix {
+
 std::vector<std::string> code;
 
 enum COMMANDS {
@@ -192,4 +193,5 @@ void Trainer::execute(WorldModel world) {
 bool Trainer::continueExecution() {
 	return newExecution;
 }
+
 }

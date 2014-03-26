@@ -27,8 +27,7 @@
 /*! @addtogroup phoenix_main
  * @{
  */
-namespace Phoenix
-{
+namespace Phoenix {
 /*!
  * @brief <STRONG> _coordinate <BR> </STRONG>
  * The Coordinate is  just a holder for coordinates
@@ -66,6 +65,7 @@ public:
 	double getMaxDistance();
 	double getError();
 };
+/*! @} */
 } // End namespace Phoenix
 /*! @} */
 

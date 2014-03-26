@@ -26,8 +26,7 @@
 /*! @addtogroup phoenix_main
  * @{
  */
-namespace Phoenix
-{
+namespace Phoenix {
 
  /*!
  * @brief <STRONG> COMMAND_STATUS <BR> </STRONG>

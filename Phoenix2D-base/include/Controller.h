@@ -37,8 +37,7 @@
  * The namespace that contains everything elated to the Phoenix Library
  * @{
  */
-namespace Phoenix
-{
+namespace Phoenix {
 
 class Connect;
 class Reader;
@@ -112,14 +111,14 @@ private:
 	Connect* c;             ///< Pointer to inner Connect Object
 	Reader* reader;         ///< Pointer to inner Reader Object
 	Server* server;         ///< Pointer to inner Server Object
-	Commands* commands;     ///< Pointer to inner Commans Object
+	Commands* commands;     ///< Pointer to inner Commands Object
 	World* world;           ///< Pointer to inner World Object
 	Self* self;             ///< Pointer to inner Self Object
 	bool connected;         ///< Connection status
 	std::string team_name;
 	std::string hostname;
 };
-
+/*! @} */
 } // End namespace Phoenix
 /*! @} */
 

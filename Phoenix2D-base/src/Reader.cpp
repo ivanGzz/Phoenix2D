@@ -25,8 +25,9 @@
 #include "Connect.h"
 #include "Parser.h"
 #include "Config.h"
-namespace Phoenix
-{
+
+namespace Phoenix {
+
 Connect* connect_ptr = 0;
 Parser* parser_ptr = 0;
 bool running = false;
@@ -76,4 +77,5 @@ void Reader::stop() {
 		std::cerr << "Reader::stop() -> failed to join thread" << std::endl;
 	}
 }
+
 }

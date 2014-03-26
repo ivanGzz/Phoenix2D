@@ -24,9 +24,19 @@
 #include "Position.h"
 #include <string>
 
-namespace Phoenix
-{
+/*! @addtogroup phoenix_main
+ * @{
+ */
+namespace Phoenix {
 
+/*! @addtogroup core
+ * @{
+ */
+
+ /*!
+ * @brief <STRONG> Commands <BR> </STRONG>
+ * The Commans lorem Ipsum
+ */
 class Config {
 public:
 	Config();
@@ -44,7 +54,7 @@ public:
 	static std::string LOG_NAME;
 	static bool PLAYER_HISTORY;
 };
-
+/*! @} */
 } // End namespace Phoenix
 /*! @} */
 

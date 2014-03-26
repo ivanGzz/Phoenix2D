@@ -21,8 +21,9 @@
 #include "Command.h"
 #include "Game.h"
 #include <iostream>
-namespace Phoenix
-{
+
+namespace Phoenix {
+
 Command::Command() {
 	command = "(error)";
 	weight = 1;
@@ -165,4 +166,5 @@ COMMAND_STATUS Command::getCommandStatus() {
 int Command::createdAt() {
 	return simulation_time;
 }
+
 }

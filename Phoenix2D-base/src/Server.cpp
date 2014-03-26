@@ -21,8 +21,9 @@
 #include "Server.h"
 #include <boost/regex.hpp>
 #include <cstdlib>
-namespace Phoenix
-{
+
+namespace Phoenix {
+
 double      Server::AUDIO_CUT_DIST                 = 50.0;
 int         Server::AUTO_MODE                      = 0;
 double      Server::BACK_DASH_RATE                 = 0.6;
@@ -418,4 +419,5 @@ std::string Server::getParameter(std::string parameter) {
 		return "";
 	}
 }
+
 }
