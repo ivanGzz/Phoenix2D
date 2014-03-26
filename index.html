@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/Product">
+<head> 
+    <title>Phoenix2D for RoboCup</title>
+    <meta charset="utf-8">
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico" />
+    <link href="assets/css/index.css" media="screen" rel="stylesheet" type="text/css"/>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/index.js?v=2"></script>
+    <meta itemprop="name" content="Phoenix2D for RoboCup Soccer Simulation">
+    <meta itemprop="description" content="Create your own Soccer Player for RoboCup Soccer Simulation">
+    <meta itemprop="image" content="http://claudiordgz.github.io/phoenix2D/assets/images/phoenix_logo_cropped_640.png">
+</head>
+<body>
+    <div class="fixedbg">
+    </div>
+    <div class="fixedbar">
+        <div id="slideup">
+            <a href="#top" class="logo animate"><h1>Phoenix2D</h1></a>
+            <!-- div class="download button">Download Coder</div -->
+            <div class="links">
+                <!-- a id="nav_introduction" href="#introduction" class="animate">Intro</a -->
+				<a id="nav_features" href="#features" class="animate">Features</a -->
+                <a id="nav_gettingstarted" href="#gettingstarted" class="animate">Get Started</a>
+                <a id="nav_tour" href="#tour" class="animate">Tour</a>
+				<a id="nav_projects" href="#projects" class="animate">Projects</a>
+                <a id="nav_faq" href="#faq" class="animate">FAQ</a>
+                <a id="nav_contribute" href="#contribute" class="animate">Contribute</a>
+            </div>
+        </div>
+    </div>
+    <div class="masthead">
+        <a name="top" class="anchor"></a>
+        <canvas id="animation"></canvas>
+        <h1>Phoenix2D</h1>
+        <a href="#projects" class="new_callout animate">Phoenix2D &lt;projects&gt;</a>
+        <!-- div class="download button">Download Coder</div -->
+        <!-- div class="links">
+            <a href="#introduction" data-navtarget="introduction" class="animate">Introducing Coder</a>
+            <a href="#gettingstarted" data-navtarget="gettingstarted" class="animate">Getting Started</a>
+            <a href="#download" data-navtarget="download" class="animate">Download</a>
+            <a href="#faq" data-navtarget="faq" class="animate">FAQ</a>
+        </div -->
+    </div>
+    <div class="section">
+        <a name="introduction" class="anchor"></a>
+        <h2>Just focus on the Artificial Intelligence.</h2>
+        <div id="introvideo">
+            <img src="assets/images/phoenix_logo_cropped_640.png" class="videoframe">
+            <img src="assets/images/play.png" class="playbutton">
+        </div>
+        <p>Phoenix2D is a free, open source framework that handles the Client-Server communication with RoboCup Soccer Simulation using Object Oriented Design (OOD) to provide you with the tools that will make your life simpler when in comes to developing your own player behaviour. This way new coders can craft simple or complex behaviours in C++ and pit the players in a Soccer Simulation Tournament.
+        </p>
+        <a href="https://github.com/claudiordgz/Phoenix2D" target="_blank" class="button inline trackdl">Clone Phoenix2D</a>
+        <p class="download-details inline">Requires RSS Server & Monitor<br/>Requires Boost Libraries for C++</p>
+        <div class="clear"></div>
+    </div>
+	<div class="section">
+        <a name="features" class="anchor"></a>
+		<h2>Features of Phoenix2D</h2>
+		<ul>
+			<li>
+			<h3>Get down and dirty with AI Algorithms</h3>
+			<img class="outerglow" src="assets/images/ai_brain_cropped_640.jpg" />
+			</li>
+			<li><h3>Focus on important subjects such as Path finding, Data Mining, Strategy Selection... WINNING!</h3></li>
+			<img class="outerglow" src="assets/images/ai_subjects.png" />
+			<li>
+			<h3>Create your own Strategies among your players.</h3>
+			<img class="outerglow" src="assets/images/soccer_field_plan_640.jpg" />
+            </li>
+			<li><h3>Create multiple behaviors and make them work in team.</h3></li>
+		</ul>
+	</div>
+    <div class="section">
+        <a name="gettingstarted" class="anchor"></a>
+        <h2>How run the demo Phoenix2D Agent.</h2>
+        <div class="setup switch">
+            <div class="wired left">Unix</div>
+            <div class="wifi right">Windows</div>
+        </div>
+        <div class="setup instructions">
+            <div class="switchpanel wired">
+                <div class="step">
+					<img src="assets/images/download.png" />
+					<div class="stepnum">1.</div>
+					<p><a href="#shoppinglist" class="animate">Download the required dependencies.</a>  
+					</p>
+				</div>
+                <div class="step">
+					<!--<img src="assets/images/sdcard.png" /> -->
+					<div class="stepnum">2.</div>
+					<p>In construction</p></div>
+                <div class="step last">
+					<!-- <img src="assets/images/wired.png" /> -->
+					<div class="stepnum">3.</div>
+					<p>In construction
+                    </p>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="switchpanel wifi">
+                <div class="step">
+					<img src="assets/images/download.png" />
+					<div class="stepnum">1.</div>
+					<p><a href="#shoppinglist" class="animate">Download the required dependencies.</a>  
+					</p>
+				</div>
+                <div class="step">
+					<!--<img src="assets/images/sdcard.png" />-->
+					<div class="stepnum">2.</div>
+					<p>In construction</p></div>
+                <div class="step last">
+					<!--<img src="assets/images/wired.png" />-->
+					<div class="stepnum">3.</div>
+					<p>In construction
+                    </p>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <a name="tour" class="anchor"></a>
+        <h2>Getting to know your PDE.</h2>
+        <h3>Click on the images for a quick tour of the Player Development Environment (PDE).</h3>
+        
+        <div class="tour">
+            <div class="tournav">
+            </div>
+            <div class="slide">
+                <p>Phoenix2D was designed to allow you to develop your Player's Artificial Intelligence (AI) with simple classes. You don't have to define everything on the first go, we'll cover you with basic default behaviours.</p>
+				<img class="outerglow" src="assets/images/soccer_field_cropped_640.png" />
+            </div>
+            <div class="slide">
+                <p>Using the RoboCup Soccer Simulation Monitor you'll be able to see your players AI in execution. Develop movement behaviours based on following the ball or protecting the goal area.</p>
+				<img class="outerglow" src="assets/images/soccer_01.png" />
+            </div>
+            <div class="slide">
+                <p>Coordinate movements of your players based on something as simple as how many players are running after the ball or something highly complex such as a custom communication system.</p>
+				<img class="outerglow" src="assets/images/soccer_02.png" />
+            </div>
+            <div class="slide">
+                <p>Create Behaviours for PlayOn telling your players what to do to just keep playing. Override only the behaviours you are ready to override. Or combine behaviours from different players (coming soon) to create your perfect player.</p>
+				<img class="outerglow" src="assets/images/soccer_03.png" />
+            </div>
+            <div class="slide">
+                <p>Define also behaviours on how to choose were to kick the ball from the corners (CornerKickL/R), on free kicks(FreeKickL/R), and on goal area (GoalKickL/R).</p>
+                <img class="outerglow" src="assets/images/soccer_04.png" />
+            </div>
+        </div>
+
+        
+
+    </div>
+    <div class="section">
+        <a name="shoppinglist" class="anchor"></a>
+        <h2>Installing the required Dependencies</h2>
+        <p>To get started you will be needing the following</p>
+        <div class="product">
+            <img src="assets/images/robocup_logo.jpg" />
+            <h3>RoboCup Soccer Simulation Server</h3>
+            <div class="cost">
+				<a class="store trackout" target="_blank" href="http://sourceforge.net/projects/sserver/files/rcssserver/">Go here for what to do</a>
+			</div>
+            <div class="availability">
+                <a class="store trackout" target="_blank" href="http://sourceforge.net/projects/sserver/files/rcssserver/">SourceForge</a>
+            </div>
+        </div>
+        <div class="product right">
+            <img src="assets/images/rcssmonitor.jpg" />
+            <h3>RoboCup Soccer Simulation Monitor</h3>
+            <div class="availability">
+                <a class="store trackout" target="_blank" href="http://sourceforge.net/projects/sserver/files/rcssmonitor/"> SourceForge</a>
+            </div>
+        </div>
+        <div class="product">
+            <img src="assets/images/boost_logo.png" />
+            <h3>Boost C++ Libraries</h3>
+            <div class="cost">Compilation Instructions</div>
+            <div class="availability">
+                <a class="store trackout" target="_blank" href="http://www.boost.org/users/download/">Build or Get PreBuilt Binaries</a>
+            </div>
+        </div>
+        <div class="product right">
+            <img src="assets/images/cpp-logo.png" />
+            <h3>C++ Compiler >= version 4.6</h3>
+        </div>
+    </div>
+    <div class="section">
+        <a name="download" class="anchor"></a>
+        <h2>Download the Client-Server Library.</h2>
+        <p>Once you've done downloading and building the dependencies you need to download the Phoenix2D-Library and build it in your system. To do this you can get the source code directly from github.</p>
+        <a class="download button trackdl" target="_blank" href="https://github.com/claudiordgz/Phoenix2D">Clone GitHub</a>
+        <p class="download-details">Requires Boost C++ Libraries</p>
+        <p class="last">For detailed instructions on how to build the code on your system please refer to the Phoenix2D Wiki</p>
+    </div>
+    <!--<div class="section">
+        <a name="windows" class="anchor"></a>
+        <h2>Windows-specific Instructions</h2>
+        <div class="faq">
+            <h3>Making a Coder SD Card on a PC.</h3>
+            <p>Windows users can format their SD Card using the SD Card Association's <a class="trackout" href="https://www.sdcard.org/downloads/formatter_4/" target="_blank">formatting tool</a>.</p>
+        </div>
+        <div class="faq">
+            <h3>Connecting to coder.local.</h3>
+            <p>To connect to Coder using a Windows PC, you'll first need to install Apple's <a class="trackout" href="http://support.apple.com/kb/DL999" target="_blank">Bonjour Print Services for Windows</a>. Once this piece of software is installed, you'll be able to visit http://coder.local in Chrome or IE.</p>
+        </div>
+    </div>-->
+    <div class="section">
+        <a name="projects" class="anchor"></a>
+        <h2>Phoenix2D Projects</h2>
+        <p><img src="assets/images/Phoenix-resized.png" /></p>
+        <p>Looking to develop the next Messi or Christiano Ronaldo on your Phoenix2D PDE? We are putting together PDE Projects where we implement algorithms from all shapes and sizes to give you a detailed explanation on how to craft the next <i>Scratch Do Ouro</i>.</p>
+        <p><a href="https://github.com/claudiordgz/Phoenix2D" target="_blank" class="button inline trackout" style="background-color: #A30202">View Projects</a></p>
+    </div>
+    <div class="section">
+        <a name="faq" class="anchor"></a>
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq first rollup">
+            <h3>What is Phoenix2D, and what can I do with it?</h3>
+            <p>Lorem Ipsum.</p>
+        </div>
+        <div class="faq rollup">
+            <h3>Who is it for?</h3>
+            <p>Lorem Ipsum.</p>
+        </div>
+        <div class="faq rollup">
+            <h3>What do I need to get started?</h3>
+            <p>Lorem Ipsum.</p>
+        </div>
+        <div class="faq rollup">
+            <h3>I’ve never coded before. How do I get started?</h3>
+            <p>Lorem Ipsum.</p>
+        </div>
+        <div class="faq rollup">
+            <h3>Can I share my PDE Player?</h3>
+            <p>Lorem Ipsum.</p>
+        </div>
+		<div class="faq rollup">
+            <h3>Will there be any tournaments in the future?</h3>
+            <p>Lorem Ipsum.</p>
+        </div>
+    </div>
+    <div class="section">
+        <h2>Hosting tournaments</h2>
+        <div class="faq rollup">
+            <h3>How do I host my own tournament?</h3>
+            <p>Lorem Ipsum</p>
+        </div>
+    </div>
+    <div class="section last">
+        <a name="contribute" class="anchor"></a>
+        <h2>Contributing</h2>
+        <p>We have lots of ideas to grow the Phoenix2D Project, we'd love any help you may give us. Here are some ways to get involved.</p>
+        
+        <div class="faq">
+            <h3>Make Phoenix2D Better</h3>
+            <p>Help fix bugs, respond to feature requests, and make Phoenix2D the most accessible way for new coders to learn to make things for the web. Phoenix2D is open source and hosted on Github. </p>
+            <a href="https://github.com/claudiordgz/Phoenix2D" target="_blank" class="button trackout">Phoenix2D on Github</a>
+        </div>
+        <div class="faq">
+            <h3>Make and Share Phoenix2D-Algorithms</h3>
+            <p>Lorem Ipsum</p>
+        </div>
+        <div class="faq">
+            <h3>Make and Share PDE Players</h3>
+            <p>Lorem Ipsum</p>
+        </div>
+    </div>
+    <!--<div class="footer">
+        <div class="madewith bottom"></div>
+        <div class="links">
+            <a href="http://www.google.com/intl/en/policies/" class="trackout">Privacy and Terms</a>
+            <div class="plusholder">
+                <div class="g-plusone"></div>
+            </div>
+            <script type="text/javascript">
+              (function() {
+                var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+                po.src = 'https://apis.google.com/js/plusone.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+              })();
+            </script>
+        </div>
+    </div>-->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-35752941-1', 'claudiordgz.github.io');
+  ga('send', 'pageview');
+
+  $(document).ready( function() {
+    $('a.trackdl').click(function() {
+      var version = $(this).attr('data-version');      
+      ga('send', 'event', 'download', 'click', version ); 
+    });
+    $('a.trackout').click(function() {
+      var destination = $(this).attr('href');      
+      ga('send', 'event', 'outbound', 'click', destination ); 
+    });
+  });
+</script>
+</body>
+</html>
