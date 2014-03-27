@@ -1,0 +1,40 @@
+#ifndef PHOENIX2D_COMMUNICATIONS_HPP_
+#define PHOENIX2D_COMMUNICATIONS_HPP_
+
+#include <communications/Actions.h>
+#include <communications/Ball.h>
+#include <communications/BeforeKickOff.h>
+#include <communications/Command.h>
+#include <communications/Commands.h>
+#include <communications/Config.h>
+#include <communications/Connect.h>
+#include <communications/Controller.h>
+#include <communications/CornerKickL.h>
+#include <communications/CornerKickR.h>
+#include <communications/Flag.h>
+#include <communications/FreeKickL.h>
+#include <communications/FreeKickR.h>
+#include <communications/Game.h>
+#include <communications/GoalKickL.h>
+#include <communications/GoalKickR.h>
+#include <communications/KickInL.h>
+#include <communications/KickInR.h>
+#include <communications/KickOffL.h>
+#include <communications/KickOffR.h>
+#include <communications/Line.h>
+#include <communications/Logger.h>
+#include <communications/Normal.h>
+#include <communications/Parser.h>
+#include <communications/Player.h>
+#include <communications/PlayMode.h>
+#include <communications/PlayOn.h>
+#include <communications/Position.h>
+#include <communications/Reader.h>
+#include <communications/Self.h>
+#include <communications/Server.h>
+#include <communications/Trainer.h>
+#include <communications/Vector2D.h>
+#include <communications/World.h>
+#include <communications/WorldModel.h>
+
+#endif

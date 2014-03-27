@@ -1,0 +1,6 @@
+<map id="Phoenix::Controller::disconnect" name="Phoenix::Controller::disconnect">
+<area shape="rect" id="node2" href="$d3/d00/a00113.html#ga6459ad2ec33abf891affd7c7e17d4c0d" title="Phoenix::Controller\l::isConnected" alt="" coords="197,5,329,46"/>
+<area shape="rect" id="node3" href="$df/d61/a00031.html#a4a9973798b48b2756d0565bebcbbb99a" title="Phoenix::Reader::stop" alt="" coords="187,71,338,97"/>
+<area shape="rect" id="node4" href="$d4/dee/a00008.html#a890aa7f22a7ff0b8fb5b6facf0f62ee5" title="Phoenix::Connect::sendMessage" alt="" coords="387,45,602,72"/>
+<area shape="rect" id="node5" href="$d4/dee/a00008.html#ae344065d5bcd9e265061ba20ad89452e" title="Phoenix::Connect::disconnect" alt="" coords="397,96,593,123"/>
+</map>

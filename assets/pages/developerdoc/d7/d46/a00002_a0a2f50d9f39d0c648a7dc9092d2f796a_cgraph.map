@@ -1,0 +1,9 @@
+<map id="Phoenix::Actions::goTo" name="Phoenix::Actions::goTo">
+<area shape="rect" id="node2" href="$de/d21/a00006.html#a98df7e4f8db5a8e42cb7034a609a2c13" title="Phoenix::Commands::dash" alt="" coords="211,5,389,32"/>
+<area shape="rect" id="node3" href="$d5/d79/a00030.html#a30a45e671cf1346a0c33ac7c9282f57b" title="Phoenix::Position::\lgetDirectionTo" alt="" coords="234,122,366,163"/>
+<area shape="rect" id="node6" href="$d5/d79/a00030.html#a990dff0858bda2eaa12a29622664158c" title="Phoenix::Position::\lgetDistanceTo" alt="" coords="234,57,366,98"/>
+<area shape="rect" id="node7" href="$dc/d87/a00032.html#a08fff94f5749b4ed11e62fb5c8a05fcd" title="Phoenix::Self::getPosition" alt="" coords="214,188,386,215"/>
+<area shape="rect" id="node8" href="$de/d21/a00006.html#afacec240f64e4006001287b758b21995" title="Phoenix::Commands::turn" alt="" coords="213,239,387,265"/>
+<area shape="rect" id="node4" href="$d5/d79/a00030.html#aba865729447fa517aeebd30ea0076e8c" title="Phoenix::Position::getY" alt="" coords="438,68,597,95"/>
+<area shape="rect" id="node5" href="$d5/d79/a00030.html#a3bcbc8be681ce21ab1f8c1fede50fbd0" title="Phoenix::Position::getX" alt="" coords="439,125,596,152"/>
+</map>

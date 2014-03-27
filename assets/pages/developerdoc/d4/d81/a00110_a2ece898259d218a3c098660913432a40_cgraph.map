@@ -1,0 +1,20 @@
+<map id="Phoenix::process_see" name="Phoenix::process_see">
+<area shape="rect" id="node2" href="$dc/d87/a00032.html#a08fff94f5749b4ed11e62fb5c8a05fcd" title="Phoenix::Self::getPosition" alt="" coords="446,96,618,123"/>
+<area shape="rect" id="node3" href="$dc/d87/a00032.html#a33b68b3c727cdf3e7e03bc20ec578fc0" title="Phoenix::Self::getVelocity" alt="" coords="446,20,618,47"/>
+<area shape="rect" id="node6" href="$dc/d87/a00032.html#ad0d6c52ccc19eac551898b62f07091aa" title="Phoenix::Self::localize" alt="" coords="226,223,377,249"/>
+<area shape="rect" id="node18" href="$d4/d81/a00110.html#a7a52ecdd15d0ae8bd6966297d153b8ea" title="Phoenix::see_regex" alt="" coords="233,172,370,199"/>
+<area shape="rect" id="node19" href="$d1/dc6/a00037.html#a6167ef64a8864775d53383fc73af16bc" title="Phoenix::World::updateWorld" alt="" coords="205,71,397,97"/>
+<area shape="rect" id="node4" href="$de/d8c/a00036.html#ad427963083f95e77ab72caf4903ed26d" title="Phoenix::Vector2D::\lgetVector2DWithMagnitudeAnd\lDirection" alt="" coords="667,5,871,61"/>
+<area shape="rect" id="node5" href="$de/d8c/a00036.html#ae895f8985972420edbd5d1acbc890ec1" title="Phoenix::Vector2D::\lVector2D" alt="" coords="923,13,1061,54"/>
+<area shape="rect" id="node7" href="$dc/d87/a00032.html#a878e925a47563af9f0016021a0216524" title="Phoenix::Self::localize" alt="" coords="457,224,607,251"/>
+<area shape="rect" id="node17" href="$d4/d81/a00110.html#a5427bb8771c87d9962c02baf1b0ff6be" title="Phoenix::angleMean" alt="" coords="462,173,602,200"/>
+<area shape="rect" id="node8" href="$dc/d87/a00032.html#a69d0d9f127c91e9d702ed05feb9b99d9" title="Phoenix::Self::getAmount\lOfSpeedAtTime" alt="" coords="684,151,855,193"/>
+<area shape="rect" id="node10" href="$dc/d87/a00032.html#a9d391cb97a5f71160f4c425e1b318dd9" title="Phoenix::Self::getEffort\lAtTime" alt="" coords="692,217,847,258"/>
+<area shape="rect" id="node12" href="$dc/d87/a00032.html#a15cfa6e5b7d343500cd9deccba537c93" title="Phoenix::Self::getDirection\lOfSpeedAtTime" alt="" coords="681,282,857,323"/>
+<area shape="rect" id="node14" href="$de/d8c/a00036.html#ab3d8a0728eda1c0497c7d54641dfdcf9" title="Phoenix::Vector2D::\lgetMagnitude" alt="" coords="700,347,839,389"/>
+<area shape="rect" id="node15" href="$de/d8c/a00036.html#a95b9a4bf5719ac8752d2c79dd54d8b6e" title="Phoenix::Vector2D::\lgetXComponent" alt="" coords="700,413,839,454"/>
+<area shape="rect" id="node16" href="$de/d8c/a00036.html#ac83686867d0a2fcbd00e763fe96775bc" title="Phoenix::Vector2D::\lgetYComponent" alt="" coords="700,86,839,127"/>
+<area shape="rect" id="node9" href="$d4/d81/a00110.html#a28a4cd26394b2d78a5c1b4fed891ec48" title="Phoenix::amount_of\l_speed_buffer" alt="" coords="923,151,1061,193"/>
+<area shape="rect" id="node11" href="$d4/d81/a00110.html#a13d585b484b80f5e91ab2a03ad017811" title="Phoenix::effort_buffer" alt="" coords="921,224,1063,251"/>
+<area shape="rect" id="node13" href="$d4/d81/a00110.html#a873939f83cd24c2b5c7c1f6a16fac21b" title="Phoenix::direction\l_of_speed_buffer" alt="" coords="929,282,1055,323"/>
+</map>

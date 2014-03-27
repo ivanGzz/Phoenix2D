@@ -1,0 +1,12 @@
+<map id="Phoenix::Trainer::execute" name="Phoenix::Trainer::execute">
+<area shape="rect" id="node2" href="$de/d21/a00006.html#a42543640d1a7e64b365bbda98263378f" title="Phoenix::Commands::\lchangeMode" alt="" coords="235,5,386,46"/>
+<area shape="rect" id="node3" href="$d8/d41/a00038.html#a4d2b36b70d7fd8fcb67c36550aa2695b" title="Phoenix::WorldModel\l::getPlayers" alt="" coords="237,70,384,111"/>
+<area shape="rect" id="node4" href="$de/d21/a00006.html#a35d1b359e1566327379f7b347226f6df" title="Phoenix::Commands::\lrecover" alt="" coords="235,135,386,177"/>
+<area shape="rect" id="node5" href="$de/d21/a00006.html#a961960fdec6b05bc7cf0dc66336402fc" title="Phoenix::Commands::say" alt="" coords="225,201,397,228"/>
+<area shape="rect" id="node6" href="$de/d21/a00006.html#ad39ceec23e89d5898e0a786bc1772a12" title="Phoenix::Commands::\lsendCommands" alt="" coords="235,253,386,294"/>
+<area shape="rect" id="node7" href="$dd/dad/a00005.html#afd1ca0791c0c9733a885740a9609dee1" title="Phoenix::Command::change\lStatusTo" alt="" coords="471,143,657,185"/>
+<area shape="rect" id="node8" href="$dd/dad/a00005.html#a2e40b6a43df9ce837cdd327f27e909c0" title="Phoenix::Command::getCommand" alt="" coords="453,209,675,236"/>
+<area shape="rect" id="node9" href="$dd/dad/a00005.html#afd7fe065d0451007d3f2bdf8ccbd20bb" title="Phoenix::Command::getWeight" alt="" coords="463,260,665,287"/>
+<area shape="rect" id="node10" href="$d4/dee/a00008.html#a890aa7f22a7ff0b8fb5b6facf0f62ee5" title="Phoenix::Connect::sendMessage" alt="" coords="457,311,671,337"/>
+<area shape="rect" id="node11" href="$dc/d87/a00032.html#ad540aef640b565da2c9ba8c258a1d793" title="Phoenix::Self::setLastCommandsSet" alt="" coords="446,361,682,388"/>
+</map>

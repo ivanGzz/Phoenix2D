@@ -1,0 +1,6 @@
+<map id="Phoenix::Config::load" name="Phoenix::Config::load">
+<area shape="rect" id="node2" href="$d4/d81/a00110.html#a4fd6d2840bbca081f628ab4d66670106" title="Phoenix::logging_regex" alt="" coords="203,5,360,32"/>
+<area shape="rect" id="node3" href="$d4/d81/a00110.html#a150bf0687959986b693fd0e54d7867b3" title="Phoenix::player_history\l_regex" alt="" coords="202,57,361,98"/>
+<area shape="rect" id="node4" href="$d4/d81/a00110.html#a76b29ab56a8484423c97680f38abd476" title="Phoenix::position_regex" alt="" coords="201,123,362,149"/>
+<area shape="rect" id="node5" href="$d4/d81/a00110.html#addb7a1a29dd29f7f7c2ad7f0d9d7fb91" title="Phoenix::verbose_regex" alt="" coords="201,173,361,200"/>
+</map>

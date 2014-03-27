@@ -1,0 +1,7 @@
+<map id="Phoenix::PlayOn::setup" name="Phoenix::PlayOn::setup">
+<area shape="rect" id="node2" href="$de/d21/a00006.html#ae7d602412b6f2c8476fbb6c84d2c7b2a" title="Phoenix::Commands::\lchangeView" alt="" coords="225,5,375,46"/>
+<area shape="rect" id="node3" href="$d8/d41/a00038.html#a4d2b36b70d7fd8fcb67c36550aa2695b" title="Phoenix::WorldModel\l::getPlayers" alt="" coords="227,70,373,111"/>
+<area shape="rect" id="node4" href="$dc/d87/a00032.html#a08fff94f5749b4ed11e62fb5c8a05fcd" title="Phoenix::Self::getPosition" alt="" coords="214,136,386,163"/>
+<area shape="rect" id="node5" href="$d4/d81/a00110.html#a6232d246d70dc66132d18d4b8242d574" title="Phoenix::positions" alt="" coords="235,187,365,213"/>
+<area shape="rect" id="node6" href="$d5/d79/a00030.html#a57713d921d91e7f5384a434bd08a486b" title="Phoenix::Position::\ltoString" alt="" coords="234,238,366,279"/>
+</map>

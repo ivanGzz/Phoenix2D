@@ -1,0 +1,10 @@
+<map id="Phoenix::World::updateWorld" name="Phoenix::World::updateWorld">
+<area shape="rect" id="node2" href="$d0/d33/a00027.html#a72e94f0aa219ce364e0573b621f67dc4" title="Phoenix::Player::boundTo" alt="" coords="259,5,429,32"/>
+<area shape="rect" id="node3" href="$d5/d79/a00030.html#a990dff0858bda2eaa12a29622664158c" title="Phoenix::Position::\lgetDistanceTo" alt="" coords="278,57,410,98"/>
+<area shape="rect" id="node6" href="$d0/d33/a00027.html#a1a2ac7a182f67884c346365bb72a5aa7" title="Phoenix::Player::getPosition" alt="" coords="251,123,437,149"/>
+<area shape="rect" id="node7" href="$dc/d87/a00032.html#a08fff94f5749b4ed11e62fb5c8a05fcd" title="Phoenix::Self::getPosition" alt="" coords="258,173,430,200"/>
+<area shape="rect" id="node8" href="$d0/d33/a00027.html#a5fe404edf1e0b47654aae4315aed3c2d" title="Phoenix::Player::getPretender\lFront" alt="" coords="246,225,442,266"/>
+<area shape="rect" id="node9" href="$d0/d33/a00027.html#a3f74964b5569a0b142d0971a97a2d4af" title="Phoenix::Player::pretend\lToBound" alt="" coords="261,290,427,331"/>
+<area shape="rect" id="node4" href="$d5/d79/a00030.html#a3bcbc8be681ce21ab1f8c1fede50fbd0" title="Phoenix::Position::getX" alt="" coords="492,39,649,65"/>
+<area shape="rect" id="node5" href="$d5/d79/a00030.html#aba865729447fa517aeebd30ea0076e8c" title="Phoenix::Position::getY" alt="" coords="491,89,650,116"/>
+</map>

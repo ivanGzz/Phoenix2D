@@ -1,0 +1,69 @@
+[1.0]
+
+  * Trainer automatic runs: a script interpreter is added to Trainer class.
+    The script must have the name trainer.phx and the next syntaxis:
+    - do <int>: repeats <int> times the next commands until the corresponding
+      end_do.
+    - end_do: closes the corresponding DO block.
+    - say: broadcast a message to the players
+    - wait <int>: the trainer does nothing for the next <int> cycles
+    - change_to <string>: changes the current play mode to <string> play mode
+    - recover: performs the (recover) command on the simulator
+    - #: comments the line
+    It is not neccesary to call change_to time_over command in order to stop
+    the players.  The program automatically adds this command at the end of the
+    code.
+    
+  * Added buffers to sense body data.  By default the buffer maximum size is
+    8, and it can be accessed by Self::getStaminaAtTime(int time), where time
+    is the offset in time.  For example, to access the stamina 2 cycles before
+    the current cycle you must call Self::getStaminaAtTime(2);
+      
+  * Added logging class through std::clog stream.  Example:
+  
+    std::clog << "Logging example" << std::endl;
+    
+    logs "Logging example" string to <TEAM_NAME>_<int>.<LOG_NAME>.<DD.MM-HH.mm.SS>.log 
+    file, where <int> is the player uniform number. This logging will only work iff 
+    Config::LOGGING is set to true. This logging also work for the trainer iff 
+    Config::TRAINER_LOGGING is set to true.  The file log for the trainer has the 
+    name Trainer.<LOG_NAME>.<DD.MM-HH.mm.SS>.log
+    
+  * Added config class. This class loads general paramaters from conf.phx:
+  
+    (config buffer_max_history <unsigned int>)
+    (config player_max_history <unsigned int>) currently unimplemented
+    (config ball_max_history <unsigned int>) currently unimplemented
+    (config commands_max_history <unsigned int>)
+    (config commands_precision <unsigned int>) currently unimplemented
+    (config log_name <string>) if set then <LOG_NAME> = <string>, <LOG_NAME> = ""
+    otherwise
+    (logging 0) for trainer logging
+    
+    Then, the class loads positions and configurations from the file 
+    <TEAM_NAME>.phx. If the file does not exist, it loads the defaults positions 
+    and configurations from the class.
+    Until now, the supported syntax is for positions:
+    
+    (position <int> <float> <float>)
+    (logging <int>) enables logging through std::clog
+    (verbose <int>) enables verbose mode
+    (player_history <int>) enables memory in world model
+    
+    Where <TEAM> can be our (team) or opp(onent team), <int> is the uniform
+    number of the player, and the two <float> values are x and y position
+    respectively, following the left hand convention for each side.
+    For the logging configuration the syntax is the same, by default the value
+    for logging is false.
+    
+    The default positions can be changed in Config.cpp file before compilation.
+    The comments in this configs file begging with #
+    
+  * Each play mode now has a onMessageReceived(string,int) callback to process
+    the messages received.  The first argument is the message and the second
+    argument is the uniform number of the sender.  Currently it only implements
+    the mate messages.
+    
+  * Added new method to PlayMode: setup().  This method is called only once 
+    whenever a new play_mode will be executed, then on<AGENT>Execute() is 
+    performed in later cycles.

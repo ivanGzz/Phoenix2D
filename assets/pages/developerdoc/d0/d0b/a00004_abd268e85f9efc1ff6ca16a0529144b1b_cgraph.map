@@ -1,0 +1,5 @@
+<map id="Phoenix::BeforeKickOff::onPlayerExecute" name="Phoenix::BeforeKickOff::onPlayerExecute">
+<area shape="rect" id="node2" href="$d5/d79/a00030.html#a7317288fa0b9f69416dce442a3c24cb3" title="Phoenix::Position::\lgetBodyDirection" alt="" coords="231,5,363,46"/>
+<area shape="rect" id="node3" href="$dc/d87/a00032.html#a08fff94f5749b4ed11e62fb5c8a05fcd" title="Phoenix::Self::getPosition" alt="" coords="211,71,383,97"/>
+<area shape="rect" id="node4" href="$de/d21/a00006.html#afacec240f64e4006001287b758b21995" title="Phoenix::Commands::turn" alt="" coords="211,121,384,148"/>
+</map>

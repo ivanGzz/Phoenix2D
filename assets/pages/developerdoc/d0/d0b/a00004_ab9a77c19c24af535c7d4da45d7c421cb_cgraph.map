@@ -1,0 +1,5 @@
+<map id="Phoenix::BeforeKickOff::setup" name="Phoenix::BeforeKickOff::setup">
+<area shape="rect" id="node2" href="$d5/d79/a00030.html#a3bcbc8be681ce21ab1f8c1fede50fbd0" title="Phoenix::Position::getX" alt="" coords="223,5,380,32"/>
+<area shape="rect" id="node3" href="$d5/d79/a00030.html#aba865729447fa517aeebd30ea0076e8c" title="Phoenix::Position::getY" alt="" coords="222,56,381,83"/>
+<area shape="rect" id="node4" href="$de/d21/a00006.html#a48287f74bf4ec571c4f66a938487fbad" title="Phoenix::Commands::move" alt="" coords="211,107,392,133"/>
+</map>

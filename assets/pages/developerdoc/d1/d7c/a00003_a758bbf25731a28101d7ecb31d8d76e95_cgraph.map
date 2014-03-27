@@ -1,0 +1,8 @@
+<map id="Phoenix::Ball::Ball" name="Phoenix::Ball::Ball">
+<area shape="rect" id="node2" href="$d5/d79/a00030.html#a7317288fa0b9f69416dce442a3c24cb3" title="Phoenix::Position::\lgetBodyDirection" alt="" coords="198,5,330,46"/>
+<area shape="rect" id="node3" href="$d5/d79/a00030.html#a052445ea5f10007f4c830e6332dabfdc" title="Phoenix::Position::\lgetHeadDirection" alt="" coords="198,70,330,111"/>
+<area shape="rect" id="node4" href="$d5/d79/a00030.html#a3bcbc8be681ce21ab1f8c1fede50fbd0" title="Phoenix::Position::getX" alt="" coords="185,136,343,163"/>
+<area shape="rect" id="node5" href="$de/d8c/a00036.html#a95b9a4bf5719ac8752d2c79dd54d8b6e" title="Phoenix::Vector2D::\lgetXComponent" alt="" coords="195,187,333,229"/>
+<area shape="rect" id="node6" href="$d5/d79/a00030.html#aba865729447fa517aeebd30ea0076e8c" title="Phoenix::Position::getY" alt="" coords="185,253,343,280"/>
+<area shape="rect" id="node7" href="$de/d8c/a00036.html#ac83686867d0a2fcbd00e763fe96775bc" title="Phoenix::Vector2D::\lgetYComponent" alt="" coords="195,305,333,346"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="Phoenix::WorldModel::getUndPlayersOrderedByDistanceTo" name="Phoenix::WorldModel::getUndPlayersOrderedByDistanceTo">
+<area shape="rect" id="node2" href="$d4/d81/a00110.html#a9a20ec8b61e42fbb5e2b018ce964743e" title="Phoenix::compareDistances" alt="" coords="297,60,482,87"/>
+<area shape="rect" id="node3" href="$d5/d79/a00030.html#a990dff0858bda2eaa12a29622664158c" title="Phoenix::Position::\lgetDistanceTo" alt="" coords="558,23,690,65"/>
+<area shape="rect" id="node6" href="$d0/d33/a00027.html#a1a2ac7a182f67884c346365bb72a5aa7" title="Phoenix::Player::getPosition" alt="" coords="531,89,717,116"/>
+<area shape="rect" id="node4" href="$d5/d79/a00030.html#a3bcbc8be681ce21ab1f8c1fede50fbd0" title="Phoenix::Position::getX" alt="" coords="767,5,924,32"/>
+<area shape="rect" id="node5" href="$d5/d79/a00030.html#aba865729447fa517aeebd30ea0076e8c" title="Phoenix::Position::getY" alt="" coords="766,56,925,83"/>
+</map>
