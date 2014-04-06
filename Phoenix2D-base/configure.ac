@@ -6,17 +6,16 @@ AC_INIT([Phoenix2D-base], [1.0], [nigm2005@gmail.com])
 AC_CONFIG_SRCDIR([include/Actions.h])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
+AM_INIT_AUTOMAKE([-Wall -Werror foreign subdir-objects])
+AM_PROG_AR
 LT_INIT
-AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 
 # Checks for programs.
 AC_PROG_CXX
 AC_PROG_CC
 
 # Checks for libraries.
-AX_PTHREAD([], [
-  AC_MSG_ERROR([pthread library not found. Please set PTHREAD_CFLAGS and PTHREAD_LIBS correctly for your setup])
-])
+AX_PTHREAD(, [AC_MSG_ERROR([pthread library not found. Please set PTHREAD_CFLAGS and PTHREAD_LIBS correctly for your setup])])
 CC="$PTHREAD_CC"
 AC_SUBST(PTHREAD_CFLAGS)
 AC_SUBST(PTHREAD_LDFLAGS)
