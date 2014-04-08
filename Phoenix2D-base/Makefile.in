@@ -174,24 +174,6 @@ AM_V_CXXLD = $(am__v_CXXLD_@AM_V@)
 am__v_CXXLD_ = $(am__v_CXXLD_@AM_DEFAULT_V@)
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
-COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-LTCOMPILE = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) \
-	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
-	$(AM_CFLAGS) $(CFLAGS)
-AM_V_CC = $(am__v_CC_@AM_V@)
-am__v_CC_ = $(am__v_CC_@AM_DEFAULT_V@)
-am__v_CC_0 = @echo "  CC      " $@;
-am__v_CC_1 = 
-CCLD = $(CC)
-LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-AM_V_CCLD = $(am__v_CCLD_@AM_V@)
-am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
-am__v_CCLD_0 = @echo "  CCLD    " $@;
-am__v_CCLD_1 = 
 SOURCES = $(libPhoenixBase_1_0_la_SOURCES)
 DIST_SOURCES = $(libPhoenixBase_1_0_la_SOURCES)
 am__can_run_installinfo = \
@@ -365,19 +347,20 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 ACLOCAL_AMFLAGS = -I m4
+AM_CPPFLAGS = -Iinclude
 lib_LTLIBRARIES = libPhoenixBase-1.0.la
-libPhoenixBase_1_0_la_SOURCES = include/Actions.h src/Actions.cpp \
- include/Ball.h src/Ball.cpp include/Command.h src/Command.cpp \
- include/Commands.h src/Commands.cpp include/Config.h src/Config.cpp \
- include/Connect.h src/Connect.cpp include/Controller.h src/Controller.cpp \
- include/Flag.h src/Flag.cpp include/Game.h src/Game.cpp \
- include/Line.h src/Line.cpp include/Logger.h src/Logger.cpp \
- include/Parser.h src/Parser.cpp include/Player.h src/Player.cpp \
- include/PlayMode.h src/PlayMode.cpp include/Position.h src/Position.cpp \
- include/Reader.h src/Reader.cpp include/Self.h src/Self.cpp \
- include/Self.h src/Self.cpp include/Server.h src/Server.cpp \
- include/Trainer.h src/Trainer.cpp include/Vector2D.h src/Vector2D.cpp \
- include/World.h src/World.cpp include/WorldModel.h src/WorldMode.cpp
+libPhoenixBase_1_0_la_SOURCES = src/Actions.cpp \
+	src/Ball.cpp src/Command.cpp \
+	src/Commands.cpp src/Config.cpp \
+	src/Connect.cpp src/Controller.cpp \
+	src/Flag.cpp src/Game.cpp \
+	src/Line.cpp src/Logger.cpp \
+	src/Parser.cpp src/Player.cpp \
+	src/PlayMode.cpp src/Position.cpp \
+	src/Reader.cpp src/Self.cpp \
+	src/Self.cpp src/Server.cpp \
+	src/Trainer.cpp src/Vector2D.cpp \
+	src/World.cpp src/WorldMode.cpp
 
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
