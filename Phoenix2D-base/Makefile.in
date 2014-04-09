@@ -132,8 +132,8 @@ am_libPhoenixBase_1_0_la_OBJECTS = src/Actions.lo src/Ball.lo \
 	src/Command.lo src/Commands.lo src/Configs.lo src/Connect.lo \
 	src/Controller.lo src/Flag.lo src/Game.lo src/Logger.lo \
 	src/Parser.lo src/Player.lo src/PlayMode.lo src/Position.lo \
-	src/Reader.lo src/Self.lo src/Self.lo src/Server.lo \
-	src/Trainer.lo src/Vector2D.lo src/World.lo src/WorldModel.lo
+	src/Reader.lo src/Self.lo src/Server.lo src/Trainer.lo \
+	src/Vector2D.lo src/World.lo src/WorldModel.lo
 libPhoenixBase_1_0_la_OBJECTS = $(am_libPhoenixBase_1_0_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -357,7 +357,7 @@ libPhoenixBase_1_0_la_SOURCES = src/Actions.cpp \
 	src/Logger.cpp \
 	src/Parser.cpp src/Player.cpp \
 	src/PlayMode.cpp src/Position.cpp \
-	src/Reader.cpp src/Self.cpp \
+	src/Reader.cpp \
 	src/Self.cpp src/Server.cpp \
 	src/Trainer.cpp src/Vector2D.cpp \
 	src/World.cpp src/WorldModel.cpp

@@ -10,7 +10,7 @@ libPhoenixBase_1_0_la_SOURCES = src/Actions.cpp \
 	src/Logger.cpp \
 	src/Parser.cpp src/Player.cpp \
 	src/PlayMode.cpp src/Position.cpp \
-	src/Reader.cpp src/Self.cpp \
+	src/Reader.cpp \
 	src/Self.cpp src/Server.cpp \
 	src/Trainer.cpp src/Vector2D.cpp \
 	src/World.cpp src/WorldModel.cpp
