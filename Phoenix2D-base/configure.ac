@@ -21,7 +21,7 @@ AC_SUBST(PTHREAD_CFLAGS)
 AC_SUBST(PTHREAD_LDFLAGS)
 AC_SUBST(PTHREAD_LIBS)
 AC_SUBST(CC)
-AX_BOOST_BASE([1.55.0], [], [AC_MSG_ERROR([boost base not found])])
+AX_BOOST_BASE([1.45.0], [], [AC_MSG_ERROR([boost base not found])])
 AX_BOOST_REGEX
 
 # Checks for header files.

@@ -13,4 +13,4 @@ libPhoenixBase_1_0_la_SOURCES = src/Actions.cpp \
 	src/Reader.cpp src/Self.cpp \
 	src/Self.cpp src/Server.cpp \
 	src/Trainer.cpp src/Vector2D.cpp \
-	src/World.cpp src/WorldMode.cpp
+	src/World.cpp src/WorldModel.cpp
