@@ -1,5 +1,5 @@
 ACLOCAL_AMFLAGS = -I m4
-AC_CONFIG_MACRO_DIR([m4])
+#AC_CONFIG_MACRO_DIR([m4])
 AM_CPPFLAGS = -Iinclude
 lib_LTLIBRARIES = libPhoenixBase-1.0.la
 libPhoenixBase_1_0_la_SOURCES = src/Actions.cpp \
@@ -7,7 +7,7 @@ libPhoenixBase_1_0_la_SOURCES = src/Actions.cpp \
 	src/Commands.cpp src/Configs.cpp \
 	src/Connect.cpp src/Controller.cpp \
 	src/Flag.cpp src/Game.cpp \
-	src/Line.cpp src/Logger.cpp \
+	src/Logger.cpp \
 	src/Parser.cpp src/Player.cpp \
 	src/PlayMode.cpp src/Position.cpp \
 	src/Reader.cpp src/Self.cpp \

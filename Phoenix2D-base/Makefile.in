@@ -130,11 +130,10 @@ libPhoenixBase_1_0_la_LIBADD =
 am__dirstamp = $(am__leading_dot)dirstamp
 am_libPhoenixBase_1_0_la_OBJECTS = src/Actions.lo src/Ball.lo \
 	src/Command.lo src/Commands.lo src/Configs.lo src/Connect.lo \
-	src/Controller.lo src/Flag.lo src/Game.lo src/Line.lo \
-	src/Logger.lo src/Parser.lo src/Player.lo src/PlayMode.lo \
-	src/Position.lo src/Reader.lo src/Self.lo src/Self.lo \
-	src/Server.lo src/Trainer.lo src/Vector2D.lo src/World.lo \
-	src/WorldMode.lo
+	src/Controller.lo src/Flag.lo src/Game.lo src/Logger.lo \
+	src/Parser.lo src/Player.lo src/PlayMode.lo src/Position.lo \
+	src/Reader.lo src/Self.lo src/Self.lo src/Server.lo \
+	src/Trainer.lo src/Vector2D.lo src/World.lo src/WorldMode.lo
 libPhoenixBase_1_0_la_OBJECTS = $(am_libPhoenixBase_1_0_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -347,6 +346,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 ACLOCAL_AMFLAGS = -I m4
+#AC_CONFIG_MACRO_DIR([m4])
 AM_CPPFLAGS = -Iinclude
 lib_LTLIBRARIES = libPhoenixBase-1.0.la
 libPhoenixBase_1_0_la_SOURCES = src/Actions.cpp \
@@ -354,7 +354,7 @@ libPhoenixBase_1_0_la_SOURCES = src/Actions.cpp \
 	src/Commands.cpp src/Configs.cpp \
 	src/Connect.cpp src/Controller.cpp \
 	src/Flag.cpp src/Game.cpp \
-	src/Line.cpp src/Logger.cpp \
+	src/Logger.cpp \
 	src/Parser.cpp src/Player.cpp \
 	src/PlayMode.cpp src/Position.cpp \
 	src/Reader.cpp src/Self.cpp \
@@ -466,7 +466,6 @@ src/Connect.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
 src/Controller.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
 src/Flag.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
 src/Game.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
-src/Line.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
 src/Logger.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
 src/Parser.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
 src/Player.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
@@ -500,7 +499,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/Controller.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/Flag.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/Game.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/Line.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/Logger.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/Parser.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/PlayMode.Plo@am__quote@
@@ -902,7 +900,6 @@ uninstall-am: uninstall-libLTLIBRARIES
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
 	tags tags-am uninstall uninstall-am uninstall-libLTLIBRARIES
 
-AC_CONFIG_MACRO_DIR([m4])
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
