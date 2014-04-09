@@ -3,7 +3,7 @@
 
 AC_PREREQ([2.69])
 AC_INIT([Phoenix2D-base], [1.0], [nigm2005@gmail.com])
-AC_CONFIG_SRCDIR([include/Actions.h])
+AC_CONFIG_SRCDIR([include/Actions.hpp])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign subdir-objects])
