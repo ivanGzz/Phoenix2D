@@ -2,6 +2,8 @@
 ###########
 Debug/
 Release/
+.deps/
+.dirstamp/
 
 # Eclipse files #
 #################
@@ -25,6 +27,7 @@ Release/
 *.o
 *.so
 *.a
+*.lo
 
 # Packages #
 ############
@@ -65,3 +68,8 @@ Thumbs.db
 *.xml
 *.pdf
 *.scan
+Makefile
+config.h
+config.status
+stamp-h1
+libtool
