@@ -18,8 +18,8 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef READER_H_
-#define READER_H_
+#ifndef READER_HPP_
+#define READER_HPP_
 
 /*! @addtogroup phoenix_main
  * @{
@@ -48,4 +48,4 @@ public:
 } // End namespace Phoenix
 /*! @} */
 
-#endif /* READER_H_ */
+#endif /* READER_HPP_ */

@@ -24,20 +24,20 @@
 #include <pthread.h>
 #include <list>
 #include <unistd.h>
-#include "Parser.h"
-#include "Game.h"
-#include "Self.h"
-#include "Flag.h"
-#include "Player.h"
-#include "Server.h"
-#include "Position.h"
-#include "World.h"
-#include "Ball.h"
-#include "PlayMode.h"
-#include "Vector2D.h"
-#include "Trainer.h"
-#include "Config.h"
-#include "Logger.h"
+#include "Parser.hpp"
+#include "Game.hpp"
+#include "Self.hpp"
+#include "Flag.hpp"
+#include "Player.hpp"
+#include "Server.hpp"
+#include "Position.hpp"
+#include "World.hpp"
+#include "Ball.hpp"
+#include "PlayMode.hpp"
+#include "Vector2D.hpp"
+#include "Trainer.hpp"
+#include "Configs.hpp"
+#include "Logger.hpp"
 
 namespace Phoenix {
 
@@ -192,7 +192,7 @@ Parser::Parser(Self *self, World *world) {
 Parser::~Parser() {
 	pthread_attr_destroy(&attr);
 	if (game_ptr) delete game_ptr;
-	if (Config::VERBOSE) std::cout << "Parser out" << std::endl;
+	if (Configs::VERBOSE) std::cout << "Parser out" << std::endl;
 }
 
 void Parser::parseMessage(std::string message) {
@@ -266,7 +266,7 @@ void Parser::parseMessage(std::string message) {
 		size_t found = message.find(" ", 12);
 		game_ptr->updateTime(atoi(message.substr(12, found - 12).c_str()));
 	} else if (message_type.compare("ok") == 0) {
-		if (Config::VERBOSE) std::cout << Game::SIMULATION_TIME << ": " << message << std::endl;
+		if (Configs::VERBOSE) std::cout << Game::SIMULATION_TIME << ": " << message << std::endl;
 	} else if (message_type.compare("error") == 0) {
 		std::cerr << Game::SIMULATION_TIME << ": " << message << std::endl;
 	} else {

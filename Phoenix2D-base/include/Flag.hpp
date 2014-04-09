@@ -18,8 +18,8 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FLAG_H_
-#define FLAG_H_
+#ifndef FLAG_HPP_
+#define FLAG_HPP_
 
 #include <string>
 #include <map>
@@ -69,4 +69,4 @@ public:
 } // End namespace Phoenix
 /*! @} */
 
-#endif /* FLAG_H_ */
+#endif /* FLAG_HPP_ */

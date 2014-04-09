@@ -18,13 +18,13 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PLAYER_H_
-#define PLAYER_H_
+#ifndef PLAYER_HPP_
+#define PLAYER_HPP_
 
 #include <string>
 #include <vector>
-#include "Position.h"
-#include "Vector2D.h"
+#include "Position.hpp"
+#include "Vector2D.hpp"
 
 /*! @addtogroup phoenix_main
  * @{
@@ -96,4 +96,4 @@ public:
 } // End namespace Phoenix
 /*! @} */
 
-#endif /* PLAYER_H_ */
+#endif /* PLAYER_HPP_ */

@@ -18,8 +18,8 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMANDS_H_
-#define COMMANDS_H_
+#ifndef COMMANDS_HPP_
+#define COMMANDS_HPP_
 
 #include <string>
 
@@ -63,4 +63,4 @@ public:
 } // End namespace Phoenix
 /*! @} */
 
-#endif /* COMMANDS_H_ */
+#endif /* COMMANDS_HPP_ */

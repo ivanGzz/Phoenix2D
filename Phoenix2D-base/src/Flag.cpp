@@ -21,9 +21,9 @@
 #include <sstream>
 #include <cstdlib>
 #include <cmath>
-#include "Flag.h"
-#include "Self.h"
-#include "Server.h"
+#include "Flag.hpp"
+#include "Self.hpp"
+#include "Server.hpp"
 
 namespace Phoenix {
 

@@ -18,11 +18,11 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Actions.h"
-#include "Self.h"
-#include "Commands.h"
+#include "Actions.hpp"
+#include "Self.hpp"
+#include "Commands.hpp"
 //#include <iostream>
-#include "Game.h"
+#include "Game.hpp"
 #include <cmath>
 
 namespace Phoenix {

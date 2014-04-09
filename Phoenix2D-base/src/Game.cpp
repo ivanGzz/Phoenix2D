@@ -21,9 +21,9 @@
 #include <iostream>
 #include <pthread.h>
 #include <boost/regex.hpp>
-#include "Self.h"
-#include "Game.h"
-#include "Config.h"
+#include "Self.hpp"
+#include "Game.hpp"
+#include "Configs.hpp"
 
 namespace Phoenix {
 
@@ -46,7 +46,7 @@ Game::Game() {
 }
 
 Game::~Game() {
-	if (Config::VERBOSE) std::cout << "Game out" << std::endl;
+	if (Configs::VERBOSE) std::cout << "Game out" << std::endl;
 }
 
 void Game::updateTime(int game_time) {

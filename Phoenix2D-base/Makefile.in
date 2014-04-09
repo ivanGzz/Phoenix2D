@@ -129,7 +129,7 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 libPhoenixBase_1_0_la_LIBADD =
 am__dirstamp = $(am__leading_dot)dirstamp
 am_libPhoenixBase_1_0_la_OBJECTS = src/Actions.lo src/Ball.lo \
-	src/Command.lo src/Commands.lo src/Config.lo src/Connect.lo \
+	src/Command.lo src/Commands.lo src/Configs.lo src/Connect.lo \
 	src/Controller.lo src/Flag.lo src/Game.lo src/Line.lo \
 	src/Logger.lo src/Parser.lo src/Player.lo src/PlayMode.lo \
 	src/Position.lo src/Reader.lo src/Self.lo src/Self.lo \
@@ -351,7 +351,7 @@ AM_CPPFLAGS = -Iinclude
 lib_LTLIBRARIES = libPhoenixBase-1.0.la
 libPhoenixBase_1_0_la_SOURCES = src/Actions.cpp \
 	src/Ball.cpp src/Command.cpp \
-	src/Commands.cpp src/Config.cpp \
+	src/Commands.cpp src/Configs.cpp \
 	src/Connect.cpp src/Controller.cpp \
 	src/Flag.cpp src/Game.cpp \
 	src/Line.cpp src/Logger.cpp \
@@ -461,7 +461,7 @@ src/Actions.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
 src/Ball.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
 src/Command.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
 src/Commands.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
-src/Config.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
+src/Configs.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
 src/Connect.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
 src/Controller.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
 src/Flag.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
@@ -495,7 +495,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/Ball.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/Command.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/Commands.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/Config.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/Configs.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/Connect.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/Controller.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/Flag.Plo@am__quote@

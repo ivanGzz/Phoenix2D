@@ -24,10 +24,10 @@
 #include <fstream>
 #include <iostream>
 #include <cstdlib>
-#include "Trainer.h"
-#include "Commands.h"
-#include "Config.h"
-#include "Game.h"
+#include "Trainer.hpp"
+#include "Commands.hpp"
+#include "Configs.hpp"
+#include "Game.hpp"
 
 namespace Phoenix {
 
@@ -143,7 +143,7 @@ Trainer::~Trainer() {
 }
 
 void Trainer::execute(WorldModel world) {
-	if (Config::TRAINER_LOGGING && Game::PLAY_MODE.compare("play_on") == 0) {
+	if (Configs::TRAINER_LOGGING && Game::PLAY_MODE.compare("play_on") == 0) {
 		std::list<Player*> players = world.getPlayers();
 		std::clog << Game::GAME_TIME;
 		for (std::list<Player*>::iterator it = players.begin(); it != players.end(); ++it) {

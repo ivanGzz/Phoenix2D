@@ -18,11 +18,11 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Ball.h"
+#include "Ball.hpp"
 #include <vector>
 #include <sstream>
 #include <cstdlib>
-#include "Self.h"
+#include "Self.hpp"
 #include <cmath>
 
 namespace Phoenix {

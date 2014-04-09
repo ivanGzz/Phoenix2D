@@ -18,8 +18,8 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Command.h"
-#include "Game.h"
+#include "Command.hpp"
+#include "Game.hpp"
 #include <iostream>
 
 namespace Phoenix {

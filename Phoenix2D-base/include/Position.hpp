@@ -18,8 +18,8 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef POSITION_H_
-#define POSITION_H_
+#ifndef POSITION_HPP_
+#define POSITION_HPP_
 
 #include <string>
 
@@ -72,4 +72,4 @@ public:
 } // End namespace Phoenix
 /*! @} */
 
-#endif /* POSITION_H_ */
+#endif /* POSITION_HPP_ */

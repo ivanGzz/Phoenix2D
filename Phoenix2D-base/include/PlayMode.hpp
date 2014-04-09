@@ -18,10 +18,10 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PLAYMODE_H_
-#define PLAYMODE_H_
+#ifndef PLAYMODE_HPP_
+#define PLAYMODE_HPP_
 
-#include "WorldModel.h"
+#include "WorldModel.hpp"
 
 /*! @addtogroup phoenix_main
  * @{
@@ -75,4 +75,4 @@ public:
 } // End namespace Phoenix
 /*! @} */
 
-#endif /* PLAYMODE_H_ */
+#endif /* PLAYMODE_HPP_ */

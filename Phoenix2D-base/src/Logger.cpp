@@ -22,10 +22,10 @@
 #include <iostream>
 #include <sstream>
 #include <ctime>
-#include "Logger.h"
-#include "Self.h"
-#include "Controller.h"
-#include "Config.h"
+#include "Logger.hpp"
+#include "Self.hpp"
+#include "Controller.hpp"
+#include "Configs.hpp"
 
 namespace Phoenix {
 
@@ -57,8 +57,8 @@ void Logger::log() {
 		ss << "Trainer.";
 		break;
 	}
-	if (Config::LOG_NAME.length() > 0) {
-		ss << Config::LOG_NAME << ".";
+	if (Configs::LOG_NAME.length() > 0) {
+		ss << Configs::LOG_NAME << ".";
 	}
 	if (now->tm_mday < 10) {
 		ss << "0" << now->tm_mday << ".";

@@ -18,10 +18,10 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CONFIG_H_
-#define CONFIG_H_
+#ifndef CONFIGS_HPP_
+#define CONFIGS_HPP_
 
-#include "Position.h"
+#include "Position.hpp"
 #include <string>
 
 /*! @addtogroup phoenix_main
@@ -37,10 +37,10 @@ namespace Phoenix {
  * @brief <STRONG> Commands <BR> </STRONG>
  * The Commans lorem Ipsum
  */
-class Config {
+class Configs {
 public:
-	Config();
-	~Config();
+	Configs();
+	~Configs();
 	void load();
 	static Position POSITION;
 	static bool LOGGING;
@@ -59,4 +59,4 @@ public:
 /*! @} */
 
 
-#endif /* CONFIG_H_ */
+#endif /* CONFIGS_HPP_ */

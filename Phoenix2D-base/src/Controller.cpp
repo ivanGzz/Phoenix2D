@@ -18,17 +18,17 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Controller.h"
+#include "Controller.hpp"
 #include <boost/regex.hpp>
 #include <iostream>
 #include <cstdlib>
-#include "Connect.h"
-#include "Self.h"
-#include "Reader.h"
-#include "Server.h"
-#include "Parser.h"
-#include "Commands.h"
-#include "World.h"
+#include "Connect.hpp"
+#include "Self.hpp"
+#include "Reader.hpp"
+#include "Server.hpp"
+#include "Parser.hpp"
+#include "Commands.hpp"
+#include "World.hpp"
 
 namespace Phoenix {
 

@@ -18,8 +18,8 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMAND_H_
-#define COMMAND_H_
+#ifndef COMMAND_HPP_
+#define COMMAND_HPP_
 
 #include <string>
 
@@ -110,4 +110,4 @@ public:
 /*! @} */
 
 
-#endif /* COMMAND_H_ */
+#endif /* COMMAND_HPP_ */

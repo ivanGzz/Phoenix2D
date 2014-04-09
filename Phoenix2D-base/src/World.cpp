@@ -20,11 +20,11 @@
 
 #include <cmath>
 #include <iostream>
-#include "World.h"
-#include "Game.h"
-#include "Config.h"
-#include "Self.h"
-#include "Controller.h"
+#include "World.hpp"
+#include "Game.hpp"
+#include "Configs.hpp"
+#include "Self.hpp"
+#include "Controller.hpp"
 
 namespace Phoenix {
 
@@ -36,7 +36,7 @@ World::World() {
 }
 
 World::~World() {
-	if (Config::VERBOSE) std::cout << "World out" << std::endl;
+	if (Configs::VERBOSE) std::cout << "World out" << std::endl;
 }
 
 void World::updateWorld() {
@@ -56,7 +56,7 @@ void World::updateWorld() {
 }
 
 void World::updateWorld(std::list<Player> new_players, Ball new_ball) {
-	if (Config::PLAYER_HISTORY) {
+	if (Configs::PLAYER_HISTORY) {
 		double vision_angle = 180.0 + 10.0;
 		if (Self::VIEW_MODE_WIDTH.compare("narrow") == 0) {
 			vision_angle = 60.0 + 10.0;

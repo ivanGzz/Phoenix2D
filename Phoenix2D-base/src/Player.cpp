@@ -21,9 +21,9 @@
 #include <sstream>
 #include <cstdlib>
 #include <cmath>
-#include "Player.h"
-#include "Self.h"
-#include "Controller.h"
+#include "Player.hpp"
+#include "Self.hpp"
+#include "Controller.hpp"
 
 namespace Phoenix {
 

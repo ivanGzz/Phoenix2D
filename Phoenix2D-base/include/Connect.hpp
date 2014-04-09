@@ -18,8 +18,8 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CONNECT_H_
-#define CONNECT_H_
+#ifndef CONNECT_HPP_
+#define CONNECT_HPP_
 
 #include <string>
 
@@ -43,4 +43,4 @@ public:
 /*! @} */
 
 
-#endif /* CONNECT_H_ */
+#endif /* CONNECT_HPP_ */

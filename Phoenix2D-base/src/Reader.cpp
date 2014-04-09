@@ -21,10 +21,10 @@
 #include <string>
 #include <iostream>
 #include <pthread.h>
-#include "Reader.h"
-#include "Connect.h"
-#include "Parser.h"
-#include "Config.h"
+#include "Reader.hpp"
+#include "Connect.hpp"
+#include "Parser.hpp"
+#include "Configs.hpp"
 
 namespace Phoenix {
 
@@ -45,7 +45,7 @@ Reader::Reader(Connect *connect, Parser *parser) {
 }
 
 Reader::~Reader() {
-	if (Config::VERBOSE) std::cout << "Reader out" << std::endl;
+	if (Configs::VERBOSE) std::cout << "Reader out" << std::endl;
 }
 
 void Reader::execute() {

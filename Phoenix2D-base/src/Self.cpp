@@ -25,11 +25,11 @@
 #include <iostream>
 #include <boost/regex.hpp>
 #include <boost/circular_buffer.hpp>
-#include "Command.h"
-#include "Config.h"
-#include "Self.h"
-#include "Server.h"
-#include "Game.h"
+#include "Command.hpp"
+#include "Configs.hpp"
+#include "Self.hpp"
+#include "Server.hpp"
+#include "Game.hpp"
 
 namespace Phoenix {
 
@@ -90,35 +90,35 @@ static double x          = 0.0;
 static double y          = 0.0;
 static double theta      = 0.0;
 static std::list<Command*> last_commands_sent;
-static boost::circular_buffer<std::string> view_mode_width_buffer(Config::BUFFER_MAX_HISTORY, "normal");
-static boost::circular_buffer<std::string> view_mode_quality_buffer(Config::BUFFER_MAX_HISTORY, "high");
-static boost::circular_buffer<double> stamina_buffer(Config::BUFFER_MAX_HISTORY, 0.0);
-static boost::circular_buffer<double> effort_buffer(Config::BUFFER_MAX_HISTORY, 0.0);
-static boost::circular_buffer<double> stamina_capacity_buffer(Config::BUFFER_MAX_HISTORY, 0.0);
-static boost::circular_buffer<double> amount_of_speed_buffer(Config::BUFFER_MAX_HISTORY, 0.0);
-static boost::circular_buffer<double> direction_of_speed_buffer(Config::BUFFER_MAX_HISTORY, 0.0);
-static boost::circular_buffer<double> head_angle_buffer(Config::BUFFER_MAX_HISTORY, 0.0);
-static boost::circular_buffer<int> kick_count_buffer(Config::BUFFER_MAX_HISTORY, 0);
-static boost::circular_buffer<int> dash_count_buffer(Config::BUFFER_MAX_HISTORY, 0);
-static boost::circular_buffer<int> turn_count_buffer(Config::BUFFER_MAX_HISTORY, 0);
-static boost::circular_buffer<int> say_count_buffer(Config::BUFFER_MAX_HISTORY, 0);
-static boost::circular_buffer<int> turn_neck_count_buffer(Config::BUFFER_MAX_HISTORY, 0);
-static boost::circular_buffer<int> catch_count_buffer(Config::BUFFER_MAX_HISTORY, 0);
-static boost::circular_buffer<int> move_count_buffer(Config::BUFFER_MAX_HISTORY, 0);
-static boost::circular_buffer<int> change_view_count_buffer(Config::BUFFER_MAX_HISTORY, 0);
-static boost::circular_buffer<int> arm_movable_buffer(Config::BUFFER_MAX_HISTORY, 0);
-static boost::circular_buffer<int> arm_expires_buffer(Config::BUFFER_MAX_HISTORY, 0);
-static boost::circular_buffer<double> arm_dist_buffer(Config::BUFFER_MAX_HISTORY, 0.0);
-static boost::circular_buffer<double> arm_dir_buffer(Config::BUFFER_MAX_HISTORY, 0.0);
-static boost::circular_buffer<int> arm_count_buffer(Config::BUFFER_MAX_HISTORY, 0);
-static boost::circular_buffer<std::string> focus_target_buffer(Config::BUFFER_MAX_HISTORY, "none");
-static boost::circular_buffer<int> focus_count_buffer(Config::BUFFER_MAX_HISTORY, 0);
-static boost::circular_buffer<int> tackle_expires_buffer(Config::BUFFER_MAX_HISTORY, 0);
-static boost::circular_buffer<int> tackle_count_buffer(Config::BUFFER_MAX_HISTORY, 0);
+static boost::circular_buffer<std::string> view_mode_width_buffer(Configs::BUFFER_MAX_HISTORY, "normal");
+static boost::circular_buffer<std::string> view_mode_quality_buffer(Configs::BUFFER_MAX_HISTORY, "high");
+static boost::circular_buffer<double> stamina_buffer(Configs::BUFFER_MAX_HISTORY, 0.0);
+static boost::circular_buffer<double> effort_buffer(Configs::BUFFER_MAX_HISTORY, 0.0);
+static boost::circular_buffer<double> stamina_capacity_buffer(Configs::BUFFER_MAX_HISTORY, 0.0);
+static boost::circular_buffer<double> amount_of_speed_buffer(Configs::BUFFER_MAX_HISTORY, 0.0);
+static boost::circular_buffer<double> direction_of_speed_buffer(Configs::BUFFER_MAX_HISTORY, 0.0);
+static boost::circular_buffer<double> head_angle_buffer(Configs::BUFFER_MAX_HISTORY, 0.0);
+static boost::circular_buffer<int> kick_count_buffer(Configs::BUFFER_MAX_HISTORY, 0);
+static boost::circular_buffer<int> dash_count_buffer(Configs::BUFFER_MAX_HISTORY, 0);
+static boost::circular_buffer<int> turn_count_buffer(Configs::BUFFER_MAX_HISTORY, 0);
+static boost::circular_buffer<int> say_count_buffer(Configs::BUFFER_MAX_HISTORY, 0);
+static boost::circular_buffer<int> turn_neck_count_buffer(Configs::BUFFER_MAX_HISTORY, 0);
+static boost::circular_buffer<int> catch_count_buffer(Configs::BUFFER_MAX_HISTORY, 0);
+static boost::circular_buffer<int> move_count_buffer(Configs::BUFFER_MAX_HISTORY, 0);
+static boost::circular_buffer<int> change_view_count_buffer(Configs::BUFFER_MAX_HISTORY, 0);
+static boost::circular_buffer<int> arm_movable_buffer(Configs::BUFFER_MAX_HISTORY, 0);
+static boost::circular_buffer<int> arm_expires_buffer(Configs::BUFFER_MAX_HISTORY, 0);
+static boost::circular_buffer<double> arm_dist_buffer(Configs::BUFFER_MAX_HISTORY, 0.0);
+static boost::circular_buffer<double> arm_dir_buffer(Configs::BUFFER_MAX_HISTORY, 0.0);
+static boost::circular_buffer<int> arm_count_buffer(Configs::BUFFER_MAX_HISTORY, 0);
+static boost::circular_buffer<std::string> focus_target_buffer(Configs::BUFFER_MAX_HISTORY, "none");
+static boost::circular_buffer<int> focus_count_buffer(Configs::BUFFER_MAX_HISTORY, 0);
+static boost::circular_buffer<int> tackle_expires_buffer(Configs::BUFFER_MAX_HISTORY, 0);
+static boost::circular_buffer<int> tackle_count_buffer(Configs::BUFFER_MAX_HISTORY, 0);
 std::list<std::string> empty_vector;
-static boost::circular_buffer<std::list<std::string> > collisions_buffer(Config::BUFFER_MAX_HISTORY, empty_vector);
-static boost::circular_buffer<int> foul_charged_buffer(Config::BUFFER_MAX_HISTORY, 0);
-static boost::circular_buffer<std::string> foul_card_buffer(Config::BUFFER_MAX_HISTORY, "none");
+static boost::circular_buffer<std::list<std::string> > collisions_buffer(Configs::BUFFER_MAX_HISTORY, empty_vector);
+static boost::circular_buffer<int> foul_charged_buffer(Configs::BUFFER_MAX_HISTORY, 0);
+static boost::circular_buffer<std::string> foul_card_buffer(Configs::BUFFER_MAX_HISTORY, "none");
 
 double Self::PI         = 3.14159265359;
 
@@ -277,7 +277,7 @@ Self::Self(std::string player_params, std::string team_name, int unum, std::stri
 }
 
 Self::~Self() {
-	if (Config::VERBOSE) std::cout << "Self out" << std::endl;
+	if (Configs::VERBOSE) std::cout << "Self out" << std::endl;
 	if (types_id)                 delete[] types_id;
 	if (player_speed_max)         delete[] player_speed_max;
 	if (stamina_inc_max)          delete[] stamina_inc_max;
@@ -694,111 +694,111 @@ void Self::setLastCommandsSet(std::list<Command*> last_commands_sent_t) {
 }
 
 std::string Self::getViewModeWidthAtTime(unsigned int time) {
-	return (time < Config::BUFFER_MAX_HISTORY) ? view_mode_width_buffer[time] : "";
+	return (time < Configs::BUFFER_MAX_HISTORY) ? view_mode_width_buffer[time] : "";
 }
 
 std::string Self::getViewModeQualityAtTime(unsigned int time) {
-	return (time < Config::BUFFER_MAX_HISTORY) ? view_mode_quality_buffer[time] : "";
+	return (time < Configs::BUFFER_MAX_HISTORY) ? view_mode_quality_buffer[time] : "";
 }
 
 double Self::getStaminaAtTime(unsigned int time) {
-	return (time < Config::BUFFER_MAX_HISTORY) ? stamina_buffer[time] : 0.0;
+	return (time < Configs::BUFFER_MAX_HISTORY) ? stamina_buffer[time] : 0.0;
 }
 
 double Self::getEffortAtTime(unsigned int time) {
-	return (time < Config::BUFFER_MAX_HISTORY) ? effort_buffer[time] : 0.0;
+	return (time < Configs::BUFFER_MAX_HISTORY) ? effort_buffer[time] : 0.0;
 }
 
 double Self::getStaminaCapacityAtTime(unsigned int time) {
-	return (time < Config::BUFFER_MAX_HISTORY) ? stamina_capacity_buffer[time] : 0.0;
+	return (time < Configs::BUFFER_MAX_HISTORY) ? stamina_capacity_buffer[time] : 0.0;
 }
 
 double Self::getAmountOfSpeedAtTime(unsigned int time) {
-	return (time < Config::BUFFER_MAX_HISTORY) ? amount_of_speed_buffer[time] : 0.0;
+	return (time < Configs::BUFFER_MAX_HISTORY) ? amount_of_speed_buffer[time] : 0.0;
 }
 
 double Self::getDirectionOfSpeedAtTime(unsigned int time) {
-	return (time < Config::BUFFER_MAX_HISTORY) ? direction_of_speed_buffer[time] : 0.0;
+	return (time < Configs::BUFFER_MAX_HISTORY) ? direction_of_speed_buffer[time] : 0.0;
 }
 
 int Self::getKickCountAtTime(unsigned int time) {
-	return (time < Config::BUFFER_MAX_HISTORY) ? kick_count_buffer[time] : 0;
+	return (time < Configs::BUFFER_MAX_HISTORY) ? kick_count_buffer[time] : 0;
 }
 
 int Self::getDashCountAtTime(unsigned int time) {
-	return (time < Config::BUFFER_MAX_HISTORY) ? dash_count_buffer[time] : 0;
+	return (time < Configs::BUFFER_MAX_HISTORY) ? dash_count_buffer[time] : 0;
 }
 
 int Self::getTurnCountAtTime(unsigned int time) {
-	return (time < Config::BUFFER_MAX_HISTORY) ? turn_count_buffer[time] : 0;
+	return (time < Configs::BUFFER_MAX_HISTORY) ? turn_count_buffer[time] : 0;
 }
 
 int Self::getSayCountAtTime(unsigned int time) {
-	return (time < Config::BUFFER_MAX_HISTORY) ? say_count_buffer[time] : 0;
+	return (time < Configs::BUFFER_MAX_HISTORY) ? say_count_buffer[time] : 0;
 }
 
 int Self::getTurnNeckCountAtTime(unsigned int time) {
-	return (time < Config::BUFFER_MAX_HISTORY) ? turn_neck_count_buffer[time] : 0;
+	return (time < Configs::BUFFER_MAX_HISTORY) ? turn_neck_count_buffer[time] : 0;
 }
 
 int Self::getCatchCountAtTime(unsigned int time) {
-	return (time < Config::BUFFER_MAX_HISTORY) ? catch_count_buffer[time] : 0;
+	return (time < Configs::BUFFER_MAX_HISTORY) ? catch_count_buffer[time] : 0;
 }
 
 int Self::getMoveCountAtTime(unsigned int time) {
-	return (time < Config::BUFFER_MAX_HISTORY) ? move_count_buffer[time] : 0;
+	return (time < Configs::BUFFER_MAX_HISTORY) ? move_count_buffer[time] : 0;
 }
 
 int Self::getChangeViewCountAtTime(unsigned int time) {
-	return (time < Config::BUFFER_MAX_HISTORY) ? change_view_count_buffer[time] : 0;
+	return (time < Configs::BUFFER_MAX_HISTORY) ? change_view_count_buffer[time] : 0;
 }
 
 int Self::getArmMovableAtTime(unsigned int time) {
-	return (time < Config::BUFFER_MAX_HISTORY) ? arm_movable_buffer[time] : 0;
+	return (time < Configs::BUFFER_MAX_HISTORY) ? arm_movable_buffer[time] : 0;
 }
 
 int Self::getArmExpiresAtTime(unsigned int time) {
-	return (time < Config::BUFFER_MAX_HISTORY) ? arm_expires_buffer[time] : 0;
+	return (time < Configs::BUFFER_MAX_HISTORY) ? arm_expires_buffer[time] : 0;
 }
 
 double Self::getArmDistAtTime(unsigned int time) {
-	return (time < Config::BUFFER_MAX_HISTORY) ? arm_dist_buffer[time] : 0.0;
+	return (time < Configs::BUFFER_MAX_HISTORY) ? arm_dist_buffer[time] : 0.0;
 }
 
 double Self::getArmDirAtTime(unsigned int time) {
-	return (time < Config::BUFFER_MAX_HISTORY) ? arm_dir_buffer[time] : 0.0;
+	return (time < Configs::BUFFER_MAX_HISTORY) ? arm_dir_buffer[time] : 0.0;
 }
 
 int Self::getArmCountAtTime(unsigned int time) {
-	return (time < Config::BUFFER_MAX_HISTORY) ? arm_count_buffer[time] : 0;
+	return (time < Configs::BUFFER_MAX_HISTORY) ? arm_count_buffer[time] : 0;
 }
 
 std::string Self::getFocusTargetAtTime(unsigned int time) {
-	return (time < Config::BUFFER_MAX_HISTORY) ? focus_target_buffer[time] : "";
+	return (time < Configs::BUFFER_MAX_HISTORY) ? focus_target_buffer[time] : "";
 }
 
 int Self::getFocusCountAtTime(unsigned int time) {
-	return (time < Config::BUFFER_MAX_HISTORY) ? focus_count_buffer[time] : 0;
+	return (time < Configs::BUFFER_MAX_HISTORY) ? focus_count_buffer[time] : 0;
 }
 
 int Self::getTackleExpiresAtTime(unsigned int time) {
-	return (time < Config::BUFFER_MAX_HISTORY) ? tackle_expires_buffer[time] : 0;
+	return (time < Configs::BUFFER_MAX_HISTORY) ? tackle_expires_buffer[time] : 0;
 }
 
 int Self::getTackleCountAtTime(unsigned int time) {
-	return (time < Config::BUFFER_MAX_HISTORY) ? tackle_count_buffer[time] : 0;
+	return (time < Configs::BUFFER_MAX_HISTORY) ? tackle_count_buffer[time] : 0;
 }
 
 std::list<std::string> Self::getCollisionsAtTime(unsigned int time) {
-	return (time < Config::BUFFER_MAX_HISTORY) ? collisions_buffer[time] : empty_vector;
+	return (time < Configs::BUFFER_MAX_HISTORY) ? collisions_buffer[time] : empty_vector;
 }
 
 int Self::getFoulChargedAtTime(unsigned int time) {
-	return (time < Config::BUFFER_MAX_HISTORY) ? foul_charged_buffer[time] : 0;
+	return (time < Configs::BUFFER_MAX_HISTORY) ? foul_charged_buffer[time] : 0;
 }
 
 std::string Self::getFoulCardAtTime(unsigned int time) {
-	return (time < Config::BUFFER_MAX_HISTORY) ? foul_card_buffer[time] : "";
+	return (time < Configs::BUFFER_MAX_HISTORY) ? foul_card_buffer[time] : "";
 }
 
 }

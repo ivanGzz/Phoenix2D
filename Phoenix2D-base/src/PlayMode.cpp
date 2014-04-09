@@ -18,9 +18,9 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "PlayMode.h"
-#include "Commands.h"
-#include "Parser.h"
+#include "PlayMode.hpp"
+#include "Commands.hpp"
+#include "Parser.hpp"
 
 namespace Phoenix {
 

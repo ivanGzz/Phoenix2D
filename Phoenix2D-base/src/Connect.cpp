@@ -24,8 +24,8 @@
 #include <unistd.h>
 #include <string.h>
 #include <iostream>
-#include "Connect.h"
-#include "Config.h"
+#include "Connect.hpp"
+#include "Configs.hpp"
 
 namespace Phoenix {
 
@@ -76,7 +76,7 @@ Connect::Connect(const char *host, int port) {
 }
 
 Connect::~Connect() {
-	if (Config::VERBOSE) std::cout << "Connect out" << std::endl;
+	if (Configs::VERBOSE) std::cout << "Connect out" << std::endl;
 }
 
 void Connect::disconnect() {

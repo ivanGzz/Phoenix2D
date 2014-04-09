@@ -18,12 +18,12 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef WORLDMODEL_H_
-#define WORLDMODEL_H_
+#ifndef WORLDMODEL_HPP_
+#define WORLDMODEL_HPP_
 
 #include <list>
-#include "Player.h"
-#include "Ball.h"
+#include "Player.hpp"
+#include "Ball.hpp"
 
 /*! @addtogroup phoenix_main
  * @{
@@ -54,4 +54,4 @@ public:
 } // End namespace Phoenix
 /*! @} */
 
-#endif /* WORLDMODEL_H_ */
+#endif /* WORLDMODEL_HPP_ */

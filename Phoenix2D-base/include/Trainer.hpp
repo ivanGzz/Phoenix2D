@@ -18,10 +18,10 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRAINER_H_
-#define TRAINER_H_
+#ifndef TRAINER_HPP_
+#define TRAINER_HPP_
 
-#include "WorldModel.h"
+#include "WorldModel.hpp"
 
 /*! @addtogroup phoenix_main
  * @{
@@ -46,4 +46,4 @@ public:
 } // End namespace Phoenix
 /*! @} */
 
-#endif /* TRAINER_H_ */
+#endif /* TRAINER_HPP_ */

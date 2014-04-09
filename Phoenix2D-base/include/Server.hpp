@@ -18,8 +18,8 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SERVER_H_
-#define SERVER_H_
+#ifndef SERVER_HPP_
+#define SERVER_HPP_
 
 #include <string>
 
@@ -233,4 +233,4 @@ public:
 } // End namespace Phoenix
 /*! @} */
 
-#endif /* SERVER_H_ */
+#endif /* SERVER_HPP_ */

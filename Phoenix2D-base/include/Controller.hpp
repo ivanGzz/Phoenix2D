@@ -26,8 +26,8 @@
  */
  // $Log$
 
-#ifndef CONTROLLER_H_
-#define CONTROLLER_H_
+#ifndef CONTROLLER_HPP_
+#define CONTROLLER_HPP_
 
 #include <string>
 
@@ -71,8 +71,7 @@ class Self;
  * The Controller is in charge of instantiation of the rest of the inner 
  * objects using the user's parameters. 
  */
-class Controller 
-{
+class Controller {
 public:
 	static char AGENT_TYPE; ///< p = Player, t = Trainer
   /*! @brief Default Constructor
@@ -122,4 +121,4 @@ private:
 } // End namespace Phoenix
 /*! @} */
 
-#endif /* CONTROLLER_H_ */
+#endif /* CONTROLLER_HPP_ */

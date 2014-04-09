@@ -18,7 +18,7 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "WorldModel.h"
+#include "WorldModel.hpp"
 
 namespace Phoenix {
 

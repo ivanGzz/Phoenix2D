@@ -18,7 +18,7 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Server.h"
+#include "Server.hpp"
 #include <boost/regex.hpp>
 #include <cstdlib>
 

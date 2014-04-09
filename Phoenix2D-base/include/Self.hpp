@@ -18,15 +18,15 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SELF_H_
-#define SELF_H_
+#ifndef SELF_HPP_
+#define SELF_HPP_
 
 #include <string>
 #include <list>
 #include <vector>
-#include "Flag.h"
-#include "Position.h"
-#include "Vector2D.h"
+#include "Flag.hpp"
+#include "Position.hpp"
+#include "Vector2D.hpp"
 
 /*! @addtogroup phoenix_main
  * @{
@@ -162,4 +162,4 @@ public:
 } // End namespace Phoenix
 /*! @} */
 
-#endif /* SELF_H_ */
+#endif /* SELF_HPP_ */

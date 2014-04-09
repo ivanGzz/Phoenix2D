@@ -22,13 +22,13 @@
 #include <sstream>
 #include <iomanip>
 #include <list>
-#include "Commands.h"
-#include "Command.h"
-#include "Connect.h"
-#include "Self.h"
-#include "Server.h"
-#include "Config.h"
-#include "Game.h"
+#include "Commands.hpp"
+#include "Command.hpp"
+#include "Connect.hpp"
+#include "Self.hpp"
+#include "Server.hpp"
+#include "Configs.hpp"
+#include "Game.hpp"
 
 namespace Phoenix {
 
@@ -41,11 +41,11 @@ Commands::Commands(Connect *connect) {
 }
 
 Commands::~Commands() {
-	if (Config::VERBOSE) std::cout << "Commands out" << std::endl;
+	if (Configs::VERBOSE) std::cout << "Commands out" << std::endl;
 }
 
 void Commands::flush() {
-	while (commands_history.size() > 0 && Game::SIMULATION_TIME - commands_history.front().createdAt() > Config::COMMANDS_MAX_HISTORY) {
+	while (commands_history.size() > 0 && Game::SIMULATION_TIME - commands_history.front().createdAt() > Configs::COMMANDS_MAX_HISTORY) {
 		commands_history.pop_front();
 	}
 }

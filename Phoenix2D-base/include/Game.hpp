@@ -18,11 +18,10 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GAME_H_
-#define GAME_H_
+#ifndef GAME_HPP_
+#define GAME_HPP_
 
 #include <string>
-
 
 /*! @addtogroup phoenix_main
  * @{
@@ -49,4 +48,4 @@ public:
 } // End namespace Phoenix
 /*! @} */
 
-#endif /* GAME_H_ */
+#endif /* GAME_HPP_ */

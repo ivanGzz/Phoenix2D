@@ -18,8 +18,8 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LOGGER_H_
-#define LOGGER_H_
+#ifndef LOGGER_HPP_
+#define LOGGER_HPP_
 
 #include <string>
 
@@ -42,4 +42,4 @@ public:
 } // End namespace Phoenix
 /*! @} */
 
-#endif /* LOGGER_H_ */
+#endif /* LOGGER_HPP_ */

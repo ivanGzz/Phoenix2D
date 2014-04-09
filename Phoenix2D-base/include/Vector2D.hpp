@@ -18,8 +18,8 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef VECTOR2D_H_
-#define VECTOR2D_H_
+#ifndef VECTOR2D_HPP_
+#define VECTOR2D_HPP_
 
 #include <string>
 
@@ -67,4 +67,4 @@ public:
 } // End namespace Phoenix
 /*! @} */
 
-#endif /* VECTOR2D_H_ */
+#endif /* VECTOR2D_HPP_ */

@@ -18,8 +18,8 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PARSER_H_
-#define PARSER_H_
+#ifndef PARSER_HPP_
+#define PARSER_HPP_
 
 #include <string>
 
@@ -52,4 +52,4 @@ public:
 } // End namespace Phoenix
 /*! @} */
 
-#endif /* PARSER_H_ */
+#endif /* PARSER_HPP_ */

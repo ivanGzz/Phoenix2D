@@ -18,12 +18,12 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef BALL_H_
-#define BALL_H_
+#ifndef BALL_HPP_
+#define BALL_HPP_
 
 #include <string>
-#include "Position.h"
-#include "Vector2D.h"
+#include "Position.hpp"
+#include "Vector2D.hpp"
 
 /*! @addtogroup phoenix_main
  * @{
@@ -63,4 +63,4 @@ public:
 /*! @} */
 
 
-#endif /* BALL_H_ */
+#endif /* BALL_HPP_ */

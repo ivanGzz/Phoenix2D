@@ -18,10 +18,10 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACTIONS_H_
-#define ACTIONS_H_
+#ifndef ACTIONS_HPP_
+#define ACTIONS_HPP_
 
-#include "Position.h"
+#include "Position.hpp"
 
 /*! @addtogroup phoenix_main
  * @{
@@ -57,4 +57,4 @@ public:
 /*! @} */
 
 
-#endif /* ACTIONS_H_ */
+#endif /* ACTIONS_HPP_ */

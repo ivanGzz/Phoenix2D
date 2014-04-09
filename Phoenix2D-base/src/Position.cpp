@@ -18,9 +18,9 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Position.h"
+#include "Position.hpp"
 #include <cmath>
-#include "Self.h"
+#include "Self.hpp"
 #include <sstream>
 #include <iostream>
 #include <iomanip>

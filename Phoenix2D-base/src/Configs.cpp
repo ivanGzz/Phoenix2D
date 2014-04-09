@@ -22,8 +22,8 @@
 #include <boost/regex.hpp>
 #include <cstdlib>
 #include <iostream>
-#include "Config.h"
-#include "Self.h"
+#include "Configs.hpp"
+#include "Self.hpp"
 
 namespace Phoenix {
 
@@ -34,20 +34,20 @@ boost::regex verbose_regex("\\(verbose\\s(\\d+)\\)");
 boost::regex player_history_regex("\\(player_history\\s(\\d+)\\)");
 
 //Globals
-unsigned int Config::BUFFER_MAX_HISTORY = 4;
-unsigned int Config::PLAYER_MAX_HISTORY = 16;
-unsigned int Config::BALL_MAX_HISTORY = 16;
-unsigned int Config::COMMANDS_MAX_HISTORY = 4;
-unsigned int Config::COMMAND_PRECISION = 4;
-std::string Config::LOG_NAME = "";
+unsigned int Configs::BUFFER_MAX_HISTORY = 4;
+unsigned int Configs::PLAYER_MAX_HISTORY = 16;
+unsigned int Configs::BALL_MAX_HISTORY = 16;
+unsigned int Configs::COMMANDS_MAX_HISTORY = 4;
+unsigned int Configs::COMMAND_PRECISION = 4;
+std::string Configs::LOG_NAME = "";
 //individuals
-Position Config::POSITION;
-bool Config::PLAYER_HISTORY = false;
-bool Config::LOGGING = false;
-bool Config::TRAINER_LOGGING = false;
-bool Config::VERBOSE = false;
+Position Configs::POSITION;
+bool Configs::PLAYER_HISTORY = false;
+bool Configs::LOGGING = false;
+bool Configs::TRAINER_LOGGING = false;
+bool Configs::VERBOSE = false;
 
-Config::Config() {
+Configs::Configs() {
 	std::ifstream file("conf.phx", std::ifstream::in);
 	if (file) {
 		std::string line;
@@ -57,69 +57,69 @@ Config::Config() {
 			if (boost::regex_match(line.c_str(), match, config_regex)) {
 				std::string config = std::string() + match[1];
 				if (config.compare("buffer_max_history") == 0) {
-					Config::BUFFER_MAX_HISTORY = (unsigned int)atoi((std::string() + match[2]).c_str());
+					Configs::BUFFER_MAX_HISTORY = (unsigned int)atoi((std::string() + match[2]).c_str());
 				} else if (config.compare("player_max_history") == 0) {
-					Config::PLAYER_MAX_HISTORY = (unsigned int)atoi((std::string() + match[2]).c_str());
+					Configs::PLAYER_MAX_HISTORY = (unsigned int)atoi((std::string() + match[2]).c_str());
 				} else if (config.compare("ball_max_history") == 0) {
-					Config::BALL_MAX_HISTORY = (unsigned int)atoi((std::string() + match[2]).c_str());
+					Configs::BALL_MAX_HISTORY = (unsigned int)atoi((std::string() + match[2]).c_str());
 				} else if (config.compare("commands_max_history") == 0) {
-					Config::COMMANDS_MAX_HISTORY = (unsigned int)atoi((std::string() + match[2]).c_str());
+					Configs::COMMANDS_MAX_HISTORY = (unsigned int)atoi((std::string() + match[2]).c_str());
 				} else if (config.compare("commands_precision") == 0) {
-					Config::COMMAND_PRECISION = (unsigned int)atoi((std::string() + match[2]).c_str());
+					Configs::COMMAND_PRECISION = (unsigned int)atoi((std::string() + match[2]).c_str());
 				} else if (config.compare("log_name") == 0) {
-					Config::LOG_NAME = std::string() + match[2];
+					Configs::LOG_NAME = std::string() + match[2];
 				}
 			} else if (boost::regex_match(line.c_str(), match, logging_regex)) {
 				int number = atoi((std::string() + match[1]).c_str());
 				if (number == 0) {
-					Config::TRAINER_LOGGING = true;
+					Configs::TRAINER_LOGGING = true;
 				}
 			}
 		}
 		file.close();
 	} else {
-		std::cerr << "Config::Config() -> error opening conf.phx file" << std::cerr;
+		std::cerr << "Configs::Configs() -> error opening conf.phx file" << std::cerr;
 	}
 }
 
-Config::~Config() {
+Configs::~Configs() {
 
 }
 
-void Config::load() {
+void Configs::load() {
 	switch (Self::UNIFORM_NUMBER) {
 	case 1:
-		Config::POSITION = Position(-50.0, 0.0);;
+		Configs::POSITION = Position(-50.0, 0.0);;
 		break;
 	case 2:
-		Config::POSITION = Position(-10.0, 0.0);
+		Configs::POSITION = Position(-10.0, 0.0);
 		break;
 	case 3:
-		Config::POSITION = Position(-1.0, -10.0);
+		Configs::POSITION = Position(-1.0, -10.0);
 		break;
 	case 4:
-		Config::POSITION = Position(-1.0, 10.0);
+		Configs::POSITION = Position(-1.0, 10.0);
 		break;
 	case 5:
-		Config::POSITION = Position(-12.0, 0.0);
+		Configs::POSITION = Position(-12.0, 0.0);
 		break;
 	case 6:
-		Config::POSITION = Position(-2.0, -11.0);
+		Configs::POSITION = Position(-2.0, -11.0);
 		break;
 	case 7:
-		Config::POSITION = Position(-2.0, 11.0);
+		Configs::POSITION = Position(-2.0, 11.0);
 		break;
 	case 8:
-		Config::POSITION = Position(-14.0, -5.0);
+		Configs::POSITION = Position(-14.0, -5.0);
 		break;
 	case 9:
-		Config::POSITION = Position(-14.0, 5.0);
+		Configs::POSITION = Position(-14.0, 5.0);
 		break;
 	case 10:
-		Config::POSITION = Position(-14.0, -10.0);
+		Configs::POSITION = Position(-14.0, -10.0);
 		break;
 	case 11:
-		Config::POSITION = Position(-14.0, 10.0);
+		Configs::POSITION = Position(-14.0, 10.0);
 		break;
 	}
 	std::string filename = Self::TEAM_NAME + ".phx";
@@ -134,22 +134,22 @@ void Config::load() {
 				double x = atof((std::string() + match[2]).c_str());
 				double y = atof((std::string() + match[3]).c_str());
 				if (Self::UNIFORM_NUMBER == number) {
-					Config::POSITION = Position(x, y);
+					Configs::POSITION = Position(x, y);
 				}
 			} else if (boost::regex_match(line.c_str(), match, logging_regex)) {
 				int number = atoi((std::string() + match[1]).c_str());
 				if (Self::UNIFORM_NUMBER == number) {
-					Config::LOGGING = true;
+					Configs::LOGGING = true;
 				}
 			} else if (boost::regex_match(line.c_str(), match, verbose_regex)) {
 				int number = atoi((std::string() + match[1]).c_str());
 				if (Self::UNIFORM_NUMBER == number) {
-					Config::VERBOSE = true;
+					Configs::VERBOSE = true;
 				}
 			} else if (boost::regex_match(line.c_str(), match, player_history_regex)) {
 				int number = atoi((std::string() + match[1]).c_str());
 				if (Self::UNIFORM_NUMBER == number) {
-					Config::PLAYER_HISTORY = true;
+					Configs::PLAYER_HISTORY = true;
 				}
 			}
 		}
