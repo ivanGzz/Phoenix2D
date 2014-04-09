@@ -133,7 +133,7 @@ am_libPhoenixBase_1_0_la_OBJECTS = src/Actions.lo src/Ball.lo \
 	src/Controller.lo src/Flag.lo src/Game.lo src/Logger.lo \
 	src/Parser.lo src/Player.lo src/PlayMode.lo src/Position.lo \
 	src/Reader.lo src/Self.lo src/Self.lo src/Server.lo \
-	src/Trainer.lo src/Vector2D.lo src/World.lo src/WorldMode.lo
+	src/Trainer.lo src/Vector2D.lo src/World.lo src/WorldModel.lo
 libPhoenixBase_1_0_la_OBJECTS = $(am_libPhoenixBase_1_0_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -360,7 +360,7 @@ libPhoenixBase_1_0_la_SOURCES = src/Actions.cpp \
 	src/Reader.cpp src/Self.cpp \
 	src/Self.cpp src/Server.cpp \
 	src/Trainer.cpp src/Vector2D.cpp \
-	src/World.cpp src/WorldMode.cpp
+	src/World.cpp src/WorldModel.cpp
 
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
@@ -477,7 +477,7 @@ src/Server.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
 src/Trainer.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
 src/Vector2D.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
 src/World.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
-src/WorldMode.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
+src/WorldModel.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
 
 libPhoenixBase-1.0.la: $(libPhoenixBase_1_0_la_OBJECTS) $(libPhoenixBase_1_0_la_DEPENDENCIES) $(EXTRA_libPhoenixBase_1_0_la_DEPENDENCIES) 
 	$(AM_V_CXXLD)$(CXXLINK) -rpath $(libdir) $(libPhoenixBase_1_0_la_OBJECTS) $(libPhoenixBase_1_0_la_LIBADD) $(LIBS)
@@ -510,7 +510,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/Trainer.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/Vector2D.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/World.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/WorldMode.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/WorldModel.Plo@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
