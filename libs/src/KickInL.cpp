@@ -18,10 +18,11 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "KickInL.h"
-#include "Commands.h"
-namespace Phoenix
-{
+#include "KickInL.hpp"
+#include "Commands.hpp"
+
+namespace Phoenix {
+
 KickInL::KickInL(Commands *commands) : PlayMode(commands) {
 
 }
@@ -49,4 +50,5 @@ void KickInL::onCoachExecute(WorldModel world) {
 void KickInL::onMessageReceived(std::string message, int sender) {
 
 }
+
 }

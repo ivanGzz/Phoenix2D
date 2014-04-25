@@ -21,15 +21,16 @@
 #include <iostream>
 #include <vector>
 #include <boost/circular_buffer.hpp>
-#include "PlayOn.h"
-#include "Commands.h"
-#include "Game.h"
-#include "Self.h"
-#include "Actions.h"
-#include "Player.h"
-#include "Config.h"
-namespace Phoenix
-{
+#include "PlayOn.hpp"
+#include "Commands.hpp"
+#include "Game.hpp"
+#include "Self.hpp"
+#include "Actions.hpp"
+#include "Player.hpp"
+#include "Config.hpp"
+
+namespace Phoenix {
+
 boost::circular_buffer<Position> positions(4);
 bool move = false;
 
@@ -42,7 +43,7 @@ PlayOn::~PlayOn() {
 }
 
 void PlayOn::setup(WorldModel world) {
-	if (Config::LOGGING) {
+	if (Configs::LOGGING) {
 		std::list<Player*> players = world.getPlayers();
 		std::clog << Game::GAME_TIME  << Self::getPosition().toString() << " [" << players.size() << "]";
 		for (std::list<Player*>::iterator it = players.begin(); it != players.end(); ++it) {
@@ -90,7 +91,7 @@ void PlayOn::onPlayerExecute(WorldModel world) {
 			}
 		}
 	}
-	if (Config::LOGGING) {
+	if (Configs::LOGGING) {
 		std::list<Player*> players = world.getPlayers();
 		std::clog << Game::GAME_TIME  << Self::getPosition().toString() << " [" << players.size() << "]";
 		for (std::list<Player*>::iterator it = players.begin(); it != players.end(); ++it) {
@@ -112,4 +113,5 @@ void PlayOn::onCoachExecute(WorldModel world) {
 void PlayOn::onMessageReceived(std::string message, int sender) {
 
 }
+
 }

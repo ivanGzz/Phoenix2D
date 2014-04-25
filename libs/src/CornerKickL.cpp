@@ -18,10 +18,11 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "CornerKickL.h"
-#include "Commands.h"
-namespace Phoenix
-{
+#include "CornerKickL.hpp"
+#include "Commands.hpp"
+
+namespace Phoenix {
+
 CornerKickL::CornerKickL(Commands *commands) : PlayMode(commands) {
 
 }
@@ -49,4 +50,5 @@ void CornerKickL::onCoachExecute(WorldModel world) {
 void CornerKickL::onMessageReceived(std::string message, int sender) {
 
 }
+
 }

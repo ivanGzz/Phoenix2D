@@ -18,31 +18,31 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GOALKICKL_H_
-#define GOALKICKL_H_
+#ifndef FREEKICKR_H_
+#define FREEKICKR_H_
 
-#include "PlayMode.h"
-#include "WorldModel.h"
+#include "PlayMode.hpp"
+#include "WorldModel.hpp"
 #include <string>
+
 
 /*! @addtogroup phoenix_main
  * @{
  */
-namespace Phoenix
-{
+namespace Phoenix {
 
 class Commands;
 /*! @addtogroup PlayModes
  * @{
  */
 /*!
- * @brief <STRONG> GoalKickL <BR> </STRONG>
- * The GoalKickL lorem Ipsum
+ * @brief <STRONG> FreeKickR <BR> </STRONG>
+ * The FreeKickR lorem Ipsum
  */
-class GoalKickL : public PlayMode {
+class FreeKickR : public PlayMode {
 public:
-	GoalKickL(Commands *commands);
-	~GoalKickL();
+	FreeKickR(Commands *commands);
+	~FreeKickR();
 	void setup(WorldModel world);
 	void onPlayerExecute(WorldModel world);
 	void onGoalieExecute(WorldModel world);
@@ -53,4 +53,4 @@ public:
 } // End namespace Phoenix
 /*! @} */
 
-#endif /* GOALKICKL_H_ */
+#endif /* FREEKICKR_H_ */

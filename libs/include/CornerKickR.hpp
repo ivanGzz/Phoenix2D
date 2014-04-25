@@ -18,32 +18,30 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CORNERKICKL_H_
-#define CORNERKICKL_H_
+#ifndef CORNERKICKR_H_
+#define CORNERKICKR_H_
 
-#include "PlayMode.h"
-#include "WorldModel.h"
+#include "PlayMode.hpp"
+#include "WorldModel.hpp"
 #include <string>
 
 /*! @addtogroup phoenix_main
  * @{
  */
-namespace Phoenix
-{
+namespace Phoenix {
 
 class Commands;
-
 /*! @addtogroup PlayModes
  * @{
  */
-/*!
- * @brief <STRONG> CornerKickL <BR> </STRONG>
- * The CornerKickL lorem Ipsum
+ /*!
+ * @brief <STRONG> CornerKickR <BR> </STRONG>
+ * The CornerKickR lorem Ipsum
  */
-class CornerKickL : public PlayMode {
+class CornerKickR : public PlayMode {
 public:
-	CornerKickL(Commands *commands);
-	~CornerKickL();
+	CornerKickR(Commands *commands);
+	~CornerKickR();
 	void setup(WorldModel world);
 	void onPlayerExecute(WorldModel world);
 	void onGoalieExecute(WorldModel world);
@@ -54,5 +52,4 @@ public:
 } // End namespace Phoenix
 /*! @} */
 
-
-#endif /* CORNERKICKL_H_ */
+#endif /* CORNERKICKR_H_ */

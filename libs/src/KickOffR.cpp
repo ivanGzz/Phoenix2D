@@ -18,10 +18,11 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "KickOffR.h"
-#include "Commands.h"
-namespace Phoenix
-{
+#include "KickOffR.hpp"
+#include "Commands.hpp"
+
+namespace Phoenix {
+
 KickOffR::KickOffR(Commands *commands) : PlayMode(commands) {
 
 }
@@ -49,4 +50,5 @@ void KickOffR::onCoachExecute(WorldModel world) {
 void KickOffR::onMessageReceived(std::string message, int sender) {
 
 }
+
 }

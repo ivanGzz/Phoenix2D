@@ -18,10 +18,11 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "FreeKickL.h"
-#include "Commands.h"
-namespace Phoenix
-{
+#include "FreeKickL.hpp"
+#include "Commands.hpp"
+
+namespace Phoenix {
+
 FreeKickL::FreeKickL(Commands *commands) : PlayMode(commands) {
 
 }
@@ -49,4 +50,5 @@ void FreeKickL::onCoachExecute(WorldModel world) {
 void FreeKickL::onMessageReceived(std::string message, int sender) {
 
 }
+
 }

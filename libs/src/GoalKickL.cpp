@@ -18,10 +18,11 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "GoalKickL.h"
-#include "Commands.h"
-namespace Phoenix
-{
+#include "GoalKickL.hpp"
+#include "Commands.hpp"
+
+namespace Phoenix {
+
 GoalKickL::GoalKickL(Commands *commands) : PlayMode(commands) {
 
 }
@@ -49,4 +50,5 @@ void GoalKickL::onCoachExecute(WorldModel world) {
 void GoalKickL::onMessageReceived(std::string message, int sender) {
 
 }
+
 }

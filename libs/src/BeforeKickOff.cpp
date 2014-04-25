@@ -20,13 +20,14 @@
 
 #include <iostream>
 #include <cmath>
-#include "BeforeKickOff.h"
-#include "Game.h"
-#include "Commands.h"
-#include "Config.h"
-#include "Self.h"
-namespace Phoenix
-{
+#include "BeforeKickOff.hpp"
+#include "Game.hpp"
+#include "Commands.hpp"
+#include "Configs.hpp"
+#include "Self.hpp"
+
+namespace Phoenix {
+
 BeforeKickOff::BeforeKickOff(Commands *commands) : PlayMode(commands) {
 
 }
@@ -36,7 +37,7 @@ BeforeKickOff::~BeforeKickOff() {
 }
 
 void BeforeKickOff::setup(WorldModel world) {
-	Position initPosition = Config::POSITION;
+	Position initPosition = Configs::POSITION;
 	commands->move(initPosition.getX(), initPosition.getY());
 }
 
@@ -58,4 +59,5 @@ void BeforeKickOff::onCoachExecute(WorldModel world) {
 void BeforeKickOff::onMessageReceived(std::string message, int sender) {
 
 }
+
 }

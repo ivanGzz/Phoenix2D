@@ -1,4 +1,4 @@
-/*
+ /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
  * Copyright (c) 2013 Ivan Gonzalez
  *
@@ -18,31 +18,33 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KICKINR_H_
-#define KICKINR_H_
+#ifndef PLAYON_H_
+#define PLAYON_H_
 
-#include "PlayMode.h"
-#include "WorldModel.h"
+#include "PlayMode.hpp"
+#include "WorldModel.hpp"
 #include <string>
 
 /*! @addtogroup phoenix_main
  * @{
  */
-namespace Phoenix
-{
+namespace Phoenix {
 
 class Commands;
+class Actions;
 /*! @addtogroup PlayModes
  * @{
  */
 /*!
- * @brief <STRONG> KickInR <BR> </STRONG>
- * The KickInR lorem Ipsum
+ * @brief <STRONG> PlayOn <BR> </STRONG>
+ * The PlayOn lorem Ipsum
  */
-class KickInR : public PlayMode {
+class PlayOn : public PlayMode 
+{
+	Actions* actions;
 public:
-	KickInR(Commands *commands);
-	~KickInR();
+	PlayOn(Commands* commands, Actions* actions);
+	~PlayOn();
 	void setup(WorldModel world);
 	void onPlayerExecute(WorldModel world);
 	void onGoalieExecute(WorldModel world);
@@ -53,4 +55,4 @@ public:
 } // End namespace Phoenix
 /*! @} */
 
-#endif /* KICKINR_H_ */
+#endif /* PLAYON_H_ */
