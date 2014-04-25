@@ -1,5 +1,3 @@
-ACLOCAL_AMFLAGS = -I m4
-#AC_CONFIG_MACRO_DIR([m4])
 AM_CPPFLAGS = -Iinclude
 lib_LTLIBRARIES = libPhoenixBase-1.0.la
 libPhoenixBase_1_0_la_SOURCES = src/Actions.cpp \
