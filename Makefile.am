@@ -1,4 +1,5 @@
 AM_CPPFLAGS = -Ibase/include -Ilibs/include
+AM_LDFLAGS = -lboost_regex
 SUBDIRS = base libs .
 bin_PROGRAMS = agent
 agent_SOURCES = main.cpp

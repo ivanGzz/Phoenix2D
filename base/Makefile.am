@@ -6,7 +6,8 @@ libPhoenixBase_1_0_la_SOURCES = src/Actions.cpp \
 	src/Connect.cpp src/Controller.cpp \
 	src/Flag.cpp src/Game.cpp \
 	src/Logger.cpp \
-	src/Parser.cpp src/Player.cpp \
+	src/Parser.cpp src/PFilter.cpp \ 
+	src/Player.cpp \
 	src/PlayMode.cpp src/Position.cpp \
 	src/Reader.cpp \
 	src/Self.cpp src/Server.cpp \

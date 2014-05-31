@@ -25,11 +25,13 @@
 #include <iostream>
 #include <boost/regex.hpp>
 #include <boost/circular_buffer.hpp>
+#include "Constants.hpp"
 #include "Command.hpp"
 #include "Configs.hpp"
 #include "Self.hpp"
 #include "Server.hpp"
 #include "Game.hpp"
+#include "PFilter.hpp"
 
 namespace Phoenix {
 
@@ -48,8 +50,9 @@ double *effort_min;
 double *kick_power_rate;
 double *foul_detect_probability;
 double *catchable_area_l_stretch;
+PFilter pfilter;
 
-double u[3] = {0.0, 0.0, 0.0};
+double u[3] = {0.0, 0.0, 0.0}; //{dash_power, dash_direction, turn_moment}
 
 boost::regex sense_body_regex("^\\(sense_body\\s+\\d+\\s+"
 		"\\(view_mode\\s+(\\w+)\\s+(\\w+)\\)\\s*" //group 1 group 2
@@ -119,8 +122,6 @@ std::list<std::string> empty_vector;
 static boost::circular_buffer<std::list<std::string> > collisions_buffer(Configs::BUFFER_MAX_HISTORY, empty_vector);
 static boost::circular_buffer<int> foul_charged_buffer(Configs::BUFFER_MAX_HISTORY, 0);
 static boost::circular_buffer<std::string> foul_card_buffer(Configs::BUFFER_MAX_HISTORY, "none");
-
-double Self::PI         = 3.14159265359;
 
 std::string Self::TEAM_NAME                            = "Phoenix2D";
 int         Self::UNIFORM_NUMBER                       = 1;
@@ -521,7 +522,7 @@ void Self::changePlayerType(int type) {
 	}
 }
 
-double angleMean(std::list<double> arcs) {
+/*double angleMean(std::list<double> arcs) {
 	double x_m = 0.0;
 	double y_m = 0.0;
 	for (std::list<double>::iterator it = arcs.begin(); it != arcs.end(); ++it) {
@@ -531,7 +532,7 @@ double angleMean(std::list<double> arcs) {
 	x_m /= arcs.size();
 	y_m /= arcs.size();
 	return 180.0 * atan2(y_m, x_m) / Self::PI;
-}
+}*/
 
 /**
  * (x - x0)^2 + (y - y0)^2 = d0
@@ -540,7 +541,7 @@ double angleMean(std::list<double> arcs) {
  * k0 = d0^2 - x0^2 - y1^2
  * k1 = d1^2 - x1^2 - y1^2
  */
-bool triangular(Flag* flag0, Flag* flag1, double &x_t, double &y_t, double &theta_t, double &error_d) {
+/*bool triangular(Flag* flag0, Flag* flag1, double &x_t, double &y_t, double &theta_t, double &error_d) {
 	double k0 = pow(flag0->getDistance(), 2.0) - pow(flag0->getX(), 2.0) - pow(flag0->getY(), 2.0);
 	double k1 = pow(flag1->getDistance(), 2.0) - pow(flag1->getX(), 2.0) - pow(flag1->getY(), 2.0);
 	double x0, x1, y0, y1, B, C;
@@ -609,9 +610,9 @@ bool triangular(Flag* flag0, Flag* flag1, double &x_t, double &y_t, double &thet
 	theta_t = 180.0 * atan2(y_m, x_m) / Self::PI;
 	error_d = flag0->getError() + flag1->getError();
 	return true;
-}
+}*/
 
-bool areaCheck(double x_min, double x_max, double rmax, double x_c, double y_c, double error) {
+/*bool areaCheck(double x_min, double x_max, double rmax, double x_c, double y_c, double error) {
 	double x_t = cos(theta) * (x_c - x) + sin(theta) * (y_c - y);
 	double y_t = sin(theta) * (x - x_c) + cos(theta) * (y_c - y);
 	if (((x_t > x_min - error) && (x_t < x_max + error)) && ((y_t > -1.0 * rmax - error) && (y_t < rmax + error))) {
@@ -619,11 +620,47 @@ bool areaCheck(double x_min, double x_max, double rmax, double x_c, double y_c, 
 	} else {
 		return false;
 	}
+}*/
+
+double velc = 0.0;
+double dire = 0.0;
+double turn = 0.0;
+std::vector<Flag> current_flags;
+
+void predict(Particle &particle) {
+	particle.x += velc * cos(Math::PI * particle.direction / 180.0);
+	particle.y += velc * sin(Math::PI * particle.direction / 180.0);
+	particle.direction += turn;
+	if (particle.direction > 180.0) {
+		particle.direction -= 360.0;
+	} else if (particle.direction < -180.0) {
+		particle.direction += 360.0;
+	}
+}
+
+void weight(Particle &particle) {
+	particle.weight = 0.0;
+	for (std::vector<Flag>::iterator it = current_flags.begin(); it != current_flags.end(); ++it) {
+		double d = sqrt(pow(particle.x - it->getX(), 2.0) + pow(particle.y - it->getY(), 2.0));
+		double error = fabs(d - it->getDistance());
+		if (error > 0.0) {
+			particle.weight += 1.0 / error;
+		}
+	}
 }
 
 void Self::localize(std::vector<Flag> flags) {
 	if (!positioned) return;
-	if (flags.size() == 0) {
+	velc = getAmountOfSpeedAtTime(1) + getEffortAtTime(1) * DASH_POWER_RATE * u[0];
+	if (velc > PLAYER_SPEED_MAX) {
+		velc = PLAYER_SPEED_MAX;
+	}
+	turn = u[2] / (1.0 + INERTIA_MOMENT * velc);
+	current_flags = flags;
+	pfilter.predict(predict);
+	pfilter.update(weight);
+	pfilter.resample();
+	/*if (flags.size() == 0) {
 		localize();
 		return;
 	}
@@ -660,11 +697,21 @@ void Self::localize(std::vector<Flag> flags) {
 	}
 	x = x_e;
 	y = y_e;
-	theta = angleMean(thetas);
+	theta = angleMean(thetas);*/
 }
 
 void Self::localize() {
 	if (!positioned) return;
+	velc = getAmountOfSpeedAtTime(1) + getEffortAtTime(1) * DASH_POWER_RATE * u[0];
+	if (velc > PLAYER_SPEED_MAX) {
+		velc = PLAYER_SPEED_MAX;
+	}
+	turn = u[2] / (1.0 + INERTIA_MOMENT * velc);
+	current_flags = flags;
+	pfilter.predict(predict);
+	pfilter.update(weight);
+	pfilter.resample();
+	/*if (!positioned) return;
 	double effective_turn = u[2] / (1.0 + Self::getAmountOfSpeedAtTime(1) * Self::INERTIA_MOMENT);
 	theta += effective_turn;
 	if (theta > 180.0) {
@@ -678,7 +725,7 @@ void Self::localize() {
 	+ Vector2D::getVector2DWithMagnitudeAndDirection(edp, theta);
 	if (speed.getMagnitude() > Self::PLAYER_SPEED_MAX) speed = Vector2D::getVector2DWithMagnitudeAndDirection(Self::PLAYER_SPEED_MAX, theta);
 	x += speed.getXComponent();
-	y += speed.getYComponent();
+	y += speed.getYComponent();*/
 }
 
 Position Self::getPosition() {

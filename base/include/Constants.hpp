@@ -18,38 +18,15 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "PlayOn.hpp"
-#include "Commands.hpp"
-#include "Actions.hpp"
+#ifndef CONSTANTS_HPP_
+#define CONSTANTS_HPP_
 
-namespace Phoenix {
-
-PlayOn::PlayOn(Commands* commands, Actions* actions) : PlayMode(commands) {
-	this->actions = actions;
+namespace Math {
+	const double PI = 3.14159265359;
 }
 
-PlayOn::~PlayOn() {
-
+namespace Filter {
+	const int PARTICLES = 200;
 }
 
-void PlayOn::setup(WorldModel world) {
-
-}
-
-void PlayOn::onPlayerExecute(WorldModel world) {
-
-}
-
-void PlayOn::onGoalieExecute(WorldModel world) {
-
-}
-
-void PlayOn::onCoachExecute(WorldModel world) {
-
-}
-
-void PlayOn::onMessageReceived(std::string message, int sender) {
-
-}
-
-}
+#endif /* CONSTANTS_HPP_ */

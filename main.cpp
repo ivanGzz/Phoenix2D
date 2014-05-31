@@ -20,33 +20,33 @@
 
 #include <iostream>
 #include <map>
-#include "Controller.h"
-#include "Game.h"
-#include "Commands.h"
-#include "Actions.h"
-#include "BeforeKickOff.h"
-#include "CornerKickL.h"
-#include "CornerKickR.h"
-#include "FreeKickL.h"
-#include "FreeKickR.h"
-#include "GoalKickL.h"
-#include "GoalKickR.h"
-#include "KickInL.h"
-#include "KickInR.h"
-#include "KickOffL.h"
-#include "KickOffR.h"
-#include "PlayOn.h"
-#include "PlayMode.h"
-#include "World.h"
-#include "Trainer.h"
-#include "Self.h"
-#include "Config.h"
-#include "Logger.h"
+#include "Controller.hpp"
+#include "Game.hpp"
+#include "Commands.hpp"
+#include "Actions.hpp"
+#include "BeforeKickOff.hpp"
+#include "CornerKickL.hpp"
+#include "CornerKickR.hpp"
+#include "FreeKickL.hpp"
+#include "FreeKickR.hpp"
+#include "GoalKickL.hpp"
+#include "GoalKickR.hpp"
+#include "KickInL.hpp"
+#include "KickInR.hpp"
+#include "KickOffL.hpp"
+#include "KickOffR.hpp"
+#include "PlayOn.hpp"
+#include "PlayMode.hpp"
+#include "World.hpp"
+#include "Trainer.hpp"
+#include "Self.hpp"
+#include "Configs.hpp"
+#include "Logger.hpp"
 
 void printHelp();
 
 int main(int argc, char **argv) {
-	Phoenix::Config config;
+	Phoenix::Configs config;
 	const char *team_name, *hostname;
 	char agent_type;
 	team_name = "Phoenix2D";
@@ -88,7 +88,7 @@ int main(int argc, char **argv) {
 		if (Phoenix::Controller::AGENT_TYPE == 't') {
 			std::cout << "Trainer launched" << std::endl;
 			Phoenix::Logger logger;
-			if (Phoenix::Config::TRAINER_LOGGING) logger.log();
+			if (Phoenix::Configs::TRAINER_LOGGING) logger.log();
 			Phoenix::Trainer trainer(commands);
 			while (Phoenix::Game::nextCycle() && trainer.continueExecution()) {
 				trainer.execute(world->getWorldModel());
@@ -96,9 +96,9 @@ int main(int argc, char **argv) {
 			std::cout << "Trainer out" << std::endl;
 		} else {
 			config.load();
-			if (Phoenix::Config::VERBOSE) std::cout << "Agent launched" << std::endl;
+			if (Phoenix::Configs::VERBOSE) std::cout << "Agent launched" << std::endl;
 			Phoenix::Logger logger;
-			if (Phoenix::Config::LOGGING) logger.log();
+			if (Phoenix::Configs::LOGGING) logger.log();
 			Phoenix::Actions actions(commands);
 			play_modes["before_kick_off"] = new Phoenix::BeforeKickOff(commands);
 			play_modes["corner_kick_l"]   = new Phoenix::CornerKickL(commands);
@@ -144,11 +144,11 @@ int main(int argc, char **argv) {
 			for (std::map<std::string, Phoenix::PlayMode*>::iterator it = play_modes.begin(); it != play_modes.end(); ++it) {
 				delete it->second;
 			}
-			if (Phoenix::Config::VERBOSE) std::cout << "Agent out" << std::endl;
+			if (Phoenix::Configs::VERBOSE) std::cout << "Agent out" << std::endl;
 		}
 		controller.disconnect();
 	}
-	if (Phoenix::Config::VERBOSE) std::cout << "Finish" << std::endl;
+	if (Phoenix::Configs::VERBOSE) std::cout << "Finish" << std::endl;
 	return 0;
 }
 

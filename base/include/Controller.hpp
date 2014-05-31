@@ -34,7 +34,7 @@
 /*!
  * @defgroup phoenix_main Phoenix Library Namespace
  * @brief <STRONG> Phoenix2D Master <BR> </STRONG>
- * The namespace that contains everything elated to the Phoenix Library
+ * The namespace that contains everything related to the Phoenix Library
  * @{
  */
 namespace Phoenix {

@@ -43,7 +43,6 @@ class Command;
  */
 class Self {
 public:
-	static double PI;
 	static std::string TEAM_NAME;
 	static int         UNIFORM_NUMBER;
 	static std::string SIDE;
