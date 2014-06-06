@@ -267,6 +267,8 @@ void Parser::parseMessage(std::string message) {
 		game_ptr->updateTime(atoi(message.substr(12, found - 12).c_str()));
 	} else if (message_type.compare("ok") == 0) {
 		if (Configs::VERBOSE) std::cout << Game::SIMULATION_TIME << ": " << message << std::endl;
+	} else if (message_type.compare("warning") == 0) {
+
 	} else if (message_type.compare("error") == 0) {
 		std::cerr << Game::SIMULATION_TIME << ": " << message << std::endl;
 	} else {

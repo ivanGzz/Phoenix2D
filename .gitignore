@@ -68,6 +68,7 @@ Thumbs.db
 *.xml
 *.pdf
 *.scan
+*.pyc
 Makefile
 config.h
 config.status

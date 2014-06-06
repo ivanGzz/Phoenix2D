@@ -707,8 +707,8 @@ void Self::localize() {
 		velc = PLAYER_SPEED_MAX;
 	}
 	turn = u[2] / (1.0 + INERTIA_MOMENT * velc);
-	current_flags = flags;
-	pfilter.predict(predict);
+//	current_flags = flags;
+//	pfilter.predict(predict);
 	pfilter.update(weight);
 	pfilter.resample();
 	/*if (!positioned) return;
