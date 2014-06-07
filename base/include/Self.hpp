@@ -42,7 +42,8 @@ class Command;
  * The Self lorem Ipsum
  */
 class Self {
-friend class Controller, Parser;
+friend class Controller
+friend class Parser;
 public:
 	static std::string TEAM_NAME;
 	static int         UNIFORM_NUMBER;
