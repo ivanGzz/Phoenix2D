@@ -24,6 +24,7 @@
 #include <sstream>
 #include <iostream>
 #include <iomanip>
+#include "Constants.hpp"
 
 namespace Phoenix {
 
@@ -32,7 +33,6 @@ Position::Position() {
 	y = 0.0;
 	theta = 0.0;
 	gamma = 0.0;
-	type = EMPTY_P;
 }
 
 Position::Position(double x, double y) {
@@ -40,7 +40,6 @@ Position::Position(double x, double y) {
 	this->y = y;
 	theta = 0.0;
 	gamma = 0.0;
-	type = POINT_P;
 }
 
 Position::Position(double x, double y, double theta) {
@@ -48,7 +47,6 @@ Position::Position(double x, double y, double theta) {
 	this->y = y;
 	this->theta = theta;
 	gamma = 0.0;
-	type = OBJECT;
 }
 
 Position::Position(double x, double y, double theta, double gamma) {
@@ -56,7 +54,6 @@ Position::Position(double x, double y, double theta, double gamma) {
 	this->y = y;
 	this->theta = theta;
 	this->gamma = gamma;
-	type = COMPLETE;
 }
 
 Position::~Position() {
@@ -85,7 +82,7 @@ double Position::getDistanceTo(Position position) {
 }
 
 double Position::getDirectionTo(Position position) {
-	double direction = 180.0 * (atan2(position.getY() - y, position.getX() - x)) / Self::PI - (theta + gamma);
+	double direction = 180.0 * (atan2(position.getY() - y, position.getX() - x)) / Math::PI - (theta + gamma);
 	if (direction >= 180.0) {
 		direction -= 360.0;
 	} else if (direction < -180.0) {
@@ -97,34 +94,6 @@ double Position::getDirectionTo(Position position) {
 void Position::mirror() {
 	if (x != 0.0) x *= -1.0;
 	if (y != 0.0) y *= -1.0;
-}
-
-POSITION_TYPE Position::getPositionType() {
-	return type;
-}
-
-std::string Position::toString() {
-	std::stringstream ss;
-	//ss << "(" << std::setprecision(4) << x << ", " << y << ", " << theta << ")" << std::endl;
-	ss << "(" << std::setprecision(4) << x << "," << y;
-	switch (type) {
-	case EMPTY_P:
-		break;
-	case POINT_P:
-		break;
-	case OBJECT:
-		ss << "," << std::setprecision(4) << theta;
-		break;
-	case COMPLETE:
-		ss << "," << std::setprecision(4) << theta << "," << gamma;
-		break;
-	default:
-		break;
-	}
-	ss << ")" << std::endl;
-	std::string stringPosition;
-	std::getline(ss, stringPosition);
-	return stringPosition;
 }
 
 }

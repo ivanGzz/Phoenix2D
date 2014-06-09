@@ -24,6 +24,7 @@
 #include <sstream>
 #include <iostream>
 #include <iomanip>
+#include "Constants.hpp"
 
 namespace Phoenix {
 
@@ -39,7 +40,7 @@ Vector2D::Vector2D(double x, double y) {
 	dx = x;
 	dy = y;
 	magnitude = sqrt(pow(dx, 2.0) + pow(dy, 2.0));
-	direction = 180.0 * atan2(dy, dx) / Self::PI;
+	direction = 180.0 * atan2(dy, dx) / Math::PI;
 	type = V2D;
 }
 
@@ -52,8 +53,8 @@ Vector2D Vector2D::getEmptyVector() {
 }
 
 Vector2D Vector2D::getVector2DWithMagnitudeAndDirection(double magnitude, double direction) {
-	double x = magnitude * cos(Self::PI * direction / 180.0);
-	double y = magnitude * sin(Self::PI * direction / 180.0);
+	double x = magnitude * cos(Math::PI * direction / 180.0);
+	double y = magnitude * sin(Math::PI * direction / 180.0);
 	return Vector2D(x, y);
 }
 
@@ -84,8 +85,8 @@ Vector2D Vector2D::operator +(Vector2D vector) {
 }
 
 Vector2D Vector2D::operator *(double scalar) {
-	double x = scalar * magnitude * cos(Self::PI * direction / 180.0);
-	double y = scalar * magnitude * sin(Self::PI * direction / 180.0);
+	double x = scalar * magnitude * cos(Math::PI * direction / 180.0);
+	double y = scalar * magnitude * sin(Math::PI * direction / 180.0);
 	return Vector2D(x, y);
 }
 

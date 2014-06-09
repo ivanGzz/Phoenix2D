@@ -27,7 +27,7 @@ KickOffR::KickOffR(Commands *commands) : PlayMode(commands) {
 
 }
 
-void KickOffR::setup(WorldModel world) {
+KickOffR::~KickOffR() {
 
 }
 

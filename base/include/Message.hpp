@@ -18,11 +18,12 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #ifndef MESSAGE_HPP_
 #define MESSAGE_HPP_
 
 #include <string>
+
+namespace Phoenix {
 
 class Message {
 public:
@@ -39,5 +40,7 @@ private:
 	int unum;
 	double direction;
 };
+
+}
 
 #endif /* MESSAGE_HPP_ */

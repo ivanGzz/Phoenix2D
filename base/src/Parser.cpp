@@ -64,8 +64,8 @@ pthread_attr_t attr;
  ------------------------*/
 
 std::vector<Flag> flags;
-std::vector<Player> players;
-Ball ball;
+static std::vector<Player> players;
+static Ball ball;
 std::vector<Message> messages;
 int time = 0;
 bool new_cycle = true;
@@ -133,18 +133,15 @@ boost::regex hear_opp_regex("\\(hear\\s+(\\d+)\\s+([\\d\\.\\-e]+)\\s+opp\\s+([\\
 std::vector<std::string> hears;
 
 void *hearHandler(void* arg) {
-	std::string hear = *arg;
+	std::string hear = *((std::string *)arg);
 	boost::cmatch match;
 	if (boost::regex_match(hear.c_str(), match, hear_referee_regex)) { //referee
 		game_ptr->updatePlayMode(std::string() + match[2]);
 	} 
 	else if (boost::regex_match(hear.c_str(), match, hear_player_regex)) { //player
+		double direction = atof((std::string() + match[2]).c_str());
 		int unum = atoi((std::string() + match[3]).c_str());
 		std::string message = std::string() + match[4];
-//		play_mode_ptr->onMessageReceived(message, unum);
-		double direction = atof((std::string() + match[2]).c_str());
-		int unum = atoi((std::string() + match[2]).c_str());
-		std::string msg = std::string() + match[3];
 		Message new_message(direction, "our", unum, message);
 		messages.push_back(new_message);
 	} 
@@ -197,21 +194,26 @@ void *seeHandler(void* arg) {
 		std::string name = std::string() + match[1];
 		std::string data = std::string() + match[2];
 		switch (name[0]) {
-		case 'g':
+		case 'g': {
 			break;
-		case 'f':
+		}
+		case 'f': {
 			flags.push_back(Flag(name, data, simulation_time));
 			break;
-		case 'p':
+		}
+		case 'p': {
 			Player p;
 			p.initForPlayer(name, data, player_position, player_velocity);
 			players.push_back(p);
 			break;
-		case 'b':
+		}
+		case 'b': {
 			ball.initForPlayer(data, player_position, player_velocity);
 			break;
-		default:
+		}
+		default: {
 			break;
+		}
 		}
 		start = match[0].second;
 		search_flags |= boost::match_prev_avail;
@@ -233,18 +235,22 @@ void *seeGlobalHandler(void* arg) {
 		std::string name = std::string() + match[1];
 		std::string data = std::string() + match[2];
 		switch (name[0]) {
-		case 'g':
+		case 'g': {
 			break;
-		case 'p':
+		}
+		case 'p': {
 			Player p;
 			p.initForCoach(name, data);
 			players.push_back(p);
 			break;
-		case 'b':
+		}
+		case 'b': {
 			ball.initForCoach(data);
 			break;
-		default:
+		}
+		default: {
 			break;
+		}
 		}
 		start = match[0].second;
 		search_flags |= boost::match_prev_avail;
@@ -260,10 +266,10 @@ void *seeGlobalHandler(void* arg) {
  | Class implementation  |
  ------------------------*/
 
-Parser::Parser(Self* self, World* world, Messages* messages_ptr) {
+Parser::Parser(Self* self, World* world, Messages* messages_p) {
 	self_ptr = self;
 	world_ptr = world;
-	messages_ptr = messages;
+	messages_ptr = messages_p;
 	game_ptr = new Game();
 	pthread_attr_init(&attr);
 	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);

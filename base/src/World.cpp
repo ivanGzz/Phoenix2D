@@ -19,6 +19,7 @@
  */
 
 #include <cmath>
+#include <iostream>
 #include "World.hpp"
 #include "Game.hpp"
 #include "Configs.hpp"
@@ -27,8 +28,8 @@
 
 namespace Phoenix {
 
-std::vector<Player> players;
-Ball ball;
+static std::vector<Player> players;
+static Ball ball;
 
 World::World() {
 
@@ -45,7 +46,7 @@ void World::updateWorld() {
 	} else if (Self::VIEW_MODE_WIDTH.compare("normal") == 0) {
 		vision_angle = 120.0 + 10.0;
 	}
-	for (std::list<Player>::iterator it = players.begin(); it != players.end(); ++it) {
+	for (std::vector<Player>::iterator it = players.begin(); it != players.end(); ++it) {
 		if (std::abs(Self::getPosition().getDirectionTo(*it->getPosition())) > vision_angle / 2.0) {
 			it->toggleSightRange();
 		} else if (!(it->isInSightRange())) {
@@ -62,7 +63,7 @@ void World::updateWorld(std::vector<Player> new_players, Ball new_ball) {
 		} else if (Self::VIEW_MODE_WIDTH.compare("normal") == 0) {
 			vision_angle = 120.0 + 10.0;
 		}
-		for (std::list<Player>::iterator it = players.begin(); it != players.end(); ++it) {
+		for (std::vector<Player>::iterator it = players.begin(); it != players.end(); ++it) {
 			//If the player is out of the sight range, we add the last position of the object
 			if (std::abs(Self::getPosition().getDirectionTo(*it->getPosition())) > vision_angle / 2.0) {
 				new_players.push_back(*it);
@@ -74,7 +75,7 @@ void World::updateWorld(std::vector<Player> new_players, Ball new_ball) {
 	ball = new_ball;
 }
 
-void World::updateObserverWorld(std::list<Player> new_players, Ball new_ball) {
+void World::updateObserverWorld(std::vector<Player> new_players, Ball new_ball) {
 	players = new_players;
 	ball = new_ball;
 }

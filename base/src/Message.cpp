@@ -20,6 +20,8 @@
 
 #include "Message.hpp"
 
+namespace Phoenix {
+
 Message::Message(double d, std::string team, std::string message) {
 	direction = d;
 	this->team = team;
@@ -52,4 +54,6 @@ int Message::getUniformNumber() {
 
 double Message::getDirection() {
 	return direction;
+}
+
 }

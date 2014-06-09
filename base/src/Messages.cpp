@@ -20,6 +20,8 @@
 
 #include "Messages.hpp"
 
+namespace Phoenix {
+
 Messages::Messages() {
 
 }
@@ -34,4 +36,6 @@ std::vector<Message> Messages::getMessages() {
 
 void Messages::setMessages(std::vector<Message> messages) {
 	this->messages = messages;
+}
+
 }

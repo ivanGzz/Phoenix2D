@@ -57,6 +57,8 @@ void Ball::initForCoach(std::string position) {
 	default:
 		break;
 	}
+	this->position = Position(x, y);
+	velocity = Vector2D::getVector2DWithXAndY(vx, vy);
 	in_sight_range = true;
 }
 
@@ -98,7 +100,7 @@ void Ball::initForPlayer(std::string position, Position player_position, Vector2
 	double ery = sin(Math::PI * source_direction / 180.0);
 	x = player_position.getX() + erx * distance;
 	y = player_position.getY() + ery * distance;
-	position = Position(x, y);
+	this->position = Position(x, y);
 	if (vel) {
 		double erxm = (180.0 * erx) / (Math::PI * distance);
 		double erym = (180.0 * ery) / (Math::PI * distance);

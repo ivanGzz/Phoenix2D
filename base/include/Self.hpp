@@ -42,8 +42,6 @@ class Command;
  * The Self lorem Ipsum
  */
 class Self {
-friend class Controller
-friend class Parser;
 public:
 	static std::string TEAM_NAME;
 	static int         UNIFORM_NUMBER;
@@ -151,7 +149,6 @@ public:
 	static Position getPosition();
 	static Vector2D getVelocity();
 	static void setLastCommandsSet(std::list<Command*> last_commands_sent);
-private:
 	Self(std::string player_params, std::string team_name, int unum, std::string side);
 	~Self();
 	void addPlayerType(std::string player_type);

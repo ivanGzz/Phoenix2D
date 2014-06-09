@@ -24,6 +24,8 @@
 #include <vector>
 #include "Message.hpp"
 
+namespace Phoenix {
+
 class Messages {
 public:
 	Messages();
@@ -33,5 +35,7 @@ public:
 private:
 	std::vector<Message> messages;
 };
+
+}
 
 #endif /* MESSAGES_HPP_ */

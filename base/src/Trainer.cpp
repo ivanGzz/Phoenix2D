@@ -26,7 +26,6 @@
 #include <cstdlib>
 #include "Trainer.hpp"
 #include "Commands.hpp"
-#include "Configs.hpp"
 #include "Game.hpp"
 
 namespace Phoenix {
@@ -143,15 +142,6 @@ Trainer::~Trainer() {
 }
 
 void Trainer::execute(WorldModel world) {
-	if (Configs::TRAINER_LOGGING && Game::PLAY_MODE.compare("play_on") == 0) {
-		std::list<Player*> players = world.getPlayers();
-		std::clog << Game::GAME_TIME;
-		for (std::list<Player*>::iterator it = players.begin(); it != players.end(); ++it) {
-			std::clog << " - " << (*it)->getTeam() << "(" << (*it)->getUniformNumber() << "): [" << ((*it)->getPosition()).toString() << "," << ((*it)->getVelocity()).toString() << "]";
-		}
-		std::clog << std::endl;
-		std::clog.flush();
-	}
 	execution_line line = program.at(current_line);
 	switch (line.command) {
 	case START:

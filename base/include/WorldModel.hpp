@@ -21,7 +21,7 @@
 #ifndef WORLDMODEL_HPP_
 #define WORLDMODEL_HPP_
 
-#include <list>
+#include <vector>
 #include "Player.hpp"
 #include "Ball.hpp"
 
@@ -35,19 +35,19 @@ namespace Phoenix {
  * The WorldModel lorem Ipsum
  */
 class WorldModel {
-	std::list<Player> players;
+	std::vector<Player> players;
 	Ball ball;
 public:
-	WorldModel(std::list<Player> players, Ball ball);
+	WorldModel(std::vector<Player> players, Ball ball);
 	~WorldModel();
-	std::list<Player*> getPlayers();
-	std::list<Player*> getPlayersOrderedByDistanceTo(Position position);
-	std::list<Player*> getOurPlayers();
-	std::list<Player*> getOurPlayersOrderedByDistanceTo(Position position);
-	std::list<Player*> getOppPlayers();
-	std::list<Player*> getOppPlayersOrderedByDistanceTo(Position position);
-	std::list<Player*> getUndPlayers();
-	std::list<Player*> getUndPlayersOrderedByDistanceTo(Position position);
+	std::vector<Player*> getPlayers();
+	std::vector<Player*> getPlayersOrderedByDistanceTo(Position position);
+	std::vector<Player*> getOurPlayers();
+	std::vector<Player*> getOurPlayersOrderedByDistanceTo(Position position);
+	std::vector<Player*> getOppPlayers();
+	std::vector<Player*> getOppPlayersOrderedByDistanceTo(Position position);
+	std::vector<Player*> getUndPlayers();
+	std::vector<Player*> getUndPlayersOrderedByDistanceTo(Position position);
 	Ball* getBall();
 };
 

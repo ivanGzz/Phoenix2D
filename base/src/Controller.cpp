@@ -178,4 +178,8 @@ Self* Controller::getSelf() {
 	return self;
 }
 
+Messages* Controller::getMessages() {
+	return messages;
+}
+
 }

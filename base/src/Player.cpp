@@ -112,7 +112,7 @@ void Player::initForCoach(std::string name, std::string position) {
 		break;
 	}
 	velocity = Vector2D::getVector2DWithXAndY(vx, vy);
-	position = Position(x, y, body, head);
+	this->position = Position(x, y, body, head);
 	player_id = -1;
 	is_in_sight_range = true;
 	is_localized = true;
@@ -295,7 +295,7 @@ int Player::getUniformNumber() {
 }
 
 Vector2D* Player::getVelocity() {
-	return *velocity;
+	return &velocity;
 }
 
 bool Player::isGoalie() {

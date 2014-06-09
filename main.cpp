@@ -42,6 +42,7 @@
 #include "Self.hpp"
 #include "Configs.hpp"
 #include "Logger.hpp"
+#include "Messages.hpp"
 
 void printHelp();
 
@@ -112,7 +113,7 @@ int main(int argc, char **argv) {
 			play_modes["kick_in_r"]       = new Phoenix::KickInR(commands);
 			play_modes["kick_off_l"]      = new Phoenix::KickOffL(commands);
 			play_modes["kick_off_r"]      = new Phoenix::KickOffR(commands);
-			play_modes["play_on"]         = new Phoenix::PlayOn(commands, &actions);
+			play_modes["play_on"]         = new Phoenix::PlayOn(commands);
 			std::string current_play_mode = "launching";
 			while (Phoenix::Game::nextCycle()) {
 				if (current_play_mode.compare(Phoenix::Game::PLAY_MODE) != 0) {

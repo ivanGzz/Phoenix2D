@@ -28,20 +28,6 @@
  */
 namespace Phoenix {
 
- /*!
- * @brief <STRONG> POSITION_TYPE <BR> </STRONG>
- * The Position Type lorem Ipsum
- */
-enum POSITION_TYPE {
-	EMPTY_P,		///< Emtpy
-	XLINE,			///< Emtpy
-	YLINE,			///< Emtpy
-	POINT_P,		///< Emtpy
-	OBJECT,			///< Emtpy
-	PLAYER,			///< Emtpy
-	COMPLETE		///< Emtpy
-};
-
 /*!
  * @brief <STRONG> Position <BR> </STRONG>
  * The Position lorem Ipsum
@@ -51,7 +37,6 @@ class Position {
 	double y;
 	double theta;
 	double gamma;
-	POSITION_TYPE type;
 public:
 	Position();
 	Position(double x, double y);
@@ -65,8 +50,6 @@ public:
 	double getDistanceTo(Position position);
 	double getDirectionTo(Position position);
 	void mirror();
-	POSITION_TYPE getPositionType();
-	std::string toString();
 };
 
 } // End namespace Phoenix
