@@ -658,7 +658,9 @@ void Self::localize(std::vector<Flag> flags) {
 	turn = u[2] / (1.0 + INERTIA_MOMENT * velc);
 	current_flags = flags;
 	pfilter.predict(predict);
-	pfilter.update(weight);
+	if (flags.size() > 0) {
+		pfilter.update(weight);
+	}
 	pfilter.resample();
 	/*if (flags.size() == 0) {
 		localize();
@@ -698,34 +700,6 @@ void Self::localize(std::vector<Flag> flags) {
 	x = x_e;
 	y = y_e;
 	theta = angleMean(thetas);*/
-}
-
-void Self::localize() {
-	if (!positioned) return;
-	velc = getAmountOfSpeedAtTime(1) + getEffortAtTime(1) * DASH_POWER_RATE * u[0];
-	if (velc > PLAYER_SPEED_MAX) {
-		velc = PLAYER_SPEED_MAX;
-	}
-	turn = u[2] / (1.0 + INERTIA_MOMENT * velc);
-//	current_flags = flags;
-//	pfilter.predict(predict);
-	pfilter.update(weight);
-	pfilter.resample();
-	/*if (!positioned) return;
-	double effective_turn = u[2] / (1.0 + Self::getAmountOfSpeedAtTime(1) * Self::INERTIA_MOMENT);
-	theta += effective_turn;
-	if (theta > 180.0) {
-		theta -= 360.0;
-	} else if (theta < -180.0) {
-		theta += 360.0;
-	}
-	double edp = Self::getEffortAtTime(1) * Server::DASH_POWER_RATE * u[0];
-	if (edp > Server::PLAYER_ACCEL_MAX) edp = Server::PLAYER_ACCEL_MAX;
-	Vector2D speed = Vector2D::getVector2DWithMagnitudeAndDirection(Self::getAmountOfSpeedAtTime(1), Self::getDirectionOfSpeedAtTime(1))
-	+ Vector2D::getVector2DWithMagnitudeAndDirection(edp, theta);
-	if (speed.getMagnitude() > Self::PLAYER_SPEED_MAX) speed = Vector2D::getVector2DWithMagnitudeAndDirection(Self::PLAYER_SPEED_MAX, theta);
-	x += speed.getXComponent();
-	y += speed.getYComponent();*/
 }
 
 Position Self::getPosition() {

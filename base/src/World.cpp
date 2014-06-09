@@ -19,7 +19,6 @@
  */
 
 #include <cmath>
-#include <iostream>
 #include "World.hpp"
 #include "Game.hpp"
 #include "Configs.hpp"
@@ -28,7 +27,7 @@
 
 namespace Phoenix {
 
-std::list<Player> players;
+std::vector<Player> players;
 Ball ball;
 
 World::World() {
@@ -47,7 +46,7 @@ void World::updateWorld() {
 		vision_angle = 120.0 + 10.0;
 	}
 	for (std::list<Player>::iterator it = players.begin(); it != players.end(); ++it) {
-		if (std::abs(Self::getPosition().getDirectionTo(it->getPosition())) > vision_angle / 2.0) {
+		if (std::abs(Self::getPosition().getDirectionTo(*it->getPosition())) > vision_angle / 2.0) {
 			it->toggleSightRange();
 		} else if (!(it->isInSightRange())) {
 			it->toggleSightRange();
@@ -55,7 +54,7 @@ void World::updateWorld() {
 	}
 }
 
-void World::updateWorld(std::list<Player> new_players, Ball new_ball) {
+void World::updateWorld(std::vector<Player> new_players, Ball new_ball) {
 	if (Configs::PLAYER_HISTORY) {
 		double vision_angle = 180.0 + 10.0;
 		if (Self::VIEW_MODE_WIDTH.compare("narrow") == 0) {
@@ -64,36 +63,14 @@ void World::updateWorld(std::list<Player> new_players, Ball new_ball) {
 			vision_angle = 120.0 + 10.0;
 		}
 		for (std::list<Player>::iterator it = players.begin(); it != players.end(); ++it) {
-			if (std::abs(Self::getPosition().getDirectionTo(it->getPosition())) > vision_angle / 2.0) { //out the sight range
+			//If the player is out of the sight range, we add the last position of the object
+			if (std::abs(Self::getPosition().getDirectionTo(*it->getPosition())) > vision_angle / 2.0) {
 				new_players.push_back(*it);
-			} else { //in the sight range
-				double min_distance = 120.0;
-				Player* nearest_player = 0;
-				for (std::list<Player>::iterator it_new = new_players.begin(); it_new != new_players.end(); ++it_new) {
-					double distance = it->getPosition().getDistanceTo(it_new->getPosition());
-					if (distance < min_distance) {
-						nearest_player = &(*it);
-						min_distance = distance;
-					}
-				}
-				if (nearest_player) {
-					nearest_player->pretendToBound(&(*it));
-				}
-			}
-		}
-		for (std::list<Player>::iterator it = players.begin(); it != players.end(); ++it) {
-			switch (it->getPretendersCount()) {
-			case 0:
-				//Nobody wants me :'(
-				break;
-			default: // > 0
-				Player* pretender = it->getPretenderFront();
-				pretender->boundTo(&(*it));
-				break;
 			}
 		}
 	}
-	players.swap(new_players);
+	//In C++11 we will be able to do players.swap(new_players);
+	players = new_players;
 	ball = new_ball;
 }
 

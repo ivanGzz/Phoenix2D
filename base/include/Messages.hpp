@@ -18,37 +18,20 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KICKINR_H_
-#define KICKINR_H_
+#ifndef MESSAGES_HPP_
+#define MESSAGES_HPP_
 
-#include "PlayMode.hpp"
-#include "WorldModel.hpp"
 #include <vector>
 #include "Message.hpp"
 
-/*! @addtogroup phoenix_main
- * @{
- */
-namespace Phoenix {
-
-class Commands;
-/*! @addtogroup PlayModes
- * @{
- */
-/*!
- * @brief <STRONG> KickInR <BR> </STRONG>
- * The KickInR lorem Ipsum
- */
-class KickInR : public PlayMode {
+class Messages {
 public:
-	KickInR(Commands *commands);
-	~KickInR();
-	void onPlayerExecute(WorldModel world, std::vector<Message> messages);
-	void onGoalieExecute(WorldModel world, std::vector<Message> messages);
-	void onCoachExecute(WorldModel world, std::vector<Message> messages);
+	Messages();
+	~Messages();
+	std::vector<Message> getMessages();
+	void setMessages(std::vector<Message> messages);
+private:
+	std::vector<Message> messages;
 };
-/*! @} */
-} // End namespace Phoenix
-/*! @} */
 
-#endif /* KICKINR_H_ */
+#endif /* MESSAGES_HPP_ */

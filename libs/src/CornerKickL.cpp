@@ -31,24 +31,17 @@ CornerKickL::~CornerKickL() {
 
 }
 
-void CornerKickL::setup(WorldModel world) {
+void CornerKickL::onPlayerExecute(WorldModel world, std::vector<Message> messages) {
 
 }
 
-void CornerKickL::onPlayerExecute(WorldModel world) {
+void CornerKickL::onGoalieExecute(WorldModel world, std::vector<Message> messages) {
 
 }
 
-void CornerKickL::onGoalieExecute(WorldModel world) {
+void CornerKickL::onCoachExecute(WorldModel world, std::vector<Message> messages) {
 
 }
 
-void CornerKickL::onCoachExecute(WorldModel world) {
-
-}
-
-void CornerKickL::onMessageReceived(std::string message, int sender) {
-
-}
 
 }

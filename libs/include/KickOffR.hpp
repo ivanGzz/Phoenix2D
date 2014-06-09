@@ -23,7 +23,8 @@
 
 #include "PlayMode.hpp"
 #include "WorldModel.hpp"
-#include <string>
+#include <vector>
+#include "Message.hpp"
 
 /*! @addtogroup phoenix_main
  * @{
@@ -42,11 +43,9 @@ class KickOffR : public PlayMode {
 public:
 	KickOffR(Commands *commands);
 	~KickOffR();
-	void setup(WorldModel world);
-	void onPlayerExecute(WorldModel world);
-	void onGoalieExecute(WorldModel world);
-	void onCoachExecute(WorldModel world);
-	void onMessageReceived(std::string message, int sender);
+	void onPlayerExecute(WorldModel world, std::vector<Message> messages);
+	void onGoalieExecute(WorldModel world, std::vector<Message> messages);
+	void onCoachExecute(WorldModel world, std::vector<Message> messages);
 };
 /*! @} */
 } // End namespace Phoenix

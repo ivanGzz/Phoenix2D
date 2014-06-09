@@ -158,7 +158,6 @@ private:
 	void processSenseBody(std::string sense_body);
 	void changePlayerType(int type);
 	void localize(std::vector<Flag> flags);
-	void localize();
 };
 /*! @} */
 } // End namespace Phoenix

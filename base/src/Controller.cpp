@@ -29,6 +29,7 @@
 #include "Parser.hpp"
 #include "Commands.hpp"
 #include "World.hpp"
+#include "Messages.hpp"
 
 namespace Phoenix {
 
@@ -46,6 +47,7 @@ Controller::Controller(const char *teamName, char agentType, const char *hostnam
 	world = 0;
 	self = 0;
 	parser = 0;
+	messages = 0;
 }
 
 Controller::~Controller() {
@@ -53,6 +55,7 @@ Controller::~Controller() {
 	if (commands) delete commands;
 	if (reader) delete reader;
 	if (parser) delete parser;
+	if (messages) delete messages;
 	if (self) delete self;
 	if (server) delete server;
 	if (c) delete c;
@@ -137,7 +140,8 @@ void Controller::connect() {
 			break;
 		}
 		world = new World();
-		parser = new Parser(self, world);
+		messages = new Messages();
+		parser = new Parser(self, world, messages);
 		reader = new Reader(c, parser);
 		reader->start();
 		connected = true;

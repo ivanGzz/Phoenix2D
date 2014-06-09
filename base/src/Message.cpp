@@ -18,37 +18,38 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KICKINR_H_
-#define KICKINR_H_
-
-#include "PlayMode.hpp"
-#include "WorldModel.hpp"
-#include <vector>
 #include "Message.hpp"
 
-/*! @addtogroup phoenix_main
- * @{
- */
-namespace Phoenix {
+Message::Message(double d, std::string team, std::string message) {
+	direction = d;
+	this->team = team;
+	unum = 0;
+	this->message = message;
+}
 
-class Commands;
-/*! @addtogroup PlayModes
- * @{
- */
-/*!
- * @brief <STRONG> KickInR <BR> </STRONG>
- * The KickInR lorem Ipsum
- */
-class KickInR : public PlayMode {
-public:
-	KickInR(Commands *commands);
-	~KickInR();
-	void onPlayerExecute(WorldModel world, std::vector<Message> messages);
-	void onGoalieExecute(WorldModel world, std::vector<Message> messages);
-	void onCoachExecute(WorldModel world, std::vector<Message> messages);
-};
-/*! @} */
-} // End namespace Phoenix
-/*! @} */
+Message::Message(double d, std::string team, int unum, std::string message) {
+	direction = d;
+	this->team = team;
+	this->unum = unum;
+	this->message = message;
+}
 
-#endif /* KICKINR_H_ */
+Message::~Message() {
+
+}
+
+std::string Message::getMessage() {
+	return message;
+}
+
+std::string Message::getTeam() {
+	return team;
+}
+
+int Message::getUniformNumber() {
+	return unum;
+}
+
+double Message::getDirection() {
+	return direction;
+}

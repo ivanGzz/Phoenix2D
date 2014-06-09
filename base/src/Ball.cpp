@@ -24,6 +24,7 @@
 #include <cstdlib>
 #include "Self.hpp"
 #include <cmath>
+#include "Constants.hpp"
 
 namespace Phoenix {
 
@@ -36,36 +37,12 @@ Ball::Ball() {
 	y = 0.0;
 	vx = 0.0;
 	vy = 0.0;
-	simulation_time = 0;
 	in_sight_range = false;
-	bound = 0;
 }
 
-Ball::Ball(int simulation_time) {
-	distance = 100.0;
-	direction = 0.0;
-	distChange = 0.0;
-	dirChange = 0.0;
-	x = 0.0;
-	y = 0.0;
-	vx = 0.0;
-	vy = 0.0;
-	this->simulation_time = simulation_time;
-	in_sight_range = false;
-	bound = 0;
-}
-
-Ball::Ball(std::string position, int simulation_time) {
-	distance = 100.0;
-	direction = 0.0;
-	distChange = 0.0;
-	dirChange = 0.0;
-	x = 0.0;
-	y = 0.0;
-	vx = 0.0;
-	vy = 0.0;
+void Ball::initForCoach(std::string position) {
 	std::vector<std::string> tokens;
-	std::stringstream ss_position(position); // = std::stringstream(name);
+	std::stringstream ss_position(position);
 	std::string token;
 	while (std::getline(ss_position, token, ' ')) {
 		tokens.push_back(token);
@@ -80,32 +57,24 @@ Ball::Ball(std::string position, int simulation_time) {
 	default:
 		break;
 	}
-	this->simulation_time = simulation_time;
 	in_sight_range = true;
-	bound = 0;
 }
 
-Ball::Ball(std::string position, int simulation_time, Position player_position, Vector2D player_velocity) {
-	distance = 100.0;
-	direction = 0.0;
-	distChange = 0.0;
-	dirChange = 0.0;
-	x = 0.0;
-	y = 0.0;
-	vx = 0.0;
-	vy = 0.0;
+void Ball::initForPlayer(std::string position, Position player_position, Vector2D player_velocity) {
 	std::vector<std::string> tokens;
-	std::stringstream ss_position(position); // = std::stringstream(name);
+	std::stringstream ss_position(position);
 	std::string token;
 	while (std::getline(ss_position, token, ' ')) {
 		tokens.push_back(token);
 	}
+	bool vel = false;
 	switch (tokens.size()) {
 	case 4:
 		distance = atof(tokens[0].c_str());
 		direction = atof(tokens[1].c_str());
 		distChange = atof(tokens[2].c_str());
 		dirChange = atof(tokens[3].c_str());
+		vel = true;
 		break;
 	case 3:
 		break;
@@ -125,43 +94,39 @@ Ball::Ball(std::string position, int simulation_time, Position player_position, 
 	} else if (source_direction <= 180.0) {
 		source_direction += 360.0;
 	}
-	double erx = cos(Self::PI * source_direction / 180.0);
-	double ery = sin(Self::PI * source_direction / 180.0);
+	double erx = cos(Math::PI * source_direction / 180.0);
+	double ery = sin(Math::PI * source_direction / 180.0);
 	x = player_position.getX() + erx * distance;
 	y = player_position.getY() + ery * distance;
-	double erxm = (180.0 * erx) / (Self::PI * distance);
-	double erym = (180.0 * ery) / (Self::PI * distance);
-	double vry = (distChange * erym + dirChange * erx) / (ery * erym + erx * erxm);
-	double vrx = (distChange - ery * vry) / erx;
-	vx = player_velocity.getXComponent() + vrx;
-	vy = player_velocity.getYComponent() + vry;
-	this->simulation_time = simulation_time;
+	position = Position(x, y);
+	if (vel) {
+		double erxm = (180.0 * erx) / (Math::PI * distance);
+		double erym = (180.0 * ery) / (Math::PI * distance);
+		double vry = (distChange * erym + dirChange * erx) / (ery * erym + erx * erxm);
+		double vrx = (distChange - ery * vry) / erx;
+		vx = player_velocity.getXComponent() + vrx;
+		vy = player_velocity.getYComponent() + vry;
+		velocity = Vector2D::getVector2DWithXAndY(vx, vy);
+	} else {
+		velocity = Vector2D::getEmptyVector();
+	}
 	in_sight_range = true;
-	bound = 0;
 }
 
 Ball::~Ball() {
 
 }
 
-Position Ball::getPosition() {
-	return Position(x, y);
+Position* Ball::getPosition() {
+	return &position;
 }
 
-Vector2D Ball::getVelocity() {
-	return Vector2D::getVector2DWithXAndY(vx, vy);
+Vector2D* Ball::getVelocity() {
+	return &velocity;
 }
 
 bool Ball::isInSightRange() {
 	return in_sight_range;
-}
-
-void Ball::boundTo(Ball* ball) {
-	bound = ball;
-}
-
-Ball* Ball::getBound() {
-	return bound;
 }
 
 }

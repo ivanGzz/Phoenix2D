@@ -46,6 +46,7 @@ public:
 	static bool LOGGING;
 	static bool TRAINER_LOGGING;
 	static bool VERBOSE;
+	static unsigned int CYCLE_OFFSET;
 	static unsigned int BUFFER_MAX_HISTORY;
 	static unsigned int PLAYER_MAX_HISTORY;
 	static unsigned int BALL_MAX_HISTORY;

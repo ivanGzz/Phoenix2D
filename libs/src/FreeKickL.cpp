@@ -31,23 +31,15 @@ FreeKickL::~FreeKickL() {
 
 }
 
-void FreeKickL::setup(WorldModel world) {
+void FreeKickL::onPlayerExecute(WorldModel world, std::vector<Message> messages) {
 
 }
 
-void FreeKickL::onPlayerExecute(WorldModel world) {
+void FreeKickL::onGoalieExecute(WorldModel world, std::vector<Message> messages) {
 
 }
 
-void FreeKickL::onGoalieExecute(WorldModel world) {
-
-}
-
-void FreeKickL::onCoachExecute(WorldModel world) {
-
-}
-
-void FreeKickL::onMessageReceived(std::string message, int sender) {
+void FreeKickL::onCoachExecute(WorldModel world, std::vector<Message> messages) {
 
 }
 

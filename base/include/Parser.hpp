@@ -30,8 +30,7 @@ namespace Phoenix {
 
 class Self;
 class World;
-class PlayMode;
-class Trainer;
+class Messages;
 
 /*! @addtogroup core
  * @{
@@ -42,11 +41,9 @@ class Trainer;
  */
 class Parser {
 public:
-	Parser(Self *self, World *world);
+	Parser(Self *self, World *world, Messages* messages);
 	~Parser();
 	void parseMessage(std::string message);
-	static void registerPlayMode(PlayMode* play_mode);
-	static void registerTrainer(Trainer* trainer);
 };
 /*! @} */
 } // End namespace Phoenix

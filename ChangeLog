@@ -1,3 +1,19 @@
+2014-06-08 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (Parser.cpp) Refactored handlers for messages
+
+	* (Message) Message class created
+	* (Messages) Messages class created
+	* (Controller) Controller class modified to support Messages
+
+	* (Player) Player class refactored
+
+	* (World.cpp) Removed bounding code
+
+	* (Self) Self class localize() method removed
+	
+	* (PlayMode) Removed setup and onMessage methods from PlayMode class
+
 2014-06-06 Nelson Gonzalez <nigm2005@gmail.com>
 
 	* Removed autotools generated files

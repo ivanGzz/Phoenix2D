@@ -21,7 +21,7 @@
 #ifndef WORLD_HPP_
 #define WORLD_HPP_
 
-#include <list>
+#include <vector>
 #include "Player.hpp"
 #include "Ball.hpp"
 #include "WorldModel.hpp"
@@ -42,8 +42,8 @@ public:
 	World();
 	~World();
 	void updateWorld();
-	void updateWorld(std::list<Player> players, Ball ball);
-	void updateObserverWorld(std::list<Player> players, Ball ball);
+	void updateWorld(std::vector<Player> players, Ball ball);
+	void updateObserverWorld(std::vector<Player> players, Ball ball);
 	WorldModel getWorldModel();
 };
 /*! @} */

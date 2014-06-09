@@ -35,6 +35,16 @@ namespace Phoenix {
  * The Ball lorem Ipsum
  */
 class Ball {
+public:
+	Ball();
+	~Ball();
+	void initForCoach(std::string position);
+	void initForPlayer(std::string position, Position player_position, Vector2D player_velocity);
+	void initForFullstate(double x, double y, double vx, double vy);
+	Position* getPosition();
+	Vector2D* getVelocity();
+	bool isInSightRange();
+private:
 	double distance;
 	double direction;
 	double distChange;
@@ -43,20 +53,9 @@ class Ball {
 	double y;
 	double vx;
 	double vy;
-	int simulation_time;
+	Position position;
+	Vector2D velocity;
 	bool in_sight_range;
-	Ball* bound;
-public:
-	Ball();
-	Ball(int simulation_time);
-	Ball(std::string position, int simulation_time);
-	Ball(std::string position, int simulation_time, Position player_position, Vector2D player_velocity);
-	~Ball();
-	Position getPosition();
-	Vector2D getVelocity();
-	bool isInSightRange();
-	void boundTo(Ball* ball);
-	Ball* getBound();
 };
 
 } // End namespace Phoenix

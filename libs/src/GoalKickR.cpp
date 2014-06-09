@@ -31,23 +31,15 @@ GoalKickR::~GoalKickR() {
 
 }
 
-void GoalKickR::setup(WorldModel world) {
+void GoalKickR::onPlayerExecute(WorldModel world, std::vector<Message> messages) {
 
 }
 
-void GoalKickR::onPlayerExecute(WorldModel world) {
+void GoalKickR::onGoalieExecute(WorldModel world, std::vector<Message> messages) {
 
 }
 
-void GoalKickR::onGoalieExecute(WorldModel world) {
-
-}
-
-void GoalKickR::onCoachExecute(WorldModel world) {
-
-}
-
-void GoalKickR::onMessageReceived(std::string message, int sender) {
+void GoalKickR::onCoachExecute(WorldModel world, std::vector<Message> messages) {
 
 }
 

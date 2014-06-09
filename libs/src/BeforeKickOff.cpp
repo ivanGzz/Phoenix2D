@@ -23,7 +23,6 @@
 #include "BeforeKickOff.hpp"
 #include "Game.hpp"
 #include "Commands.hpp"
-#include "Configs.hpp"
 #include "Self.hpp"
 
 namespace Phoenix {
@@ -36,28 +35,20 @@ BeforeKickOff::~BeforeKickOff() {
 
 }
 
-void BeforeKickOff::setup(WorldModel world) {
-	Position initPosition = Configs::POSITION;
-	commands->move(initPosition.getX(), initPosition.getY());
-}
-
-void BeforeKickOff::onPlayerExecute(WorldModel world) {
+void BeforeKickOff::onPlayerExecute(WorldModel world, std::vector<Message> messages) {
 	Position myPosition = Self::getPosition();
 	if (std::abs(myPosition.getBodyDirection()) > 1.0) {
 		commands->turn(-1.0 * myPosition.getBodyDirection());
 	}
 }
 
-void BeforeKickOff::onGoalieExecute(WorldModel world) {
+void BeforeKickOff::onGoalieExecute(WorldModel world, std::vector<Message> messages) {
 
 }
 
-void BeforeKickOff::onCoachExecute(WorldModel world) {
+void BeforeKickOff::onCoachExecute(WorldModel world, std::vector<Message> messages) {
 
 }
 
-void BeforeKickOff::onMessageReceived(std::string message, int sender) {
-
-}
 
 }

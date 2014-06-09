@@ -44,6 +44,7 @@ class Reader;
 class Server;
 class Parser;
 class Commands;
+class Messages;
 class World;
 class Self;
 
@@ -105,6 +106,9 @@ public:
   /*! @brief Self getter
    */	
   Self* getSelf();
+  /*! @brief Messages getter
+   */
+  Messages* getMessages();
 private:
 	Parser* parser;         ///< Pointer to inner Parser Object
 	Connect* c;             ///< Pointer to inner Connect Object
@@ -112,6 +116,7 @@ private:
 	Server* server;         ///< Pointer to inner Server Object
 	Commands* commands;     ///< Pointer to inner Commands Object
 	World* world;           ///< Pointer to inner World Object
+	Messages* messages;		///< Pointer to inner Messages Object
 	Self* self;             ///< Pointer to inner Self Object
 	bool connected;         ///< Connection status
 	std::string team_name;

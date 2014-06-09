@@ -36,6 +36,26 @@ namespace Phoenix {
  * The Player lorem Ipsum
  */
 class Player {
+public:
+	Player();
+	~Player();
+	void initForPlayer(std::string name, std::string data, Position player_position, Vector2D player_velocity);
+	void initForCoach(std::string name, std::string data);
+	void initForFullstate(std::string team, int unum, double x, double y, double vx, double vy, double b, double n);
+	Position* getPosition();
+	std::string getTeam();
+	int getUniformNumber();
+	Vector2D* getVelocity();
+	bool isGoalie();
+	bool isPointing();
+	double getPointingDirection();
+	bool isKicking();
+	bool isTackling();
+	void setPlayerId(int player_id);
+	int getPlayerId();
+	void toggleSightRange();
+	bool isInSightRange();
+private:
 	double distance;
 	double direction;
 	double distChange;
@@ -45,52 +65,23 @@ class Player {
 	double pointDir;
 	double x;
 	double y;
+	double body;
+	double head;
 	double vx;
 	double vy;
-	double theta;
-	bool body_b;
-	bool head_b;
+	bool has_body;
+	bool has_head;
 	bool pointing;
 	bool kicking;
 	bool tackling;
 	std::string team;
 	int uniform_number;
-	int simulation_time;
 	bool goalie;
-	//Player* bound;
 	int player_id;
 	bool is_in_sight_range;
 	bool is_localized;
-	bool is_bounded;
-	std::vector<Player*> pretenders;
 	Position position;
 	Vector2D velocity;
-public:
-	Player();
-	Player(std::string name, std::string position, int simulation_time);
-	Player(std::string name, std::string position, int simulation_time, Position player_position, Vector2D player_velocity);
-	~Player();
-	Position getPosition();
-	std::string getTeam();
-	int getUniformNumber();
-	Vector2D getVelocity();
-	bool isGoalie();
-	bool isPointing();
-	double getPointingDirection();
-	bool isKicking();
-	bool isTackling();
-	void boundTo(Player* player);
-	//Player* getBound();
-	void setPlayerId(int player_id);
-	int getPlayerId();
-	void toggleSightRange();
-	bool isInSightRange();
-	void pretendToBound(Player* player);
-	int getPretendersCount();
-	Player* getPretenderFront();
-	bool localized();
-	bool bounded();
-	std::string print();
 };
 
 } // End namespace Phoenix

@@ -84,6 +84,7 @@ int main(int argc, char **argv) {
 	if (controller.isConnected()) {
 		Phoenix::Commands* commands = controller.getCommands();
 		Phoenix::World* world = controller.getWorld();
+		Phoenix::Messages* messages = controller.getMessages();
 		std::map<std::string, Phoenix::PlayMode*> play_modes;
 		if (Phoenix::Controller::AGENT_TYPE == 't') {
 			std::cout << "Trainer launched" << std::endl;
@@ -117,23 +118,21 @@ int main(int argc, char **argv) {
 				if (current_play_mode.compare(Phoenix::Game::PLAY_MODE) != 0) {
 					current_play_mode = Phoenix::Game::PLAY_MODE;
 					play_modes[current_play_mode]->onStart();
-					play_modes[current_play_mode]->onPreExecute();
-					play_modes[current_play_mode]->setup(world->getWorldModel());
-				} else {
-					play_modes[current_play_mode]->onPreExecute();
-					switch (Phoenix::Controller::AGENT_TYPE) {
-					case 'p':
-						play_modes[current_play_mode]->onPlayerExecute(world->getWorldModel());
-						break;
-					case 'g':
-						play_modes[current_play_mode]->onGoalieExecute(world->getWorldModel());
-						break;
-					case 'c':
-						play_modes[current_play_mode]->onCoachExecute(world->getWorldModel());
-						break;
-					default:
-						break;
-					}
+				}
+				play_modes[current_play_mode]->onPreExecute();
+				switch (Phoenix::Controller::AGENT_TYPE) {
+				case 'p':
+					play_modes[current_play_mode]->onPlayerExecute(world->getWorldModel(), messages->getMessages());
+					break;
+				case 'g':
+					play_modes[current_play_mode]->onGoalieExecute(world->getWorldModel(), messages->getMessages());
+					break;
+				case 'c':
+					play_modes[current_play_mode]->onCoachExecute(world->getWorldModel(), messages->getMessages());
+					break;
+				default:
+					break;
+
 				}
 				play_modes[current_play_mode]->onPostExecute();
 //				if (Config::VERBOSE) {
@@ -161,5 +160,5 @@ void printHelp() {
 	std::cout << "\t<AGENT_TYPE> can be p(layer), g(oalie), c(oach) or t(trainer), and it is p as default" << std::endl;
 	std::cout << "\t<HOSTNAME>   is the dns domain or ip address of the running host, and hostname is by default" << std::endl;
 	std::cout << "Enjoy!" << std::endl;
-	std::cout << "Ivan Gonzalez nigm2005@gmail.com" << std::endl << std::endl;
+	std::cout << "Nelson I. Gonzalez nigm2005@gmail.com" << std::endl << std::endl;
 }

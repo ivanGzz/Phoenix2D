@@ -33,7 +33,7 @@ PlayMode::~PlayMode() {
 }
 
 void PlayMode::onStart() {
-	Parser::registerPlayMode(this);
+
 }
 
 void PlayMode::onPreExecute() {

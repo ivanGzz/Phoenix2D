@@ -24,6 +24,7 @@
 #include "Player.hpp"
 #include "Self.hpp"
 #include "Controller.hpp"
+#include "Constants.hpp"
 
 namespace Phoenix {
 
@@ -33,51 +34,34 @@ Player::Player() {
 	distChange = 0.0;
 	dirChange = 0.0;
 	bodyDirection = 0.0;
-	x = 0.0;
-	y = 0.0;
-	vx = 0.0;
-	vy = 0.0;
-	theta = 0.0;
 	headDirection = 0.0;
 	pointDir = 0.0;
-	team = "undefined";
-	uniform_number = 0;
-	body_b = false;
-	head_b = false;
+	x = 0.0;
+	y = 0.0;
+	body = 0.0;
+	head = 0.0;
+	vx = 0.0;
+	vy = 0.0;
+	has_body = false;
+	has_head = false;
 	pointing = false;
 	kicking = false;
 	tackling = false;
+	team = "undefined";
+	uniform_number = 0;
 	goalie = false;
-	simulation_time = -1;
 	player_id = -1;
 	is_in_sight_range = false;
 	is_localized = false;
-	is_bounded = false;
 }
 
-Player::Player(std::string name, std::string position, int simulation_time) {
-	distance = 100.0;
-	direction = 0.0;
-	distChange = 0.0;
-	dirChange = 0.0;
-	bodyDirection = 0.0;
-	x = 0.0;
-	y = 0.0;
-	vx = 0.0;
-	vy = 0.0;
-	theta = 0.0;
-	headDirection = 0.0;
-	pointDir = 0.0;
-	team = "undefined";
-	uniform_number = 0;
-	body_b = true;
-	head_b = true;
-	pointing = false;
-	kicking = false;
-	tackling = false;
-	goalie = false;
+Player::~Player() {
+
+}
+
+void Player::initForCoach(std::string name, std::string position) {
 	std::vector<std::string> tokens;
-	std::stringstream ss_name(name); // = std::stringstream(name);
+	std::stringstream ss_name(name);
 	std::string token;
 	while (std::getline(ss_name, token, ' ')) {
 		tokens.push_back(token);
@@ -94,9 +78,8 @@ Player::Player(std::string name, std::string position, int simulation_time) {
 		goalie = true;
 	}
 	uniform_number = atoi(tokens[2].c_str());
-	this->simulation_time = simulation_time;
 	tokens.clear();
-	std::stringstream ss_position(position); // = std::stringstream(position);
+	std::stringstream ss_position(position);
 	while (std::getline(ss_position, token, ' ')) {
 		if (token.compare("k") == 0) {
 			kicking = true;
@@ -112,54 +95,32 @@ Player::Player(std::string name, std::string position, int simulation_time) {
 		y = atof(tokens[1].c_str());
 		vx = atof(tokens[2].c_str());
 		vy = atof(tokens[3].c_str());
-		theta = atof(tokens[4].c_str());
-		headDirection = atof(tokens[5].c_str());
+		body = atof(tokens[4].c_str());
+		head = atof(tokens[5].c_str());
 		break;
 	case 7:
 		x = atof(tokens[0].c_str());
 		y = atof(tokens[1].c_str());
 		vx = atof(tokens[2].c_str());
 		vy = atof(tokens[3].c_str());
-		theta = atof(tokens[4].c_str());
-		headDirection = atof(tokens[5].c_str());
+		body = atof(tokens[4].c_str());
+		head = atof(tokens[5].c_str());
 		pointDir = atof(tokens[6].c_str());
 		pointing = true;
 		break;
 	default:
 		break;
 	}
-	this->velocity = Vector2D::getVector2DWithXAndY(vx, vy);
-	this->position = Position(x, y, theta, headDirection);
+	velocity = Vector2D::getVector2DWithXAndY(vx, vy);
+	position = Position(x, y, body, head);
 	player_id = -1;
 	is_in_sight_range = true;
-	is_localized = false;
-	is_bounded = false;
+	is_localized = true;
 }
 
-Player::Player(std::string name, std::string position, int simulation_time, Position player_position, Vector2D player_velocity) {
-	distance = 100.0;
-	direction = 0.0;
-	distChange = 0.0;
-	dirChange = 0.0;
-	bodyDirection = 0.0;
-	headDirection = 0.0;
-	pointDir = 0.0;
-	x = 0.0;
-	y = 0.0;
-	vx = 0.0;
-	vy = 0.0;
-	theta = 0.0;
-	team = "undefined";
-	uniform_number = 0;
-	body_b = false;
-	head_b = false;
-	pointing = false;
-	kicking = false;
-	tackling = false;
-	goalie = false;
-	bool vel = false;
+void Player::initForPlayer(std::string name, std::string position, Position player_position, Vector2D player_velocity) {
 	std::vector<std::string> tokens;
-	std::stringstream ss_name(name); // = std::stringstream(name);
+	std::stringstream ss_name(name);
 	std::string token;
 	while (std::getline(ss_name, token, ' ')) {
 		tokens.push_back(token);
@@ -199,7 +160,7 @@ Player::Player(std::string name, std::string position, int simulation_time, Posi
 		break;
 	}
 	tokens.clear();
-	std::stringstream ss_position(position); // = std::stringstream(position);
+	std::stringstream ss_position(position);
 	while (std::getline(ss_position, token, ' ')) {
 		if (token.compare("k") == 0) {
 			kicking = true;
@@ -209,6 +170,7 @@ Player::Player(std::string name, std::string position, int simulation_time, Posi
 			tokens.push_back(token);
 		}
 	}
+	bool vel = false;
 	switch (tokens.size()) {
 	case 1:
 		direction = atof(tokens[0].c_str());
@@ -247,8 +209,8 @@ Player::Player(std::string name, std::string position, int simulation_time, Posi
 		vel = true;
 		bodyDirection = atof(tokens[4].c_str());
 		headDirection = atof(tokens[5].c_str());
-		body_b = true;
-		head_b = true;
+		has_body = true;
+		has_head = true;
 		break;
 	case 7:
 		distance = atof(tokens[0].c_str());
@@ -258,19 +220,13 @@ Player::Player(std::string name, std::string position, int simulation_time, Posi
 		vel = true;
 		bodyDirection = atof(tokens[4].c_str());
 		headDirection = atof(tokens[5].c_str());
-		body_b = true;
-		head_b = true;
+		has_body = true;
+		has_head = true;
 		pointDir = atof(tokens[6].c_str());
 		pointing = true;
 		break;
 	default:
 		break;
-	}
-	theta = bodyDirection + player_position.getBodyDirection() + player_position.getHeadDirection();
-	if (theta > 180.0) {
-		theta -= 360.0;
-	} else if (theta <= -180.0) {
-		theta += 360.0;
 	}
 	double source_direction = player_position.getBodyDirection() + player_position.getHeadDirection() + direction;
 	if (source_direction > 180.0) {
@@ -278,44 +234,56 @@ Player::Player(std::string name, std::string position, int simulation_time, Posi
 	} else if (source_direction <= 180.0) {
 		source_direction += 360.0;
 	}
-	double erx = cos(Self::PI * source_direction / 180.0);
-	double ery = sin(Self::PI * source_direction / 180.0);
+	double erx = cos(Math::PI * source_direction / 180.0);
+	double ery = sin(Math::PI * source_direction / 180.0);
 	x = player_position.getX() + erx * distance;
 	y = player_position.getY() + ery * distance;
-	double erxm = (180.0 * erx) / (Self::PI * distance);
-	double erym = (180.0 * ery) / (Self::PI * distance);
-	double vry = (distChange * erym + dirChange * erx) / (ery * erym + erx * erxm);
-	double vrx = (distChange - ery * vry) / erx;
-	vx = player_velocity.getXComponent() + vrx;
-	vy = player_velocity.getYComponent() + vry;
-	if (body_b && head_b) {
-		this->position = Position(x, y, theta, headDirection);
+	if (has_body && has_head) {
+		body = bodyDirection + player_position.getBodyDirection() + player_position.getHeadDirection();
+		if (body > 180.0) {
+			body -= 360.0;
+		} else if (body <= -180.0) {
+			body += 360.0;
+		}
+		this->position = Position(x, y, body, head);
 	} else {
 		this->position = Position(x, y);
 	}
 	if (vel) {
-		this->velocity = Vector2D::getVector2DWithXAndY(vx, vy);
-	} else {
-		this->velocity = Vector2D::getEmptyVector();
-	}
-	this->simulation_time = simulation_time;
+		double erxm = (180.0 * erx) / (Math::PI * distance);
+		double erym = (180.0 * ery) / (Math::PI * distance);
+		double vry = (distChange * erym + dirChange * erx) / (ery * erym + erx * erxm);
+		double vrx = (distChange - ery * vry) / erx;
+		vx = player_velocity.getXComponent() + vrx;
+		vy = player_velocity.getYComponent() + vry;
+		velocity = Vector2D::getVector2DWithXAndY(vx, vy);
+	} else {	
+		velocity = Vector2D::getEmptyVector();
+	}	
 	player_id = -1;
 	is_in_sight_range = true;
 	is_localized = false;
-	is_bounded = false;
 }
 
-Player::~Player() {
-
-}
-
-Position Player::getPosition() {
-	/*if (body_b && head_b) {
-		return Position(x, y, theta, headDirection);
+void Player::initForFullstate(std::string team, int unum, double x, double y, double vx, double vy, double b, double n) {
+	if (Self::SIDE[0] == team[0]) {
+		team = "our";
 	} else {
-		return Position(x, y);
-	}*/
-	return position;
+		team = "opp";
+	}
+	uniform_number = unum;
+	this->x = x;
+	this->y = y;
+	this->vx = vx;
+	this->vy = vy;
+	body = b;
+	head = n;
+	position = Position(this->x, this->y, body, head);
+	velocity = Vector2D::getVector2DWithXAndY(vx, vy);
+}
+
+Position* Player::getPosition() {
+	return &position;
 }
 
 std::string Player::getTeam() {
@@ -326,9 +294,8 @@ int Player::getUniformNumber() {
 	return uniform_number;
 }
 
-Vector2D Player::getVelocity() {
-	//return Vector2D::getVector2DWithXAndY(vx, vy);
-	return velocity;
+Vector2D* Player::getVelocity() {
+	return *velocity;
 }
 
 bool Player::isGoalie() {
@@ -351,12 +318,6 @@ bool Player::isTackling() {
 	return tackling;
 }
 
-void Player::boundTo(Player* player) {
-	//bound = player;
-	//double b_distance = player->distance;
-	is_bounded = true;
-}
-
 void Player::setPlayerId(int player_id) {
 	this->player_id = player_id;
 }
@@ -371,30 +332,6 @@ void Player::toggleSightRange() {
 
 bool Player::isInSightRange() {
 	return is_in_sight_range;
-}
-
-void Player::pretendToBound(Player* player) {
-	pretenders.push_back(player);
-}
-
-int Player::getPretendersCount() {
-	return pretenders.size();
-}
-
-Player* Player::getPretenderFront() {
-	return pretenders.front();
-}
-
-bool Player::localized() {
-	return is_localized;
-}
-
-bool Player::bounded() {
-	return is_bounded;
-}
-
-std::string Player::print() {
-	return "";
 }
 
 }

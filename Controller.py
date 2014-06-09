@@ -3,8 +3,9 @@ import re
 
 class Controller:
 
+	ctype = "p"
 	host = "localhost"
-	port = 6001
+	port = 6000
 	server = ""
 	player = ""
 	player_types = []
@@ -13,7 +14,10 @@ class Controller:
 	# Constructor
 	#
 
-	def __init__(self):
+	def __init__(self, c_type = "p"):
+		self.ctype = c_type
+		if self.ctype == "t":
+			self.port = 6001
 		self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 	#
@@ -23,9 +27,12 @@ class Controller:
 	# the data received from the server
 	#
 
-	def connect(self, host):
+	def connect(self, host = "localhost", team = "phoenix"):
 		self.host = host
-		self.sendMessage("(init (version 15.0))")
+		if self.ctype == "t":
+			self.sendMessage("(init (version 15.0))")
+		else:
+			self.sendMessage("(init " + team + " (version 15.0))")
 		print self.receiveMessage()
 		self.server = self.receiveMessage()
 		print "Server params done: '(string)server' member"
@@ -36,18 +43,25 @@ class Controller:
 		for i in range(types):
 			self.player_types.append(self.receiveMessage())
 		print "Player types done: '(list)player_types' member"
-		self.sendMessage("(eye on)")
+		if self.ctype == "t":
+			self.sendMessage("(eye on)")
+		else:
+			self.sendMessage("(synch_see)")
+		print self.receiveMessage()
 
 	#
 	# Returns the current game time
-	# it is a blocking method which waits until a see_global
-	# message is received. In consequence, some messages could
-	# get lost
+	# it is a blocking method which waits until a see_global or
+	# sense_body message is received. In consequence, some 
+	# messages could get lost
 
 	def cycle(self):
-		m = re.search("\\(see_global\\s(\\d+)\\s", self.receiveMessage())
+		regex = "\\(see_global\\s(\\d+)\\s"
+		if self.ctype == "p":
+			regex = "\\(sense_body\\s(\\d+)\\s"
+		m = re.search(regex, self.receiveMessage())
 		while m != None:
-			m = re.search("\\(see_global\\s(\\d+)\\s", self.receiveMessage())
+			m = re.search(regex, self.receiveMessage())
 		return int(m.group(1))
 
 	#
@@ -83,6 +97,7 @@ class Controller:
 	#
 
 	def sendMessage(self, msg):
+		msg = msg + '\0'
 		self.sock.sendto(msg, (self.host, self.port))
 
 	def receiveMessage(self):

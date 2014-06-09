@@ -34,6 +34,7 @@ boost::regex verbose_regex("\\(verbose\\s(\\d+)\\)");
 boost::regex player_history_regex("\\(player_history\\s(\\d+)\\)");
 
 //Globals
+unsigned int Configs::CYCLE_OFFSET = 20;
 unsigned int Configs::BUFFER_MAX_HISTORY = 4;
 unsigned int Configs::PLAYER_MAX_HISTORY = 16;
 unsigned int Configs::BALL_MAX_HISTORY = 16;

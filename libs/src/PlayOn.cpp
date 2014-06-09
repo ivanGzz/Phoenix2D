@@ -24,31 +24,23 @@
 
 namespace Phoenix {
 
-PlayOn::PlayOn(Commands* commands, Actions* actions) : PlayMode(commands) {
-	this->actions = actions;
+PlayOn::PlayOn(Commands* commands) : PlayMode(commands) {
+
 }
 
 PlayOn::~PlayOn() {
 
 }
 
-void PlayOn::setup(WorldModel world) {
+void PlayOn::onPlayerExecute(WorldModel world, std::vector<Message> messages) {
 
 }
 
-void PlayOn::onPlayerExecute(WorldModel world) {
+void PlayOn::onGoalieExecute(WorldModel world, std::vector<Message> messages) {
 
 }
 
-void PlayOn::onGoalieExecute(WorldModel world) {
-
-}
-
-void PlayOn::onCoachExecute(WorldModel world) {
-
-}
-
-void PlayOn::onMessageReceived(std::string message, int sender) {
+void PlayOn::onCoachExecute(WorldModel world, std::vector<Message> messages) {
 
 }
 

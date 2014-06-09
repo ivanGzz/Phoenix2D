@@ -31,23 +31,15 @@ KickInL::~KickInL() {
 
 }
 
-void KickInL::setup(WorldModel world) {
+void KickInL::onPlayerExecute(WorldModel world, std::vector<Message> messages) {
 
 }
 
-void KickInL::onPlayerExecute(WorldModel world) {
+void KickInL::onGoalieExecute(WorldModel world, std::vector<Message> messages) {
 
 }
 
-void KickInL::onGoalieExecute(WorldModel world) {
-
-}
-
-void KickInL::onCoachExecute(WorldModel world) {
-
-}
-
-void KickInL::onMessageReceived(std::string message, int sender) {
+void KickInL::onCoachExecute(WorldModel world, std::vector<Message> messages) {
 
 }
 

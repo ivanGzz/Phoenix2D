@@ -27,27 +27,19 @@ KickOffR::KickOffR(Commands *commands) : PlayMode(commands) {
 
 }
 
-KickOffR::~KickOffR() {
-
-}
-
 void KickOffR::setup(WorldModel world) {
 
 }
 
-void KickOffR::onPlayerExecute(WorldModel world) {
+void KickOffR::onPlayerExecute(WorldModel world, std::vector<Message> messages) {
 
 }
 
-void KickOffR::onGoalieExecute(WorldModel world) {
+void KickOffR::onGoalieExecute(WorldModel world, std::vector<Message> messages) {
 
 }
 
-void KickOffR::onCoachExecute(WorldModel world) {
-
-}
-
-void KickOffR::onMessageReceived(std::string message, int sender) {
+void KickOffR::onCoachExecute(WorldModel world, std::vector<Message> messages) {
 
 }
 

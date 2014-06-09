@@ -22,6 +22,8 @@
 #define PLAYMODE_HPP_
 
 #include "WorldModel.hpp"
+#include <vector>
+#include "Message.hpp"
 
 /*! @addtogroup phoenix_main
  * @{
@@ -62,12 +64,10 @@ public:
 	PlayMode(Commands *commands);
 	virtual ~PlayMode();
 	void onStart();
-	virtual void setup(WorldModel world) = 0;
 	void onPreExecute();
-	virtual void onPlayerExecute(WorldModel world) = 0;
-	virtual void onGoalieExecute(WorldModel world) = 0;
-	virtual void onCoachExecute(WorldModel world) = 0;
-	virtual void onMessageReceived(std::string message, int sender) = 0;
+	virtual void onPlayerExecute(WorldModel world, std::vector<Message> messages) = 0;
+	virtual void onGoalieExecute(WorldModel world, std::vector<Message> messages) = 0;
+	virtual void onCoachExecute(WorldModel world, std::vector<Message> messages) = 0;
 	void onPostExecute();
 	void onEnd();
 };
