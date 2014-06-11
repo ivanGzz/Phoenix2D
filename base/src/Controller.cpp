@@ -29,6 +29,9 @@
 #include "Parser.hpp"
 #include "Commands.hpp"
 #include "PlayMode.hpp"
+#include "World.hpp"
+#include "Messages.hpp"
+#include "Game.hpp"
 #include <map>
 
 namespace Phoenix {
@@ -190,19 +193,19 @@ void Controller::run() {
 	_commands = new Commands(_connect);
 	PlayMode play_mode(_commands);
 	std::string current_play_mode = "launching";
-	std::map<std::string, execute> ai;
+	std::map<std::string, execute>* ai;
 	switch (Controller::AGENT_TYPE) {
 	case 'p':
-		ai = player;
+		ai = &player;
 		break;
 	case 'g':
-		ai = goalie;
+		ai = &goalie;
 		break;
 	case 'c':
-		ai = coach;
+		ai = &coach;
 		break;
 	default:
-		ai = player;
+		ai = &player;
 		break;
 	}
 	play_mode.onStart(setup);
@@ -211,9 +214,10 @@ void Controller::run() {
 			current_play_mode = Game::PLAY_MODE;
 		}
 		play_mode.onPreExecute();
-		std::map<std::string, execute>::iterator it = ai.find(current_play_mode);
-		if (it != ai.end()) {
-			play_mode.onExecute(_world->getWorldModel(), _messages->getMessages(), *it);
+		std::map<std::string, execute>::iterator it = ai->find(current_play_mode);
+		if (it != ai->end()) {
+			std::cout << "Executing " << current_play_mode << std::endl;
+			play_mode.onExecute(_world->getWorldModel(), _messages->getMessages(), it->second);
 		} else {
 			std::cerr << "Controller::run(): " << current_play_mode << " handler not found" << std::endl;
 		}

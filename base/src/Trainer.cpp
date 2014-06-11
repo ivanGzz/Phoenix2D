@@ -102,7 +102,7 @@ bool generateCode() {
 				program.push_back(line);
 				address++;
 			} else if (type.compare("wait_for_msg") == 0) {
-				execution_line line = {address, WAIT_FOR, args, address + 1, true};
+				execution_line line = {address, WAIT_FOR, 1, args, address + 1, true};
 				program.push_back(line);
 				address++;
 			}

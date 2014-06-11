@@ -68,6 +68,7 @@ std::vector<Flag> flags;
 static std::vector<Player> players;
 static Ball ball;
 std::vector<Message> messages;
+std::vector<Message> out_of_cycle;
 int time = 0;
 bool new_cycle = true;
 
@@ -147,14 +148,22 @@ void *hearHandler(void* arg) {
 		int unum = atoi((std::string() + match[3]).c_str());
 		std::string message = std::string() + match[4];
 		Message new_message(direction, "our", unum, message);
-		messages.push_back(new_message);
+		if (new_cycle) {
+			messages.push_back(new_message);
+		} else {
+			out_of_cycle.push_back(new_message);
+		}
 	} 
 	else if (boost::regex_match(hear.c_str(), match, hear_coach_regex)) { //from coach to player (free-form)
 		std::string coach = std::string() + match[2];
 		if (Self::SIDE[0] == coach[13]) {
 			std::string msg = std::string() + match[3];
 			Message new_message(0.0, "coach", msg);
-			messages.push_back(new_message);
+			if (new_cycle) {
+				messages.push_back(new_message);
+			} else {
+				out_of_cycle.push_back(new_message);
+			}
 		}
 	} 
 	else if (boost::regex_match(hear.c_str(), match, hear_trainer_regex)) { //from trainer to player
@@ -165,7 +174,11 @@ void *hearHandler(void* arg) {
 		int unum = atoi((std::string() + match[3]).c_str());
 		std::string msg = std::string() + match[4];
 		Message new_message(0.0, team, unum, msg);
-		messages.push_back(new_message);
+		if (new_cycle) {
+			messages.push_back(new_message);
+		} else {
+			out_of_cycle.push_back(new_message);
+		}
 	}
 	else {
 		std::cerr << Game::SIMULATION_TIME << ": message not supported " << hear << std::endl;
@@ -305,6 +318,10 @@ void Parser::parseMessage(std::string message) {
 		players.clear();
 		ball = Ball();
 		messages.clear();
+		for (std::vector<Message>::iterator it = out_of_cycle.begin(); it != out_of_cycle.end(); ++it) {
+			messages.push_back(*it);
+		}
+		out_of_cycle.clear();
 		new_cycle = true;
 		found = message.find(" ", 12);
 		time = atoi(message.substr(12, found - 12).c_str());
@@ -314,6 +331,7 @@ void Parser::parseMessage(std::string message) {
 		if (pthread_create(&thread_sense_body, &attr, senseBodyHandler, 0) != 0) {
 			std::cerr << "Parser::parseMessage(string) -> error creating sense_body thread" << std::endl;
 		}
+		return;
 	}
 	else if (message_type.compare("see_global") == 0) {
 		see_global = message;
@@ -329,15 +347,28 @@ void Parser::parseMessage(std::string message) {
 		if (pthread_create(&thread_see_global, &attr, seeGlobalHandler, 0) != 0) {
 			std::cerr << "Parser::parseMessage(string) -> error creating see_global thread" << std::endl;
 		}
+		return;
 	}
-	if (!new_cycle) return; //we do not accept messages received after the new cycle started
 	else if (message_type.compare("hear") == 0) {
 		hears.push_back(message);
 		if (pthread_create(&thread_message, &attr, hearHandler, &hears.back()) != 0) {
 			std::cerr << "Parser::parseMessage(string) -> error creating sense_body thread" << std::endl;
 		}
 	}
-	else if (message_type.compare("see") == 0) {
+	else if (message_type.compare("change_player_type") == 0) {
+
+	}
+	else if (message_type.compare("ok") == 0) {
+		if (Configs::VERBOSE) std::cout << Game::SIMULATION_TIME << ": " << message << std::endl;
+	}
+	else if (message_type.compare("warning") == 0) {
+		if (Configs::VERBOSE) std::cout << Game::SIMULATION_TIME << ": " << message << std::endl;
+	}
+	else if (message_type.compare("error") == 0) {
+		std::cerr << Game::SIMULATION_TIME << ": " << message << std::endl;
+	}
+	if (!new_cycle) return; //we do not accept this messages after the new cycle started
+	if (message_type.compare("see") == 0) {
 		see = message;
 		if (pthread_create(&thread_see, &attr, seeHandler, 0) != 0) {
 			std::cerr << "Parser::parseMessage(string) -> error creating sense_body thread" << std::endl;
@@ -345,18 +376,6 @@ void Parser::parseMessage(std::string message) {
 	}	
 	else if (message_type.compare("fullstate") == 0) {
 
-	}
-	else if (message_type.compare("change_player_type") == 0) {
-
-	} 
-	else if (message_type.compare("ok") == 0) {
-		if (Configs::VERBOSE) std::cout << Game::SIMULATION_TIME << ": " << message << std::endl;
-	} 
-	else if (message_type.compare("warning") == 0) {
-		if (Configs::VERBOSE) std::cout << Game::SIMULATION_TIME << ": " << message << std::endl;
-	} 
-	else if (message_type.compare("error") == 0) {
-		std::cerr << Game::SIMULATION_TIME << ": " << message << std::endl;
 	}
 	else {
 		std::cerr << "Parse::parseMessage(string) -> message " << message << " not recognized" << std::endl;

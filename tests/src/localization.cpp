@@ -19,6 +19,7 @@
  */
 
 #include "localization.hpp"
+#include <iostream>
 
 namespace localization {
 

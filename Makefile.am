@@ -1,5 +1,5 @@
 AM_CPPFLAGS = -Ibase/include -Itests/include
-AM_LDFLAGS = -lboost_regex -pthread
+AM_LDFLAGS = -lboost_regex
 SUBDIRS = base tests .
 bin_PROGRAMS = agent
 agent_SOURCES = main.cpp
