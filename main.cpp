@@ -19,147 +19,122 @@
  */
 
 #include <iostream>
-#include <map>
+#include <string>
 #include "Controller.hpp"
-#include "Game.hpp"
-#include "Commands.hpp"
-#include "Actions.hpp"
-#include "BeforeKickOff.hpp"
-#include "CornerKickL.hpp"
-#include "CornerKickR.hpp"
-#include "FreeKickL.hpp"
-#include "FreeKickR.hpp"
-#include "GoalKickL.hpp"
-#include "GoalKickR.hpp"
-#include "KickInL.hpp"
-#include "KickInR.hpp"
-#include "KickOffL.hpp"
-#include "KickOffR.hpp"
-#include "PlayOn.hpp"
-#include "PlayMode.hpp"
-#include "World.hpp"
-#include "Trainer.hpp"
-#include "Self.hpp"
 #include "Configs.hpp"
-#include "Logger.hpp"
-#include "Messages.hpp"
+#include "tests.hpp"
+
+void printUsage();
 
 void printHelp();
 
+void printVersion();
+
+void loadAI(Phoenix::Controller controller) {
+
+}
+
+void loadTest(std::string test, Phoenix::Controller controller) {
+	if (test.compare("localization") == 0) {
+		controller.registerSetupFunction(localization::onStart);
+		controller.registerPlayerFunction("before_kick_off", localization::executeBeforeKickOff);
+		controller.registerPlayerFunction("play_on", localization::executePlayOn);
+		controller.registerFinishFunction(localization::onFinish);
+	}
+}
+
 int main(int argc, char **argv) {
+	if (argc < 2) {
+		printUsage();
+		return 0;
+	}
+	std::string command = std::string(argv[1]);
+	bool test = false;
+	if (command.compare("--version") == 0) {
+		printVersion();
+		return 0;
+	} else if (command.compare("--help") == 0) {
+		printUsage();
+		printHelp();
+		return 0;
+	} else if (command.compare("run") == 0) {
+
+	} else if (command.compare("test") == 0) {
+		test = true;
+	} else {
+		printUsage();
+		return 0;
+	}
 	Phoenix::Configs config;
 	const char *team_name, *hostname;
+	std::string test_name;
 	char agent_type;
 	team_name = "Phoenix2D";
 	agent_type = 'p';
 	hostname = "localhost";
-	switch (argc) {
-	case 0:
-		break;
-	case 1:
-		printHelp();
-		std::cout << "Using <TEAM_NAME> = \"Phoenix2D\"" << std::endl;
-		std::cout << "Using <AGENT_TYPE> = \"p\"" << std::endl;
-		std::cout << "Using <HOSTNAME> = \"localhost\"" << std::endl;
-		break;
-	case 2:
-		team_name = argv[1];
-		printHelp();
-		std::cout << "Using <AGENT_TYPE> = \"p\"" << std::endl;
-		std::cout << "Using <HOSTNAME> = \"localhost\"" << std::endl;
-		break;
-	case 3:
-		team_name = argv[1];
-		agent_type = argv[2][0];
-		printHelp();
-		std::cout << "Using <HOSTNAME> = \"localhost\"" << std::endl;
-		break;
-	default:
-		team_name = argv[1];
-		agent_type = argv[2][0];
-		hostname = argv[3];
-		break;
+	if (test) {
+		switch (argc) {
+		case 1:
+		case 2:
+		case 3:
+			test_name = std::string(argv[2]);
+			break;
+		case 4:
+			test_name = std::string(argv[2]);
+			team_name = argv[3];
+			break;
+		default:
+			test_name = std::string(argv[2]);
+			team_name = argv[3];
+			hostname = argv[4];
+			break;
+		}
+	}
+	else {
+		switch (argc) {
+		case 1:
+		case 2:
+			break;
+		case 3:
+			team_name = argv[2];
+			break;
+		case 4:
+			team_name = argv[2];
+			agent_type = argv[3][0];
+			break;
+		default:
+			team_name = argv[2];
+			agent_type = argv[3][0];
+			hostname = argv[4];
+			break;
+		}
 	}
 	Phoenix::Controller controller(team_name, agent_type, hostname);
-	controller.connect();
-	if (controller.isConnected()) {
-		Phoenix::Commands* commands = controller.getCommands();
-		Phoenix::World* world = controller.getWorld();
-		Phoenix::Messages* messages = controller.getMessages();
-		std::map<std::string, Phoenix::PlayMode*> play_modes;
-		if (Phoenix::Controller::AGENT_TYPE == 't') {
-			std::cout << "Trainer launched" << std::endl;
-			Phoenix::Logger logger;
-			if (Phoenix::Configs::TRAINER_LOGGING) logger.log();
-			Phoenix::Trainer trainer(commands);
-			while (Phoenix::Game::nextCycle() && trainer.continueExecution()) {
-				trainer.execute(world->getWorldModel());
-			}
-			std::cout << "Trainer out" << std::endl;
-		} else {
-			config.load();
-			if (Phoenix::Configs::VERBOSE) std::cout << "Agent launched" << std::endl;
-			Phoenix::Logger logger;
-			if (Phoenix::Configs::LOGGING) logger.log();
-			Phoenix::Actions actions(commands);
-			play_modes["before_kick_off"] = new Phoenix::BeforeKickOff(commands);
-			play_modes["corner_kick_l"]   = new Phoenix::CornerKickL(commands);
-			play_modes["corner_kick_r"]   = new Phoenix::CornerKickR(commands);
-			play_modes["free_kick_l"]     = new Phoenix::FreeKickL(commands);
-			play_modes["free_kick_r"]     = new Phoenix::FreeKickR(commands);
-			play_modes["goal_kick_l"]     = new Phoenix::GoalKickL(commands);
-			play_modes["goal_kick_r"]     = new Phoenix::GoalKickR(commands);
-			play_modes["kick_in_l"]       = new Phoenix::KickInL(commands);
-			play_modes["kick_in_r"]       = new Phoenix::KickInR(commands);
-			play_modes["kick_off_l"]      = new Phoenix::KickOffL(commands);
-			play_modes["kick_off_r"]      = new Phoenix::KickOffR(commands);
-			play_modes["play_on"]         = new Phoenix::PlayOn(commands);
-			std::string current_play_mode = "launching";
-			while (Phoenix::Game::nextCycle()) {
-				if (current_play_mode.compare(Phoenix::Game::PLAY_MODE) != 0) {
-					current_play_mode = Phoenix::Game::PLAY_MODE;
-					play_modes[current_play_mode]->onStart();
-				}
-				play_modes[current_play_mode]->onPreExecute();
-				switch (Phoenix::Controller::AGENT_TYPE) {
-				case 'p':
-					play_modes[current_play_mode]->onPlayerExecute(world->getWorldModel(), messages->getMessages());
-					break;
-				case 'g':
-					play_modes[current_play_mode]->onGoalieExecute(world->getWorldModel(), messages->getMessages());
-					break;
-				case 'c':
-					play_modes[current_play_mode]->onCoachExecute(world->getWorldModel(), messages->getMessages());
-					break;
-				default:
-					break;
-
-				}
-				play_modes[current_play_mode]->onPostExecute();
-//				if (Config::VERBOSE) {
-//
-//				}
-			}
-			//This must be always called in order to avoid memory leaks
-			for (std::map<std::string, Phoenix::PlayMode*>::iterator it = play_modes.begin(); it != play_modes.end(); ++it) {
-				delete it->second;
-			}
-			if (Phoenix::Configs::VERBOSE) std::cout << "Agent out" << std::endl;
-		}
-		controller.disconnect();
+	if (test) {
+		loadTest(test_name, controller);
+	} else {
+		loadAI(controller);
 	}
-	if (Phoenix::Configs::VERBOSE) std::cout << "Finish" << std::endl;
+	controller.connect();
+	controller.run();
+	controller.disconnect();
 	return 0;
 }
 
+void printVersion() {
+	std::cout << "--- Phoenix2D 2014 ---\n"
+			     "version 1.1" << std::endl;
+}
+
+void printUsage() {
+	std::cout << "--- Phoenix2D 2014 ---\n\n"
+			     "usage: ./agent [--version] [--help] <command>\n" << std::endl;
+}
+
 void printHelp() {
-	std::cout << "--- Phoenix2D 2013 ---" << std::endl << std::endl;
-	std::cout << "Syntax:" << std::endl;
-	std::cout << "\t./Phoenix2D-CPP <TEAM_NAME = \"Phoenix2D\"> <AGENT_TYPE = \"p\"> <HOSTNAME = \"localhost\">" << std::endl;
-	std::cout << "Where:" << std::endl;
-	std::cout << "\t<TEAM_NAME>  is the team name with Phoenix2D as default" << std::endl;
-	std::cout << "\t<AGENT_TYPE> can be p(layer), g(oalie), c(oach) or t(trainer), and it is p as default" << std::endl;
-	std::cout << "\t<HOSTNAME>   is the dns domain or ip address of the running host, and hostname is by default" << std::endl;
-	std::cout << "Enjoy!" << std::endl;
-	std::cout << "Nelson I. Gonzalez nigm2005@gmail.com" << std::endl << std::endl;
+	std::cout << "Commands:\n";
+	std::cout << "  run <team_name> <agent_type> <hostname> run the AI with type\n"
+			     "         <agent_type> and team <team_name> in <hostname>" << std::endl;
+	std::cout << "  test <test_name> <team_name> <hostname> runs the test <test_name>\n" ""
+			     "         with team <team_name> in <hostname>"<< std::endl;
 }

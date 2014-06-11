@@ -37,6 +37,7 @@
 #include "Configs.hpp"
 #include "Message.hpp"
 #include "Messages.hpp"
+#include "Controller.hpp"
 
 namespace Phoenix {
 
@@ -74,7 +75,9 @@ int wait = 0;
 
 void *timer(void* arg) {
 	usleep(1000 * wait);
-	self_ptr->localize(flags);
+	if (Controller::AGENT_TYPE == 'p' || Controller::AGENT_TYPE == 'g') {
+		self_ptr->localize(flags);
+	}
 	world_ptr->updateWorld(players, ball);
 	messages_ptr->setMessages(messages);
 	new_cycle = false;
@@ -125,27 +128,28 @@ void *fullstateHandler(void* arg) {
 /* hear handler */
 
 boost::regex hear_referee_regex("\\(hear\\s+(\\d+)\\s+referee\\s+([\\\"\\w\\s]*)\\)");
-boost::regex hear_coach_regex("\\(hear\\s+(\\d+)\\s+(online_coach_left|online_coach_right)\\s+([\\\"\\w\\s]*)\\)"); //coach free form
-boost::regex hear_clang_regex(""); //for coach language, soon
+boost::regex hear_coach_regex("\\(hear\\s+(\\d+)\\s+(online_coach_left|online_coach_right)\\s+\"([\\w\\s]*)\"\\)"); //coach free form
+//boost::regex hear_clang_regex(""); //for coach language, soon
 boost::regex hear_trainer_regex("\\(hear\\s+(\\d+)\\s+coach\\s+([\\\"\\w\\s]*)\\)");
-boost::regex hear_player_regex("\\(hear\\s+(\\d+)\\s+([\\d\\.\\-e]+)\\s+our\\s+(\\d+)\\s+([\\\"\\w\\s]+)\\)");
-boost::regex hear_opp_regex("\\(hear\\s+(\\d+)\\s+([\\d\\.\\-e]+)\\s+opp\\s+([\\\"\\w\\s]+)\\)");
+boost::regex hear_for_trainer("\\(hear\\s+(\\d+)\\s+\\(p\\s+\"([0-9a-zA-Z]+)\"\\s+(\\d+)\\)\\s+\"([\\w\\s]*)\"\\)");
+boost::regex hear_player_regex("\\(hear\\s+(\\d+)\\s+([\\d\\.\\-e]+)\\s+our\\s+(\\d+)\\s+\"([\\w\\s]+)\"\\)");
+boost::regex hear_opp_regex("\\(hear\\s+(\\d+)\\s+([\\d\\.\\-e]+)\\s+opp\\s+\"([\\w\\s]+)\"\\)");
 std::vector<std::string> hears;
 
 void *hearHandler(void* arg) {
 	std::string hear = *((std::string *)arg);
 	boost::cmatch match;
-	if (boost::regex_match(hear.c_str(), match, hear_referee_regex)) { //referee
+	if (boost::regex_match(hear.c_str(), match, hear_referee_regex)) { //from referee to player/trainer
 		game_ptr->updatePlayMode(std::string() + match[2]);
 	} 
-	else if (boost::regex_match(hear.c_str(), match, hear_player_regex)) { //player
+	else if (boost::regex_match(hear.c_str(), match, hear_player_regex)) { //from player to player (same team)
 		double direction = atof((std::string() + match[2]).c_str());
 		int unum = atoi((std::string() + match[3]).c_str());
 		std::string message = std::string() + match[4];
 		Message new_message(direction, "our", unum, message);
 		messages.push_back(new_message);
 	} 
-	else if (boost::regex_match(hear.c_str(), match, hear_coach_regex)) { //coach
+	else if (boost::regex_match(hear.c_str(), match, hear_coach_regex)) { //from coach to player (free-form)
 		std::string coach = std::string() + match[2];
 		if (Self::SIDE[0] == coach[13]) {
 			std::string msg = std::string() + match[3];
@@ -153,9 +157,16 @@ void *hearHandler(void* arg) {
 			messages.push_back(new_message);
 		}
 	} 
-	else if (boost::regex_match(hear.c_str(), match, hear_trainer_regex)) { //trainer
+	else if (boost::regex_match(hear.c_str(), match, hear_trainer_regex)) { //from trainer to player
 
-	} 
+	}
+	else if (boost::regex_match(hear.c_str(), match, hear_for_trainer)) { //from player to trainer
+		std::string team = std::string() + match[2];
+		int unum = atoi((std::string() + match[3]).c_str());
+		std::string msg = std::string() + match[4];
+		Message new_message(0.0, team, unum, msg);
+		messages.push_back(new_message);
+	}
 	else {
 		std::cerr << Game::SIMULATION_TIME << ": message not supported " << hear << std::endl;
 	}
@@ -256,9 +267,9 @@ void *seeGlobalHandler(void* arg) {
 		search_flags |= boost::match_prev_avail;
 		search_flags |= boost::match_not_bob;
 	}
-	world_ptr->updateObserverWorld(players, ball);
-	size_t found = see_global.find(" ", 12);
-	game_ptr->updateTime(atoi(see_global.substr(12, found - 12).c_str()));
+//	world_ptr->updateObserverWorld(players, ball);
+//	size_t found = see_global.find(" ", 12);
+//	game_ptr->updateTime(atoi(see_global.substr(12, found - 12).c_str()));
 	return 0;
 }
 
@@ -304,6 +315,21 @@ void Parser::parseMessage(std::string message) {
 			std::cerr << "Parser::parseMessage(string) -> error creating sense_body thread" << std::endl;
 		}
 	}
+	else if (message_type.compare("see_global") == 0) {
+		see_global = message;
+		players.clear();
+		ball = Ball();
+		messages.clear();
+		new_cycle = true;
+		found = message.find(" ", 12);
+		time = atoi(message.substr(12, found - 12).c_str());
+		if (pthread_create(&thread_timer, &attr, timer, 0) != 0) {
+			std::cerr << "Parser::parseMessage(string) -> error creating timer thread" << std::endl;
+		}
+		if (pthread_create(&thread_see_global, &attr, seeGlobalHandler, 0) != 0) {
+			std::cerr << "Parser::parseMessage(string) -> error creating see_global thread" << std::endl;
+		}
+	}
 	if (!new_cycle) return; //we do not accept messages received after the new cycle started
 	else if (message_type.compare("hear") == 0) {
 		hears.push_back(message);
@@ -317,15 +343,6 @@ void Parser::parseMessage(std::string message) {
 			std::cerr << "Parser::parseMessage(string) -> error creating sense_body thread" << std::endl;
 		}
 	}	
-	else if (message_type.compare("see_global") == 0) {		
-		see_global = message;
-		players.clear();
-		ball = Ball();
-		messages.clear();
-		if (pthread_create(&thread_see_global, &attr, seeGlobalHandler, 0) != 0) {
-			std::cerr << "Parser::parseMessage(string) -> error creating see_global thread" << std::endl;
-		}
-	}
 	else if (message_type.compare("fullstate") == 0) {
 
 	}

@@ -31,6 +31,6 @@ AC_FUNC_ERROR_AT_LINE
 AC_CHECK_FUNCS([bzero gethostbyname inet_ntoa pow socket sqrt])
 
 AC_CONFIG_FILES([base/Makefile
-                 libs/Makefile
+                 tests/Makefile
                  Makefile])
 AC_OUTPUT

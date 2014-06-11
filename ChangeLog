@@ -1,12 +1,29 @@
+2014-06-10 Nelson Gonz‡lez <nigm2005@gmail.com>
+
+	* (localization) added localization test
+
+2014-06-10 Nelson Gonz‡lez <nigm2005@gmail.com>
+
+	* (Controller) Refactored controller class
+	* (Controller) Moved main thread to Controller class
+
+2014-06-09 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (Trainer) Changed trainer class to support messages and the
+	new command WAIT_FOR in the trainer scripting
+	
+	* (PlayMode) Changed from inherit behaviour to function pointers
+
 2014-06-08 Nelson Gonzalez <nigm2005@gmail.com>
 
-	* (Parser.cpp) Refactored handlers for messages
+	* (Parser.cpp) Refactored handlers for sensors
 
 	* (Message) Message class created
 	* (Messages) Messages class created
 	* (Controller) Controller class modified to support Messages
 
 	* (Player) Player class refactored
+	* (Ball) Ball class refactored
 
 	* (World.cpp) Removed bounding code
 

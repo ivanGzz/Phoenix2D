@@ -30,6 +30,9 @@
 #define CONTROLLER_HPP_
 
 #include <string>
+#include <vector>
+#include "WorldModel.hpp"
+#include "Message.hpp"
 
 /*!
  * @defgroup phoenix_main Phoenix Library Namespace
@@ -39,14 +42,10 @@
  */
 namespace Phoenix {
 
-class Connect;
-class Reader;
-class Server;
-class Parser;
 class Commands;
-class Messages;
-class World;
-class Self;
+
+typedef void (* execute)(WorldModel, std::vector<Message>, Commands*);
+typedef void (* control)(void);
 
 /*!
  * @defgroup core Phoenix Core Objects
@@ -74,7 +73,7 @@ class Self;
  */
 class Controller {
 public:
-	static char AGENT_TYPE; ///< p = Player, t = Trainer
+	static char AGENT_TYPE; ///< p = Player, g = Goalie, c = Coach, t = Trainer
   /*! @brief Default Constructor
    * @param teamName User Defined Team Name
    * @param agentType see AGENT_TYPE
@@ -91,35 +90,28 @@ public:
   /*! @return Connection Status Getter
    */
 	bool isConnected();
+	void registerSetupFunction(control function);
+	void registerFinishFunction(control function);
+  /*! @brief Player function register
+   */
+	void registerPlayerFunction(std::string play_mode, execute function);
+  /*! @brief Goalie function register
+   */
+	void registerGoalieFunction(std::string play_mode, execute function);
+  /*! @brief Coach function register
+   */
+	void registerCoachFunction(std::string play_mode, execute function);
+  /*! @brief Run
+   */
+	void run();
   /*! @brief Reconnection Logic @todo Define Method
    */
 	void reconnect();
   /*! @brief Disconnect service
    */
 	void disconnect();
-  /*! @brief Commands getter
-   */
-	Commands* getCommands();
-  /*! @brief World getter
-   */
-	World* getWorld();
-  /*! @brief Self getter
-   */	
-  Self* getSelf();
-  /*! @brief Messages getter
-   */
-  Messages* getMessages();
 private:
-	Parser* parser;         ///< Pointer to inner Parser Object
-	Connect* c;             ///< Pointer to inner Connect Object
-	Reader* reader;         ///< Pointer to inner Reader Object
-	Server* server;         ///< Pointer to inner Server Object
-	Commands* commands;     ///< Pointer to inner Commands Object
-	World* world;           ///< Pointer to inner World Object
-	Messages* messages;		///< Pointer to inner Messages Object
-	Self* self;             ///< Pointer to inner Self Object
 	bool connected;         ///< Connection status
-	std::string team_name;
 	std::string hostname;
 };
 /*! @} */

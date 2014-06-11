@@ -22,6 +22,8 @@
 #define TRAINER_HPP_
 
 #include "WorldModel.hpp"
+#include <vector>
+#include "Message.hpp"
 
 /*! @addtogroup phoenix_main
  * @{
@@ -40,7 +42,7 @@ class Trainer {
 public:
 	Trainer(Commands *commands);
 	~Trainer();
-	void execute(WorldModel world);
+	void execute(WorldModel world, std::vector<Message> messages);
 	bool continueExecution();
 };
 } // End namespace Phoenix

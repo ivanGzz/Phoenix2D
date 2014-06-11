@@ -18,29 +18,23 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "KickOffR.hpp"
+#ifndef LOCALIZATION_H_
+#define LOCALIZATION_H_
+
+#include <vector>
+#include "WorldModel.hpp"
+#include "Messages.hpp"
 #include "Commands.hpp"
 
-namespace Phoenix {
+using namespace Phoenix;
 
-KickOffR::KickOffR(Commands *commands) : PlayMode(commands) {
+namespace localization {
 
-}
-
-KickOffR::~KickOffR() {
-
-}
-
-void KickOffR::onPlayerExecute(WorldModel world, std::vector<Message> messages) {
+void onStart();
+void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages, Commands* commands);
+void executePlayOn(WorldModel worldModel, std::vector<Message> messages, Commands* commands);
+void onFinish();
 
 }
 
-void KickOffR::onGoalieExecute(WorldModel world, std::vector<Message> messages) {
-
-}
-
-void KickOffR::onCoachExecute(WorldModel world, std::vector<Message> messages) {
-
-}
-
-}
+#endif /* LOCALIZATION_H_ */

@@ -18,38 +18,9 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FREEKICKL_H_
-#define FREEKICKL_H_
+#ifndef TESTS_HPP_
+#define TESTS_HPP_
 
-#include "PlayMode.hpp"
-#include "WorldModel.hpp"
-#include <string>
-#include <vector>
-#include "Message.hpp"
+#include "localization.hpp"
 
-/*! @addtogroup phoenix_main
- * @{
- */
-namespace Phoenix {
-
-class Commands;
-/*! @addtogroup PlayModes
- * @{
- */
- /*!
- * @brief <STRONG> FreeKickL <BR> </STRONG>
- * The FreeKickL lorem Ipsum
- */
-class FreeKickL : public PlayMode {
-public:
-	FreeKickL(Commands *commands);
-	~FreeKickL();
-	void onPlayerExecute(WorldModel world, std::vector<Message> messages);
-	void onGoalieExecute(WorldModel world, std::vector<Message> messages);
-	void onCoachExecute(WorldModel world, std::vector<Message> messages);
-};
-/*! @} */
-} // End namespace Phoenix
-/*! @} */
-
-#endif /* FREEKICKL_H_ */
+#endif /* TESTS_HPP_ */

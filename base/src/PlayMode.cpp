@@ -32,8 +32,12 @@ PlayMode::~PlayMode() {
 
 }
 
-void PlayMode::onStart() {
+void PlayMode::onStart(void(* setup)(void)) {
+	setup();
+}
 
+void PlayMode::onExecute(WorldModel world, std::vector<Message> messages, void(* execute)(WorldModel, std::vector<Message>, Commands*)) {
+	execute(world, messages, commands);
 }
 
 void PlayMode::onPreExecute() {
@@ -44,8 +48,8 @@ void PlayMode::onPostExecute() {
 	commands->sendCommands();
 }
 
-void PlayMode::onEnd() {
-
+void PlayMode::onEnd(void(* end)(void)) {
+	end();
 }
 
 }

@@ -58,18 +58,16 @@ class Commands;
  * The PlayMode lorem Ipsum
  */
 class PlayMode {
-protected:
-	Commands *commands;
 public:
-	PlayMode(Commands *commands);
+	PlayMode(Commands* commands);
 	virtual ~PlayMode();
-	void onStart();
+	void onStart(void(* setup)(void));
 	void onPreExecute();
-	virtual void onPlayerExecute(WorldModel world, std::vector<Message> messages) = 0;
-	virtual void onGoalieExecute(WorldModel world, std::vector<Message> messages) = 0;
-	virtual void onCoachExecute(WorldModel world, std::vector<Message> messages) = 0;
+	void onExecute(WorldModel world, std::vector<Message> messages, void(* execute)(WorldModel, std::vector<Message>, Commands*));
 	void onPostExecute();
-	void onEnd();
+	void onEnd(void(* end)(void));
+private:
+	Commands* commands;
 };
 /*! @} */
 } // End namespace Phoenix

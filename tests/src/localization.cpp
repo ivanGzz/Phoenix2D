@@ -18,37 +18,29 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KICKINR_H_
-#define KICKINR_H_
+#include "localization.hpp"
 
-#include "PlayMode.hpp"
-#include "WorldModel.hpp"
-#include <vector>
-#include "Message.hpp"
+namespace localization {
 
-/*! @addtogroup phoenix_main
- * @{
- */
-namespace Phoenix {
+bool setup = false;
 
-class Commands;
-/*! @addtogroup PlayModes
- * @{
- */
-/*!
- * @brief <STRONG> KickInR <BR> </STRONG>
- * The KickInR lorem Ipsum
- */
-class KickInR : public PlayMode {
-public:
-	KickInR(Commands *commands);
-	~KickInR();
-	void onPlayerExecute(WorldModel world, std::vector<Message> messages);
-	void onGoalieExecute(WorldModel world, std::vector<Message> messages);
-	void onCoachExecute(WorldModel world, std::vector<Message> messages);
-};
-/*! @} */
-} // End namespace Phoenix
-/*! @} */
+void onStart() {
+	std::cout << "Starting localization test" << std::endl;
+}
 
-#endif /* KICKINR_H_ */
+void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages, Commands* commands) {
+	if (!setup) {
+		commands->move(-10.0, 0.0);
+		setup = true;
+	}
+}
+
+void executePlayOn(WorldModel worldModel, std::vector<Message> messages, Commands* commands) {
+	commands->turn(10.0);
+}
+
+void onFinish() {
+	std::cout << "Finishing localization test" << std::endl;
+}
+
+}

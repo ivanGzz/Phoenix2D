@@ -35,6 +35,7 @@ std::vector<std::string> code;
 enum COMMANDS {
 	START,
 	DO,
+	WAIT_FOR,
 	CHANGE_TO,
 	RECOVER,
 	END_DO,
@@ -48,6 +49,7 @@ struct execution_line {
 	int accum;
 	std::string arg;
 	int jump_to;
+	bool wait;
 };
 
 std::vector<execution_line> program;
@@ -77,36 +79,40 @@ bool generateCode() {
 			std::string type = it->substr(0, found);
 			std::string args = it->substr(found + 1);
 			if (type.compare("do") == 0) {
-				execution_line line = {address, DO, atoi(args.c_str()), "", address + 1};
+				execution_line line = {address, DO, atoi(args.c_str()), "", address + 1, false};
 				jumps.push(address + 1);
 				program.push_back(line);
 				address++;
 			} else if (type.compare("wait") == 0) {
 				int wait = atoi(args.c_str());
 				if (wait > 0) {
-					execution_line first_line = {address, DO, wait - 1, "", address + 1};
+					execution_line first_line = {address, DO, wait, "", address + 1, false};
 					program.push_back(first_line);
 					address++;
-					execution_line second_line = {address, END_DO, 1, "", address};
+					execution_line second_line = {address, END_DO, 1, "", address, true};
 					program.push_back(second_line);
 					address++;
 				}
 			} else if (type.compare("change_to") == 0) {
-				execution_line line = {address, CHANGE_TO, 1, args, address + 1};
+				execution_line line = {address, CHANGE_TO, 1, args, address + 1, true};
 				program.push_back(line);
 				address++;
 			} else if (type.compare("say") == 0) {
-				execution_line line = {address, SAY, 1, args, address + 1};
+				execution_line line = {address, SAY, 1, args, address + 1, true};
+				program.push_back(line);
+				address++;
+			} else if (type.compare("wait_for_msg") == 0) {
+				execution_line line = {address, WAIT_FOR, args, address + 1, true};
 				program.push_back(line);
 				address++;
 			}
 		} else {
 			if ((*it).compare("recover") == 0) {
-				execution_line line = {address, RECOVER, 1, "", address + 1};
+				execution_line line = {address, RECOVER, 1, "", address + 1, true};
 				program.push_back(line);
 				address++;
 			} else if ((*it).compare("end_do") == 0) {
-				execution_line line = {address, END_DO, 1, "", jumps.top()};
+				execution_line line = {address, END_DO, 1, "", jumps.top(), false};
 				jumps.pop();
 				program.push_back(line);
 				address++;
@@ -141,42 +147,55 @@ Trainer::~Trainer() {
 
 }
 
-void Trainer::execute(WorldModel world) {
-	execution_line line = program.at(current_line);
-	switch (line.command) {
-	case START:
-		break;
-	case DO:
-		accums.push(line.accum);
-		current_line = line.jump_to;
-		break;
-	case CHANGE_TO:
-		commands->changeMode(line.arg);
-		Game::PLAY_MODE = line.arg;
-		current_line = line.jump_to;
-		break;
-	case RECOVER:
-		commands->recover();
-		current_line = line.jump_to;
-		break;
-	case END_DO:
-		accums.top()--;
-		if (accums.top() > 0) {
+void Trainer::execute(WorldModel world, std::vector<Message> messages) {
+	bool continuation = true;
+	while (continuation) {
+		execution_line line = program.at(current_line);
+		continuation = !line.wait;
+		switch (line.command) {
+		case START:
+			break;
+		case DO:
+			accums.push(line.accum);
 			current_line = line.jump_to;
-		} else {
-			accums.pop();
-			current_line++;
+			break;
+		case CHANGE_TO:
+			commands->changeMode(line.arg);
+			Game::PLAY_MODE = line.arg;
+			current_line = line.jump_to;
+			break;
+		case RECOVER:
+			commands->recover();
+			current_line = line.jump_to;
+			break;
+		case END_DO:
+			accums.top()--;
+			if (accums.top() > 0) {
+				current_line = line.jump_to;
+			} else {
+				accums.pop();
+				current_line++;
+			}
+			break;
+		case SAY:
+			commands->say(line.arg);
+			current_line = line.jump_to;
+			break;
+		case END:
+			commands->changeMode(line.arg);
+			newExecution = false;
+			break;
+		case WAIT_FOR:
+			continuation = false;
+			for (std::vector<Message>::iterator it = messages.begin(); it != messages.end(); ++it) {
+				if (it->getMessage().compare(line.arg) == 0) {
+					continuation = true;
+					current_line = line.jump_to;
+				}
+			}
+			break;
 		}
-		break;
-	case SAY:
-		commands->say(line.arg);
-		current_line = line.jump_to;
-		break;
-	case END:
-		commands->changeMode(line.arg);
-		newExecution = false;
-		break;
-	}
+	};
 	commands->sendCommands();
 }
 
