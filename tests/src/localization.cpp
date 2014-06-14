@@ -19,25 +19,75 @@
  */
 
 #include "localization.hpp"
+#include <ctime>
 #include <iostream>
+#include <boost/random.hpp>
+#include <cmath>
+#include "Position.hpp"
+#include "Self.hpp"
+#include "Server.hpp"
 
 namespace localization {
 
 bool setup = false;
+boost::mt19937 rng(time(0));
+boost::uniform_int<> xdist(0, 104);
+boost::uniform_int<> ydist(0, 68);
+Position positionToGo;
 
 void onStart() {
 	std::cout << "Starting localization test" << std::endl;
+	if (Self::SIDE[0] == 'l' && Server::FULLSTATE_L == 0) {
+		std::cerr << "localization test needs the fullstate sensor active for the left team" << std::endl;
+	} else if (Self::SIDE[0] == 'r' && Server::FULLSTATE_R == 0) {
+		std::cerr << "localization test needs the fullstate sensor active for the right team" << std::endl;
+	}
+}
+
+void randomPosition() {
+	double x = (double)xdist(rng) - 52.0;
+	double y = (double)ydist(rng) - 34.0;
+	positionToGo = Position(x, y);
+	std::cout << "New random position: (" << x << ", " << y << ")" << std::endl;
 }
 
 void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages, Commands* commands) {
 	if (!setup) {
-		commands->move(-10.0, 0.0);
+		double x = -1.0 * fabs((double)xdist(rng) - 52.0); //we need a negative coordinate in x
+		double y = (double)ydist(rng) - 34.0;
+		std::cout << "Moving to: (" << x << ", " << y << ")" << std::endl;
+		commands->move(x, y);
 		setup = true;
+		randomPosition();
 	}
 }
 
 void executePlayOn(WorldModel worldModel, std::vector<Message> messages, Commands* commands) {
-	commands->turn(10.0);
+	Position p = Self::getPosition();
+	if (Self::SIDE[0] == 'l' && Server::FULLSTATE_L) {
+		Player* pl = worldModel.getOurExactPlayer(Self::UNIFORM_NUMBER);
+		if (pl->isLocalized()) {
+			p = *(pl->getPosition());
+		}
+	} else if (Self::SIDE[0] == 'r' && Server::FULLSTATE_R) {
+		Player* pl = worldModel.getOurExactPlayer(Self::UNIFORM_NUMBER);
+		if (pl->isLocalized()) {
+			p = *(pl->getPosition());
+		}
+	}
+	std::clog << Game::GAME_TIME << ": (" << p.getX() << ", " << p.getY() << ", " << p.getBodyDirection() << ")" << std::endl;
+	double d = p.getDistanceTo(positionToGo);
+	std::cout << "Position: (" << p.getX() << ", " << p.getY() << ", " << p.getBodyDirection() << ") " << std::endl;
+	if (d > 1.0) {
+		double dir = p.getDirectionTo(positionToGo);
+		if (fabs(dir) > 10.0) {
+			commands->turn(dir);
+		} else {
+			commands->dash(50.0, 0.0);
+		}
+	} else {
+		randomPosition();
+	}
 }
 
 void onFinish() {

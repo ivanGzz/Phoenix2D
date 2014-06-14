@@ -43,6 +43,7 @@ public:
 	~World();
 	void updateWorld();
 	void updateWorld(std::vector<Player> players, Ball ball);
+	void updateWorld(std::vector<Player> players, Ball ball, std::vector<Player> fs_players, Ball fs_ball);
 	void updateObserverWorld(std::vector<Player> players, Ball ball);
 	WorldModel getWorldModel();
 };

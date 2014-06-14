@@ -30,6 +30,8 @@ namespace Phoenix {
 
 static std::vector<Player> players;
 static Ball ball;
+static std::vector<Player> fs_players;
+static Ball fs_ball;
 
 World::World() {
 
@@ -56,6 +58,28 @@ void World::updateWorld() {
 }
 
 void World::updateWorld(std::vector<Player> new_players, Ball new_ball) {
+	if (Configs::PLAYER_HISTORY) {
+		double vision_angle = 180.0 + 10.0;
+		if (Self::VIEW_MODE_WIDTH.compare("narrow") == 0) {
+			vision_angle = 60.0 + 10.0;
+		} else if (Self::VIEW_MODE_WIDTH.compare("normal") == 0) {
+			vision_angle = 120.0 + 10.0;
+		}
+		for (std::vector<Player>::iterator it = players.begin(); it != players.end(); ++it) {
+			//If the player is out of the sight range, we add the last position of the object
+			if (std::abs(Self::getPosition().getDirectionTo(*it->getPosition())) > vision_angle / 2.0) {
+				new_players.push_back(*it);
+			}
+		}
+	}
+	//In C++11 we will be able to do players.swap(new_players);
+	players = new_players;
+	ball = new_ball;
+}
+
+void World::updateWorld(std::vector<Player> new_players, Ball new_ball, std::vector<Player> new_fs_players, Ball new_fs_ball) {
+	fs_players = new_fs_players;
+	fs_ball = new_fs_ball;
 	if (Configs::PLAYER_HISTORY) {
 		double vision_angle = 180.0 + 10.0;
 		if (Self::VIEW_MODE_WIDTH.compare("narrow") == 0) {

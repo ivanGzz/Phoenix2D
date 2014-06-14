@@ -1,3 +1,14 @@
+2014-06-12 Nelson Gonz‡lez <nigm2005@gmail.com>
+
+	* (World) World class modified to include fullstate
+	* (WorldModel) WorldModel class modified to include fullstate
+	
+	* (Self) Reverted localization to low pass filter while the
+	particle filter is tuned
+	
+	* (Configs) Change configs file format to json using boost
+	property tree
+
 2014-06-10 Nelson Gonz‡lez <nigm2005@gmail.com>
 
 	* (localization) added localization test

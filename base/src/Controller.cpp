@@ -33,6 +33,7 @@
 #include "Messages.hpp"
 #include "Game.hpp"
 #include <map>
+#include "Configs.hpp"
 
 namespace Phoenix {
 
@@ -190,6 +191,8 @@ void Controller::run() {
 		std::cerr << "Controller::run() -> must connect before run" << std::endl;
 		return;
 	}
+	Logger log;
+	if (Configs::LOGGING) log.log();
 	_commands = new Commands(_connect);
 	PlayMode play_mode(_commands);
 	std::string current_play_mode = "launching";
@@ -216,7 +219,6 @@ void Controller::run() {
 		play_mode.onPreExecute();
 		std::map<std::string, execute>::iterator it = ai->find(current_play_mode);
 		if (it != ai->end()) {
-			std::cout << "Executing " << current_play_mode << std::endl;
 			play_mode.onExecute(_world->getWorldModel(), _messages->getMessages(), it->second);
 		} else {
 			std::cerr << "Controller::run(): " << current_play_mode << " handler not found" << std::endl;

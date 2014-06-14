@@ -55,6 +55,7 @@ public:
 	int getPlayerId();
 	void toggleSightRange();
 	bool isInSightRange();
+	bool isLocalized();
 private:
 	double distance;
 	double direction;

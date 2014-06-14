@@ -19,6 +19,7 @@
  */
 
 #include "WorldModel.hpp"
+#include <list>
 
 namespace Phoenix {
 
@@ -35,6 +36,22 @@ WorldModel::WorldModel(std::vector<Player> players, Ball ball) {
 	this->ball = ball;
 }
 
+WorldModel::WorldModel(std::vector<Player> players, Ball ball, std::vector<Player> fs_players, Ball fs_ball) {
+	this->players = players;
+	this->ball = ball;
+	for (int i = 0; i < 11; ++i) {
+		ours[i] = Player();
+		opps[i] = Player();
+	}
+	for (std::vector<Player>::iterator it = fs_players.begin(); it != fs_players.end(); ++it) {
+		if (it->getTeam().compare("our") == 0) {
+			ours[it->getUniformNumber()] = *it;
+		} else {
+			opps[it->getUniformNumber()] = *it;
+		}
+	}
+}
+
 WorldModel::~WorldModel() {
 
 }
@@ -48,13 +65,14 @@ std::vector<Player*> WorldModel::getPlayers() {
 }
 
 std::vector<Player*> WorldModel::getPlayersOrderedByDistanceTo(Position position) {
-	std::vector<Player*> all_players;
+	std::list<Player*> all_players;
 	positionToCompare = position;
 	for (std::vector<Player>::iterator it = players.begin(); it != players.end(); ++it) {
 		all_players.push_back(&(*it));
 	}
-//	all_players.sort(compareDistances);
-	return all_players;
+	all_players.sort(compareDistances);
+	std::vector<Player> ps(all_players.begin(), all_players.end());
+	return ps;
 }
 
 std::vector<Player*> WorldModel::getOurPlayers() {
@@ -68,15 +86,16 @@ std::vector<Player*> WorldModel::getOurPlayers() {
 }
 
 std::vector<Player*> WorldModel::getOurPlayersOrderedByDistanceTo(Position position) {
-	std::vector<Player*> our_players;
+	std::list<Player*> our_players;
 	positionToCompare = position;
 	for (std::vector<Player>::iterator it = players.begin(); it != players.end(); ++it) {
 		if (it->getTeam().compare("our") == 0) {
 			our_players.push_back(&(*it));
 		}
 	}
-//	our_players.sort(compareDistances);
-	return our_players;
+	our_players.sort(compareDistances);
+	std::vector<Player> ps(our_players.begin(), our_players.end());
+	return ps;
 }
 
 std::vector<Player*> WorldModel::getOppPlayers() {
@@ -90,15 +109,16 @@ std::vector<Player*> WorldModel::getOppPlayers() {
 }
 
 std::vector<Player*> WorldModel::getOppPlayersOrderedByDistanceTo(Position position) {
-	std::vector<Player*> opp_players;
+	std::list<Player*> opp_players;
 	positionToCompare = position;
 	for (std::vector<Player>::iterator it = players.begin(); it != players.end(); ++it) {
 		if (it->getTeam().compare("opp") == 0) {
 			opp_players.push_back(&(*it));
 		}
 	}
-//	opp_players.sort(compareDistances);
-	return opp_players;
+	opp_players.sort(compareDistances);
+	std::vector<Player> ps(opp_players.begin(), opp_players.end());
+	return ps;
 }
 
 std::vector<Player*> WorldModel::getUndPlayers() {
@@ -112,19 +132,33 @@ std::vector<Player*> WorldModel::getUndPlayers() {
 }
 
 std::vector<Player*> WorldModel::getUndPlayersOrderedByDistanceTo(Position position) {
-	std::vector<Player*> und_players;
+	std::list<Player*> und_players;
 	positionToCompare = position;
 	for (std::vector<Player>::iterator it = players.begin(); it != players.end(); ++it) {
 		if (it->getTeam().compare("undefined") == 0) {
 			und_players.push_back(&(*it));
 		}
 	}
-//	und_players.sort(compareDistances);
-	return und_players;
+	und_players.sort(compareDistances);
+	std::vector<Player> ps(und_players.begin(), und_players.end());
+	return ps;
+}
+
+Player* WorldModel::getOurExactPlayer(int unum) {
+	return ours[unum];
+}
+
+Player* WorldModel::getOppExactPlayer(int unum) {
+	return opps[unum];
 }
 
 Ball* WorldModel::getBall() {
 	return &ball;
+}
+
+Ball* WorldModel::getExactBall() {
+
+	return &fs_ball;
 }
 
 }

@@ -30,11 +30,11 @@ void printHelp();
 
 void printVersion();
 
-void loadAI(Phoenix::Controller controller) {
+void loadAI(Phoenix::Controller &controller) {
 
 }
 
-void loadTest(std::string test, Phoenix::Controller controller) {
+void loadTest(std::string test, Phoenix::Controller &controller) {
 	if (test.compare("localization") == 0) {
 		controller.registerSetupFunction(localization::onStart);
 		controller.registerPlayerFunction("before_kick_off", localization::executeBeforeKickOff);
@@ -109,6 +109,7 @@ int main(int argc, char **argv) {
 			break;
 		}
 	}
+	Configs::loadConfigs("");
 	Phoenix::Controller controller(team_name, agent_type, hostname);
 	if (test) {
 		loadTest(test_name, controller);
@@ -116,6 +117,7 @@ int main(int argc, char **argv) {
 		loadAI(controller);
 	}
 	controller.connect();
+	Configs::loadTeam("");
 	controller.run();
 	controller.disconnect();
 	return 0;

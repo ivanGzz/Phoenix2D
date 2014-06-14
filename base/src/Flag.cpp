@@ -46,16 +46,26 @@ Flag::Flag(std::string name, std::string position, int simulation_time) {
 	std::getline(ss, token, ' ');
 	distance = atof(token.c_str());
 	if (distance > 0.1) {
-		maxDistance = distance;
+// double quantized = 0.1 * Math.ceil(Math.exp(0.1 * Math.ceil(Math.log(distance) / 0.1)) / 0.1);
+		maxDistance = distance;//ceil(exp(0.1 * ceil(log(distance) / 0.1)) / 1.0);
 		minDistance = exp(log(distance - 0.1) - Server::QUANTIZE_STEP_L);
 		//distance = (minDistance + maxDistance) / 2.0;
 	} else {
 		minDistance = distance;
 		maxDistance = distance;
 	}
-	error = maxDistance - distance;
+	error = (maxDistance - minDistance) / 2.0;
 	std::getline(ss, token, ' ');
 	direction = atof(token.c_str());
+	double maxDir, minDir;
+	if (direction > 0.1) {
+		double maxDir = direction;
+		double minDir = exp(log(direction - 0.1) - Server::QUANTIZE_STEP_L);
+	} else {
+		maxDir = direction;
+		minDir = direction;
+	}
+	derror = (maxDir - minDir) / 2.0;
 	x = Flag::FIELD[name].x;
 	y = Flag::FIELD[name].y;
 }
@@ -152,6 +162,10 @@ double Flag::getMaxDistance() {
 
 double Flag::getError() {
 	return error;
+}
+
+double Flag::getDError() {
+	return derror;
 }
 
 }

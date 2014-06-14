@@ -438,6 +438,7 @@ void Self::processSenseBody(std::string sense_body) {
 			if (move_ptr) {
 				x = move_ptr->getMoveX();
 				y = move_ptr->getMoveY();
+				pfilter.initWithBelief(x, y, theta, 5.0, 5.0, 10.0);
 				positioned = true;
 				move_ptr->changeStatusTo(EXECUTED);
 			}
@@ -522,17 +523,17 @@ void Self::changePlayerType(int type) {
 	}
 }
 
-/*double angleMean(std::list<double> arcs) {
+double angleMean(std::list<double> arcs) {
 	double x_m = 0.0;
 	double y_m = 0.0;
 	for (std::list<double>::iterator it = arcs.begin(); it != arcs.end(); ++it) {
-		x_m += cos(Self::PI * *it / 180.0);
-		y_m += sin(Self::PI * *it / 180.0);
+		x_m += cos(Math::PI * (*it) / 180.0);
+		y_m += sin(Math::PI * (*it) / 180.0);
 	}
 	x_m /= arcs.size();
 	y_m /= arcs.size();
-	return 180.0 * atan2(y_m, x_m) / Self::PI;
-}*/
+	return 180.0 * atan2(y_m, x_m) / Math::PI;
+}
 
 /**
  * (x - x0)^2 + (y - y0)^2 = d0
@@ -638,15 +639,56 @@ void predict(Particle &particle) {
 	}
 }
 
+/*
+ *     def Gaussian(self, mu, sigma, x):
+
+        # calculates the probability of x for 1-dim Gaussian with mean mu and var. sigma
+        return exp(- ((mu - x) ** 2) / (sigma ** 2) / 2.0) / sqrt(2.0 * pi * (sigma ** 2))
+
+         def measurement_prob(self, measurement):
+
+        # calculates how likely a measurement should be
+
+        prob = 1.0;
+        for i in range(len(landmarks)):
+            dist = sqrt((self.x - landmarks[i][0]) ** 2 + (self.y - landmarks[i][1]) ** 2)
+            prob *= self.Gaussian(dist, self.sense_noise, measurement[i])
+        return prob
+ */
+
+double sqrttwopi = 2.506628275;
+
+double gaussian(double mu, double stdd, double x) {
+	double d = (1.0 / (stdd * sqrttwopi)) * exp(-0.5 * pow(((x - mu) / stdd), 2.0));
+	return d;
+}
+
 void weight(Particle &particle) {
-	particle.weight = 0.0;
-	for (std::vector<Flag>::iterator it = current_flags.begin(); it != current_flags.end(); ++it) {
-		double d = sqrt(pow(particle.x - it->getX(), 2.0) + pow(particle.y - it->getY(), 2.0));
-		double error = fabs(d - it->getDistance());
-		if (error > 0.0) {
-			particle.weight += 1.0 / error;
-		}
-	}
+	particle.weight = 1.0;
+//	int counter = 0;
+//	for (std::vector<Flag>::iterator it = current_flags.begin(); it != current_flags.end(); ++it) {
+//		double x = sqrt(pow(particle.x - it->getX(), 2.0) + pow(particle.y - it->getY(), 2.0));
+//		double mu = it->getDistance() - it->getError();
+//		double stdd = 2.0 * it->getError();
+//		particle.weight *= gaussian(mu, stdd, x);
+//		x = atan2(it->getY() - particle.y, it->getX() - particle.x) - particle.direction;
+//		mu = it->getDirection() - 1.0;
+//		particle.weight *= gaussian(mu, 2.0, x);
+//		counter++;
+//		if (counter > 2) {
+//			break;
+//		}
+//		if (fabs(x - u) > d) {
+//			particle.weight *= 0.0;
+//		} else {
+//			particle.weight *= 1.0 / d;
+//		}
+//		particle.weight * = (fabs(x - u) < d ? )
+//		double error = fabs(d - it->getDistance());
+//		if (error > 0.0) {
+//			particle.weight += 1.0 / error;
+//		}
+//	}
 }
 
 void Self::localize(std::vector<Flag> flags) {
@@ -657,13 +699,23 @@ void Self::localize(std::vector<Flag> flags) {
 	}
 	turn = u[2] / (1.0 + INERTIA_MOMENT * velc);
 	current_flags = flags;
-	pfilter.predict(predict);
-	if (flags.size() > 0) {
-		pfilter.update(weight);
-	}
-	pfilter.resample();
-	/*if (flags.size() == 0) {
-		localize();
+//	pfilter.predict(predict);
+//	if (flags.size() > 0) {
+//		pfilter.update(weight);
+//		pfilter.resample();
+//	}
+//	x = pfilter.x_mean;
+//	y = pfilter.y_mean;
+//	theta = pfilter.dir_mean;
+	if (flags.size() == 0) {
+		theta += turn;
+		if (theta > 180.0) {
+			theta -= 360.0;
+		} else if (theta < -180.0) {
+			theta += 360.0;
+		}
+		x += velc * cos(Math::PI * theta / 180.0);
+		y += velc * sin(Math::PI * theta / 180.0);
 		return;
 	}
 	std::list<double> thetas;
@@ -699,7 +751,7 @@ void Self::localize(std::vector<Flag> flags) {
 	}
 	x = x_e;
 	y = y_e;
-	theta = angleMean(thetas);*/
+	theta = angleMean(thetas);
 }
 
 Position Self::getPosition() {

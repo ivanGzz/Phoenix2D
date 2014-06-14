@@ -23,21 +23,11 @@
 #include <ctime>
 #include <boost/random.hpp>
 #include <cmath>
+#include <iostream>
 
 namespace Phoenix {
 
 PFilter::PFilter() {
-	boost::mt19937 rng(time(0));
-	boost::uniform_int<> xdist(0, 11500);
-	boost::uniform_int<> ydist(0, 7800);
-	boost::uniform_int<> ddist(0, 36000);
-	for (int i = 0; i < Filter::PARTICLES; ++i) {
-		double x = ((double)xdist(rng)) / 100.0 - 57.5;
-		double y = ((double)ydist(rng)) / 100.0 - 39.0;
-		double dir = ((double)ddist(rng)) / 100.0 - 180.0;
-		Particle p = {x, y, dir, 1.0 / Filter::PARTICLES};
-		set[i] = p;
-	}
 	mean = 1.0 / Filter::PARTICLES;
 	variance = 0.0;
 	x_mean = 0.0;
@@ -47,6 +37,31 @@ PFilter::PFilter() {
 
 PFilter::~PFilter() {
 
+}
+
+void PFilter::initWithBelief(double x, double y, double dir, double x_window, double y_window, double dir_window) {
+	boost::mt19937 rng(time(0));
+	boost::uniform_int<> xdist(0, 200 * x_window);
+	boost::uniform_int<> ydist(0, 200 * y_window);
+	boost::uniform_int<> ddist(0, 200 * dir_window);
+	for (int i = 0; i < Filter::PARTICLES; ++i) {
+		double x_p = x - x_window + (double)xdist(rng) / 100.0;
+		double y_p = y - y_window + (double)ydist(rng) / 100.0;
+		double dir_p = dir_p - dir_window + (double)ddist(rng) / 100.0;
+		Particle p = {x_p, y_p, dir_p, 1.0 / Filter::PARTICLES};
+		set[i] = p;
+	}
+//	boost::mt19937 rng(time(0));
+//	boost::uniform_int<> xdist(0, 11500);
+//	boost::uniform_int<> ydist(0, 7800);
+//	boost::uniform_int<> ddist(0, 36000);
+//	for (int i = 0; i < Filter::PARTICLES; ++i) {
+//		double x = ((double)xdist(rng)) / 100.0 - 57.5;
+//		double y = ((double)ydist(rng)) / 100.0 - 39.0;
+//		double dir = ((double)ddist(rng)) / 100.0 - 180.0;
+//		Particle p = {x, y, dir, 1.0 / Filter::PARTICLES};
+//		set[i] = p;
+//	}
 }
 
 void PFilter::resample() {
@@ -82,11 +97,11 @@ void PFilter::update(void(* weight)(Particle &particle)) {
 		weight(set[i]);
 		total_w += set[i].weight;
 	}
+	std::cout << total_w << std::endl;
 	//Normalize
 	for (int i = 0; i < Filter::PARTICLES; ++i) {
 		set[i].weight /= total_w;
 	}
-	computeParams();
 }
 
 void PFilter::computeParams() {
@@ -97,6 +112,19 @@ void PFilter::computeParams() {
 	variance = 0.0;
 	double dir_x_mean = 0.0;
 	double dir_y_mean = 0.0;
+////
+//	for (int i = 0; i < Filter::PARTICLES; ++i) {
+//		x_mean += set[i].x;
+//		y_mean += set[i].y;
+//		dir_x_mean += cos(Math::PI * set[i].direction / 180.0);
+//		dir_y_mean += sin(Math::PI * set[i].direction / 180.0);
+//	}
+//	x_mean = x_mean / (double)Filter::PARTICLES;
+//	y_mean = y_mean / (double)Filter::PARTICLES;
+//	dir_x_mean = dir_x_mean / (double)Filter::PARTICLES;
+//	dir_y_mean = dir_y_mean / (double)Filter::PARTICLES;
+//	dir_mean = 180.0 * atan2(dir_y_mean, dir_x_mean) / Math::PI;
+////
 	for (int i = 0; i < Filter::PARTICLES; ++i) {
 		mean += set[i].weight;
 		x_mean += set[i].x * set[i].weight;

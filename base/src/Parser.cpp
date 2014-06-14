@@ -38,6 +38,7 @@
 #include "Message.hpp"
 #include "Messages.hpp"
 #include "Controller.hpp"
+#include <fstream>
 
 namespace Phoenix {
 
@@ -59,6 +60,10 @@ pthread_t thread_message = 0;
 pthread_t thread_see = 0;
 pthread_t thread_see_global = 0;
 pthread_attr_t attr;
+std::ofstream see_stream;
+//std::ofstream hear_stream;
+//std::ofstream fs_stream;
+//std::ofstream body_stream;
 
 /*------------------------
  | Timers and Control    |
@@ -66,7 +71,9 @@ pthread_attr_t attr;
 
 std::vector<Flag> flags;
 static std::vector<Player> players;
+static std::vector<Player> fs_players;
 static Ball ball;
+static Ball fs_ball;
 std::vector<Message> messages;
 std::vector<Message> out_of_cycle;
 int time = 0;
@@ -79,7 +86,7 @@ void *timer(void* arg) {
 	if (Controller::AGENT_TYPE == 'p' || Controller::AGENT_TYPE == 'g') {
 		self_ptr->localize(flags);
 	}
-	world_ptr->updateWorld(players, ball);
+	world_ptr->updateWorld(players, ball, fs_players, fs_ball);
 	messages_ptr->setMessages(messages);
 	new_cycle = false;
 	game_ptr->updateTime(time);
@@ -114,15 +121,46 @@ void *senseBodyHandler(void *arg) {
 /* fullstate handler */
 
 std::string fullstate;
-boost::regex fullstate_ball("\\(\\(b\\)\\s+([\\d\\.\\-etk\\s]*)\\s+([\\d\\.\\-etk\\s]*)\\s+([\\d\\.\\-etk\\s]*)\\s+([\\d\\.\\-etk\\s]*)\\)");
+boost::regex fullstate_ball("\\(\\(b\\)\\s+([\\d\\.\\-e]+)\\s+([\\d\\.\\-e]+)\\s+([\\d\\.\\-e]+)\\s+([\\d\\.\\-e]+)\\)");
 boost::regex fullstate_player("\\(\\(p\\s+(l|r)\\s+(\\d+)\\s+(g|\\d+)\\)\\s+" //group 1 group 2 group 3
-	                          "([\\d\\.\\-etk\\s]*)\\s+([\\d\\.\\-etk\\s]*)\\s+" //group 4 (x) group 5 (y)
-	                          "([\\d\\.\\-etk\\s]*)\\s+([\\d\\.\\-etk\\s]*)\\s+" //group 6 (vx) group 7 (vy)
-	                          "([\\d\\.\\-etk\\s]*)\\s+([\\d\\.\\-etk\\s]*)\\s+" //group 8 (body) group 9 (neck)
-	                          "\\(stamina\\s+([\\d\\.\\-etk\\s]*)\\s+([\\d\\.\\-etk\\s]*)\\s+" //group 10 (stamina) group 11 (effort)
-	                          "([\\d\\.\\-etk\\s]*)\\s+([\\d\\.\\-etk\\s]*)\\)\\)"); //group 12 (recovery) group 13 (capacity)
+	                          "([\\d\\.\\-e]+)\\s+([\\d\\.\\-e]+)\\s+" //group 4 (x) group 5 (y)
+	                          "([\\d\\.\\-e]+)\\s+([\\d\\.\\-e]+)\\s+" //group 6 (vx) group 7 (vy)
+	                          "([\\d\\.\\-e]+)\\s+([\\d\\.\\-e]+)\\s+" //group 8 (body) group 9 (neck)
+	                          "\\(stamina\\s+([\\d\\.\\-e]+)\\s+([\\d\\.\\-e]+)\\s+" //group 10 (stamina) group 11 (effort)
+	                          "([\\d\\.\\-e]+)\\s+([\\d\\.\\-e]+)\\)\\)"); //group 12 (recovery) group 13 (capacity)
 
 void *fullstateHandler(void* arg) {
+	std::string::const_iterator start, end;
+	start = fullstate.begin();
+	end = fullstate.end();
+	boost::match_results<std::string::const_iterator> match;
+	boost::match_flag_type search_flags = boost::match_default;
+	while (boost::regex_search(start, end, match, fullstate_player, search_flags)) {
+		std::string side = std::string() + match[1];
+		int unum = atoi((std::string() + match[2]).c_str());
+		double x = atof((std::string() + match[4]).c_str());
+		double y = atof((std::string() + match[5]).c_str());
+		double vx = atof((std::string() + match[6]).c_str());
+		double vy = atof((std::string() + match[7]).c_str());
+		double b = atof((std::string() + match[8]).c_str());
+		double n = atof((std::string() + match[9]).c_str());
+		Player p;
+		p.initForFullstate(side, unum, x, y, vx, vy, b, n);
+		fs_players.push_back(p);
+		start = match[0].second;
+		search_flags |= boost::match_prev_avail;
+		search_flags |= boost::match_not_bob;
+	}
+	start = fullstate.begin();
+	end = fullstate.end();
+	search_flags = boost::match_default;
+	if (boost::regex_search(start, end, match, fullstate_ball, search_flags)) {
+		double x = atof((std::string() + match[1]).c_str());
+		double y = atof((std::string() + match[2]).c_str());
+		double vx = atof((std::string() + match[3]).c_str());
+		double vy = atof((std::string() + match[4]).c_str());
+		fs_ball.initForFullstate(x, y, vx, vy);
+	}
 	return 0;
 }
 
@@ -243,6 +281,9 @@ void *seeHandler(void* arg) {
 		search_flags |= boost::match_prev_avail;
 		search_flags |= boost::match_not_bob;
 	}
+	if (Configs::SAVE_SEE) {
+		see_stream << see << std::endl;
+	}
 	return 0;
 }
 
@@ -301,12 +342,18 @@ Parser::Parser(Self* self, World* world, Messages* messages_p) {
 	if (Server::SYNCH_SEE_OFFSET > wait) {
 		wait = Server::SYNCH_SEE_OFFSET;
 	}
+	if (Configs::SAVE_SEE) {
+		see_stream.open("see.log");
+	}
 }
 
 Parser::~Parser() {
 	pthread_attr_destroy(&attr);
 	if (game_ptr) delete game_ptr;
 	if (Configs::VERBOSE) std::cout << "Parser out" << std::endl;
+	if (Configs::SAVE_SEE) {
+		see_stream.close();
+	}
 }
 
 void Parser::parseMessage(std::string message) {
@@ -316,7 +363,9 @@ void Parser::parseMessage(std::string message) {
 		sense_body = message;
 		flags.clear();
 		players.clear();
+		fs_players.clear();
 		ball = Ball();
+		fs_ball = Ball();
 		messages.clear();
 		for (std::vector<Message>::iterator it = out_of_cycle.begin(); it != out_of_cycle.end(); ++it) {
 			messages.push_back(*it);
@@ -375,7 +424,10 @@ void Parser::parseMessage(std::string message) {
 		}
 	}	
 	else if (message_type.compare("fullstate") == 0) {
-
+		fullstate = message;
+		if (pthread_create(&thread_see, &attr, fullstateHandler, 0) != 0) {
+			std::cerr << "Parser::parseMessage(string) -> error creating fullstate thread" << std::endl;
+		}
 	}
 	else {
 		std::cerr << "Parse::parseMessage(string) -> message " << message << " not recognized" << std::endl;

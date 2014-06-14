@@ -34,18 +34,22 @@ namespace Phoenix {
  */
 
  /*!
- * @brief <STRONG> Commands <BR> </STRONG>
+ * @brief <STRONG> Configs <BR> </STRONG>
  * The Commans lorem Ipsum
  */
 class Configs {
 public:
-	Configs();
-	~Configs();
+	static void loadConfigs(std::string filename);
+	static void loadTeam(std::string filename);
 	void load();
 	static Position POSITION;
 	static bool LOGGING;
 	static bool TRAINER_LOGGING;
 	static bool VERBOSE;
+	static bool SAVE_SEE;
+	static bool SAVE_HEAR;
+	static bool SAVE_FULLSTATE;
+	static bool SAVE_SENSE_BODY;
 	static unsigned int CYCLE_OFFSET;
 	static unsigned int BUFFER_MAX_HISTORY;
 	static unsigned int PLAYER_MAX_HISTORY;

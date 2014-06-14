@@ -56,6 +56,7 @@ class PFilter {
 public:
 	PFilter();
 	~PFilter();
+	void initWithBelief(double x, double y, double dir, double x_window, double y_window, double dir_window);
 	void update(void(* weight)(Particle &particle));
 	void predict(void(* predict)(Particle &particle));
 	void resample();

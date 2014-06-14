@@ -21,6 +21,7 @@
 #include "Server.hpp"
 #include <boost/regex.hpp>
 #include <cstdlib>
+#include <iostream>
 
 namespace Phoenix {
 
@@ -264,7 +265,13 @@ Server::Server(std::string server_params) {
 	Server::FREEFORM_SEND_PERIOD           = atoi((getParameter("freeform_send_period").c_str()));
 	Server::FREEFORM_WAIT_PERIOD           = atoi((getParameter("freeform_wait_period").c_str()));
 	Server::FULLSTATE_L                    = atoi((getParameter("fullstate_l").c_str()));
+	if (Server::FULLSTATE_L > 0) {
+		std::cout << "Using fullstate sensor for left team" << std::endl;
+	}
 	Server::FULLSTATE_R                    = atoi((getParameter("fullstate_r").c_str()));
+	if (Server::FULLSTATE_R > 0) {
+		std::cout << "Using fullstate sensor for right team" << std::endl;
+	}
 	Server::GAME_LOG_COMPRESSION           = atoi((getParameter("game_log_compression").c_str()));
 	Server::GAME_LOG_DATED                 = atoi((getParameter("game_log_dated").c_str()));
 	Server::GAME_LOG_DIR                   = getParameter("game_log_dir");

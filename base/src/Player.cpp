@@ -262,7 +262,7 @@ void Player::initForPlayer(std::string name, std::string position, Position play
 	}	
 	player_id = -1;
 	is_in_sight_range = true;
-	is_localized = false;
+	is_localized = true;
 }
 
 void Player::initForFullstate(std::string team, int unum, double x, double y, double vx, double vy, double b, double n) {
@@ -280,6 +280,7 @@ void Player::initForFullstate(std::string team, int unum, double x, double y, do
 	head = n;
 	position = Position(this->x, this->y, body, head);
 	velocity = Vector2D::getVector2DWithXAndY(vx, vy);
+	is_localized = true;
 }
 
 Position* Player::getPosition() {
@@ -332,6 +333,10 @@ void Player::toggleSightRange() {
 
 bool Player::isInSightRange() {
 	return is_in_sight_range;
+}
+
+bool Player::isLocalized() {
+	return is_localized;
 }
 
 }

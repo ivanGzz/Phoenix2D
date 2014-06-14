@@ -35,10 +35,9 @@ namespace Phoenix {
  * The WorldModel lorem Ipsum
  */
 class WorldModel {
-	std::vector<Player> players;
-	Ball ball;
 public:
 	WorldModel(std::vector<Player> players, Ball ball);
+	WorldModel(std::vector<Player> players, Ball ball, std::vector<Player> fs_player, Ball fs_ball);
 	~WorldModel();
 	std::vector<Player*> getPlayers();
 	std::vector<Player*> getPlayersOrderedByDistanceTo(Position position);
@@ -48,7 +47,17 @@ public:
 	std::vector<Player*> getOppPlayersOrderedByDistanceTo(Position position);
 	std::vector<Player*> getUndPlayers();
 	std::vector<Player*> getUndPlayersOrderedByDistanceTo(Position position);
+	Player* getOurExactPlayer(int unum);
+	Player* getOppExactPlayer(int unum);
 	Ball* getBall();
+	Ball* getExactBall();
+private:
+	std::vector<Player> players;
+	std::vector<Player> fs_players;
+	Ball ball;
+	Ball fs_ball;
+	Player ours[11];
+	Player opps[11];
 };
 
 } // End namespace Phoenix

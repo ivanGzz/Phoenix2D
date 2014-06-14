@@ -50,6 +50,7 @@ class Flag {
 	double minDistance;
 	double maxDistance;
 	double error;
+	double derror;
 	int simulation_time;
 	static std::map<std::string, _coordinate> FIELD;
 public:
@@ -64,6 +65,7 @@ public:
 	double getMinDistance();
 	double getMaxDistance();
 	double getError();
+	double getDError();
 };
 /*! @} */
 } // End namespace Phoenix
