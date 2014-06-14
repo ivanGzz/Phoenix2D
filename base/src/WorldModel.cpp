@@ -71,7 +71,7 @@ std::vector<Player*> WorldModel::getPlayersOrderedByDistanceTo(Position position
 		all_players.push_back(&(*it));
 	}
 	all_players.sort(compareDistances);
-	std::vector<Player> ps(all_players.begin(), all_players.end());
+	std::vector<Player*> ps(all_players.begin(), all_players.end());
 	return ps;
 }
 
@@ -94,7 +94,7 @@ std::vector<Player*> WorldModel::getOurPlayersOrderedByDistanceTo(Position posit
 		}
 	}
 	our_players.sort(compareDistances);
-	std::vector<Player> ps(our_players.begin(), our_players.end());
+	std::vector<Player*> ps(our_players.begin(), our_players.end());
 	return ps;
 }
 
@@ -117,7 +117,7 @@ std::vector<Player*> WorldModel::getOppPlayersOrderedByDistanceTo(Position posit
 		}
 	}
 	opp_players.sort(compareDistances);
-	std::vector<Player> ps(opp_players.begin(), opp_players.end());
+	std::vector<Player*> ps(opp_players.begin(), opp_players.end());
 	return ps;
 }
 
@@ -140,16 +140,16 @@ std::vector<Player*> WorldModel::getUndPlayersOrderedByDistanceTo(Position posit
 		}
 	}
 	und_players.sort(compareDistances);
-	std::vector<Player> ps(und_players.begin(), und_players.end());
+	std::vector<Player*> ps(und_players.begin(), und_players.end());
 	return ps;
 }
 
 Player* WorldModel::getOurExactPlayer(int unum) {
-	return ours[unum];
+	return &ours[unum];
 }
 
 Player* WorldModel::getOppExactPlayer(int unum) {
-	return opps[unum];
+	return &opps[unum];
 }
 
 Ball* WorldModel::getBall() {

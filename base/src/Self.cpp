@@ -741,7 +741,7 @@ void Self::localize(std::vector<Flag> flags) {
 		double y_i = it_flag->getY() + sin(dir) * it_flag->getDistance();
 		x_e = tao * x_e + (1 - tao) * x_i;
 		y_e = tao * y_e + (1 - tao) * y_i;
-		double gamma = 180 * atan2(it_flag->getY() - y_e, it_flag->getX() - x_e) / Self::PI - it_flag->getDirection();
+		double gamma = 180 * atan2(it_flag->getY() - y_e, it_flag->getX() - x_e) / Math::PI - it_flag->getDirection();
 		if (gamma > 180.0) {
 			gamma -= 360.0;
 		} else if (gamma < -180.0) {

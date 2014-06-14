@@ -34,6 +34,7 @@
 #include "Game.hpp"
 #include <map>
 #include "Configs.hpp"
+#include "Logger.hpp"
 
 namespace Phoenix {
 

@@ -26,6 +26,7 @@
 #include "Position.hpp"
 #include "Self.hpp"
 #include "Server.hpp"
+#include "Game.hpp"
 
 namespace localization {
 
@@ -77,7 +78,6 @@ void executePlayOn(WorldModel worldModel, std::vector<Message> messages, Command
 	}
 	std::clog << Game::GAME_TIME << ": (" << p.getX() << ", " << p.getY() << ", " << p.getBodyDirection() << ")" << std::endl;
 	double d = p.getDistanceTo(positionToGo);
-	std::cout << "Position: (" << p.getX() << ", " << p.getY() << ", " << p.getBodyDirection() << ") " << std::endl;
 	if (d > 1.0) {
 		double dir = p.getDirectionTo(positionToGo);
 		if (fabs(dir) > 10.0) {

@@ -24,6 +24,7 @@
 #include "Self.hpp"
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
+#include <exception>
 
 namespace Phoenix {
 
@@ -87,20 +88,25 @@ void Configs::loadConfigs(std::string filename) {
 	}
 	std::ifstream file(filename.c_str(), std::ifstream::in);
 	if (file) {
-		boost::property_tree::ptree pt;
-		boost::property_tree::read_json(file, pt);
-		Configs::SAVE_SEE             = pt.get("configs.savesensors.see", false);
-		Configs::SAVE_SENSE_BODY      = pt.get("configs.savesensors.body", false);
-		Configs::SAVE_HEAR            = pt.get("configs.savesensors.hear", false);
-		Configs::SAVE_FULLSTATE       = pt.get("configs.savesensors.fullstate", false);
-		Configs::CYCLE_OFFSET         = pt.get("configs.self.offset", 20);
-		Configs::BUFFER_MAX_HISTORY   = pt.get("configs.self.params.buffer", 8);
-		Configs::PLAYER_MAX_HISTORY   = pt.get("configs.players.buffer", 16);
-		Configs::BALL_MAX_HISTORY     = pt.get("configs.ball.buffer", 16);
-		Configs::COMMANDS_MAX_HISTORY = pt.get("configs.commands.buffer", 4);
-		Configs::COMMAND_PRECISION    = pt.get("configs.commands.precision", 4);
-		Configs::LOG_NAME             = pt.get("configs.logging.logname", "");
-		file.close();
+		try {
+			boost::property_tree::ptree pt;
+			boost::property_tree::read_json(file, pt);
+			Configs::SAVE_SEE             = pt.get("configs.savesensors.see", false);
+			Configs::SAVE_SENSE_BODY      = pt.get("configs.savesensors.body", false);
+			Configs::SAVE_HEAR            = pt.get("configs.savesensors.hear", false);
+			Configs::SAVE_FULLSTATE       = pt.get("configs.savesensors.fullstate", false);
+			Configs::CYCLE_OFFSET         = pt.get("configs.self.offset", 20);
+			Configs::BUFFER_MAX_HISTORY   = pt.get("configs.self.params.buffer", 8);
+			Configs::PLAYER_MAX_HISTORY   = pt.get("configs.players.buffer", 16);
+			Configs::BALL_MAX_HISTORY     = pt.get("configs.ball.buffer", 16);
+			Configs::COMMANDS_MAX_HISTORY = pt.get("configs.commands.buffer", 4);
+			Configs::COMMAND_PRECISION    = pt.get("configs.commands.precision", 4);
+			Configs::LOG_NAME             = pt.get("configs.logging.logname", "");
+			file.close();
+		}
+		catch (std::exception const &e) {
+			std::cerr << e.what() << std::endl;
+		}
 	} else {
 		if (!using_default) {
 			std::cerr << "Configs::loadConfigs() -> file " << filename << " does not exist" << std::endl;
@@ -138,16 +144,21 @@ void Configs::loadTeam(std::string filename) {
 		ss << "team." <<  Self::UNIFORM_NUMBER << "." << std::endl;
 		std::string path;
 		std::getline(ss, path);
-		boost::property_tree::ptree pt;
-		boost::property_tree::read_json(file, pt);
-		double x_default = xs[Self::UNIFORM_NUMBER - 1];
-		double y_default = ys[Self::UNIFORM_NUMBER - 1];
-		double x = pt.get(path + "x", x_default);
-		double y = pt.get(path + "y", y_default);
-		Configs::POSITION = Position(x, y);
-		Configs::LOGGING  = pt.get(path + "logging", false);
-		Configs::VERBOSE  = pt.get(path + "verbose", false);
-		file.close();
+		try {
+			boost::property_tree::ptree pt;
+			boost::property_tree::read_json(file, pt);
+			double x_default = xs[Self::UNIFORM_NUMBER - 1];
+			double y_default = ys[Self::UNIFORM_NUMBER - 1];
+			double x = pt.get(path + "x", x_default);
+			double y = pt.get(path + "y", y_default);
+			Configs::POSITION = Position(x, y);
+			Configs::LOGGING  = pt.get(path + "logging", false);
+			Configs::VERBOSE  = pt.get(path + "verbose", false);
+			file.close();
+		}
+		catch (std::exception const &e) {
+			std::cerr << e.what() << std::endl;
+		}
 	} else {
 		if (!using_default) {
 			std::cerr << "Configs::loadTeam() -> file " << filename << " does not exist" << std::endl;

@@ -115,6 +115,13 @@ void Ball::initForPlayer(std::string position, Position player_position, Vector2
 	in_sight_range = true;
 }
 
+void Ball::initForFullstate(double x, double y, double vx, double vy) {
+	this->x = x;
+	this->y = y;
+	this->vx = vx;
+	this->vy = vy;
+}
+
 Ball::~Ball() {
 
 }
