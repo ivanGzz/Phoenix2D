@@ -85,7 +85,7 @@ void Commands::turnNeck(double moment) {
 	ss << "(turn_neck " << std::setprecision(4) << moment << ")" << std::endl;
 	std::string command;
 	std::getline(ss, command);
-	commands_history.push_back(Command(command, 1, TURN_NECK));
+	commands_history.push_back(Command(command, 0, TURN_NECK));
 	commands_history.back().setArgs((void *)&moment);
 	commands_to_send.push_back(&commands_history.back());
 }
@@ -111,8 +111,8 @@ void Commands::dash(double power, double direction) {
 }
 
 void Commands::say(std::string message) {
-	std::string command = "(say " + message + ")";
-	commands_history.push_back(Command(command, 1, SAY));
+	std::string command = "(say \"" + message + "\")";
+	commands_history.push_back(Command(command, 0, SAY));
 	commands_history.back().setArgs((void *)&message);
 	commands_to_send.push_back(&commands_history.back());
 }
@@ -159,7 +159,7 @@ void Commands::pointTo(double distance, double direction) {
 
 void Commands::changeView(std::string width) {
 	std::string command = "(change_view " + width + ")";
-	commands_history.push_back(Command(command, 1, CHANGE_VIEW));
+	commands_history.push_back(Command(command, 0, CHANGE_VIEW));
 	commands_history.back().setArgs((void *)&width);
 	commands_to_send.push_back(&commands_history.back());
 }

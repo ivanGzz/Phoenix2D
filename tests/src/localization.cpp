@@ -88,6 +88,9 @@ void executePlayOn(WorldModel worldModel, std::vector<Message> messages, Command
 	} else {
 		randomPosition();
 	}
+	if (Game::GAME_TIME == 10) {
+		commands->say("finish");
+	}
 }
 
 void onFinish() {

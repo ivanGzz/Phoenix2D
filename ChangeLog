@@ -1,3 +1,8 @@
+2014-06-16 Nelson Gonz‡lez <nigm2005@gmail.com>
+
+	* (Trainer) Added wait_for command for waiting for a specific
+	message, not yet tested
+
 2014-06-14 Nelson Gonz‡lez <nigm2005@gmail.com>
 
 	* (Configs) Added exception handlers for boost property tree

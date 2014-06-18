@@ -54,8 +54,8 @@ struct execution_line {
 
 std::vector<execution_line> program;
 
-bool loadCode() {
-	std::ifstream file("trainer.phx", std::ifstream::in);
+bool loadCode(std::string trainer) {
+	std::ifstream file(trainer.c_str(), std::ifstream::in);
 	if (file) {
 		std::string line;
 		while (std::getline(file, line)) {
@@ -64,7 +64,7 @@ bool loadCode() {
 		file.close();
 		return true;
 	} else {
-		std::cerr << "loadCode() -> file trainer.phx does not exist" << std::endl;
+		std::cerr << "loadCode() -> file " << trainer << " does not exist" << std::endl;
 		file.close();
 		return false;
 	}
@@ -123,7 +123,7 @@ bool generateCode() {
 		std::cerr << "generateCode() -> " << jumps.size() << " loops unclosed" << std::endl;
 		return false;
 	}
-	execution_line line = {address, END, 1, "time_over", address + 1};
+	execution_line line = {address, END, 1, "time_over", address + 1, true};
 	program.push_back(line);
 	return true;
 }
@@ -133,18 +133,25 @@ std::stack<int> accums;
 
 Trainer::Trainer(Commands *commands) {
 	this->commands = commands;
-	if (loadCode()) {
-		newExecution = true;
-		if (!generateCode()) {
-			newExecution = false;
-		}
-	} else {
-		newExecution = false;
-	}
+	newExecution = false;
 }
 
 Trainer::~Trainer() {
 
+}
+
+bool Trainer::load(std::string trainer) {
+	if (loadCode(trainer)) {
+		newExecution = true;
+		if (!generateCode()) {
+			newExecution = false;
+			return false;
+		}
+	} else {
+		newExecution = false;
+		return false;
+	}
+	return true;
 }
 
 void Trainer::execute(WorldModel world, std::vector<Message> messages) {
@@ -160,6 +167,7 @@ void Trainer::execute(WorldModel world, std::vector<Message> messages) {
 			current_line = line.jump_to;
 			break;
 		case CHANGE_TO:
+			std::cout << "Changing to: " << line.arg << std::endl;
 			commands->changeMode(line.arg);
 			Game::PLAY_MODE = line.arg;
 			current_line = line.jump_to;

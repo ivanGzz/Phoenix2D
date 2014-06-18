@@ -1,5 +1,9 @@
 [1.1]
 
+  *  The trainer has a new command: wait_for_msg <MESSAGE>, this is a blocking method which will wait 
+     for a message with content <MESSAGE>.  Once the message is heard, the trainer will follow with the
+     next command in the script.
+
   *  The configs files now use the json format.  The general configuration file (configs.json) now has
      the format:
      {"configs": {
@@ -12,16 +16,16 @@
  		},
  		"ball": {
  		  "buffer": 8        //buffer size for the ball history
- 		}
+ 		},
  		"logging": {
  		  "logname": "test"  //the logname when logging is enabled
- 		}
+ 		},
  		"self": {
  		  "params": {
  		    "buffer": 8      //buffer size for the sense body params
  		  },
  		  "offset": 20       //milliseconds the agent will wait for messages
- 		}                    // from the server once the sense body is received
+ 		}                    // from the server once the sense body is received and
 	 }                       // before the new cycle begins
 	 }
 	 and the team configuration files (<TEAM_NAME>.json) the format:
@@ -46,16 +50,17 @@
      Phoenix::Commands*), which are executed every cycle.  This functions are now registered in the 
      Controller object. Some tests are harcoded by default and you can run them using the run command.  
      For example:
-     ./agent test localization
+     ./agent test localization Phoenix2D p localhost
      runs the localization test.  To run the custom AI you use the command run:
      ./agent run Phoenix2D p localhost
      Please refer to the test folder to see the examples.
 
-  *  Now, Phoenix2D is divided in three parts: Phoenix2D-base, in charge of the low level task such as
+  *  Now, Phoenix2D is divided in four parts: Phoenix2D-base, in charge of the low level task such as
      send and receive messages, parse information, manage sensors, etc, Phoenix2D-tests, in charge of the
      test for the player, and the main.cpp file in charge of launching the program.  Both Phoenix2D-base 
      and Phoenix2D-tests are compiled as static libraries, the first as stand-alone and the second as 
-     dependent of Phoenix2D-base.
+     dependent of Phoenix2D-base.  The fourth part is the AI part which is defined by the user, in a future
+     it will be included the AI used in international contests.
 
   *  Added python script for trainer scripting.  The class is provided in the Controller.py file and a
      example of use is provided in he trainer.py file.  This is a basic scripting and only can use the

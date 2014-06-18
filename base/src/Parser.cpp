@@ -387,6 +387,10 @@ void Parser::parseMessage(std::string message) {
 		players.clear();
 		ball = Ball();
 		messages.clear();
+		for (std::vector<Message>::iterator it = out_of_cycle.begin(); it != out_of_cycle.end(); ++it) {
+			messages.push_back(*it);
+		}
+		out_of_cycle.clear();
 		new_cycle = true;
 		found = message.find(" ", 12);
 		time = atoi(message.substr(12, found - 12).c_str());
@@ -403,18 +407,22 @@ void Parser::parseMessage(std::string message) {
 		if (pthread_create(&thread_message, &attr, hearHandler, &hears.back()) != 0) {
 			std::cerr << "Parser::parseMessage(string) -> error creating sense_body thread" << std::endl;
 		}
+		return;
 	}
 	else if (message_type.compare("change_player_type") == 0) {
-
+		return;
 	}
 	else if (message_type.compare("ok") == 0) {
 		if (Configs::VERBOSE) std::cout << Game::SIMULATION_TIME << ": " << message << std::endl;
+		return;
 	}
 	else if (message_type.compare("warning") == 0) {
 		if (Configs::VERBOSE) std::cout << Game::SIMULATION_TIME << ": " << message << std::endl;
+		return;
 	}
 	else if (message_type.compare("error") == 0) {
 		std::cerr << Game::SIMULATION_TIME << ": " << message << std::endl;
+		return;
 	}
 	if (!new_cycle) return; //we do not accept this messages after the new cycle started
 	if (message_type.compare("see") == 0) {
@@ -422,15 +430,18 @@ void Parser::parseMessage(std::string message) {
 		if (pthread_create(&thread_see, &attr, seeHandler, 0) != 0) {
 			std::cerr << "Parser::parseMessage(string) -> error creating sense_body thread" << std::endl;
 		}
+		return;
 	}	
 	else if (message_type.compare("fullstate") == 0) {
 		fullstate = message;
 		if (pthread_create(&thread_see, &attr, fullstateHandler, 0) != 0) {
 			std::cerr << "Parser::parseMessage(string) -> error creating fullstate thread" << std::endl;
 		}
+		return;
 	}
 	else {
 		std::cerr << "Parse::parseMessage(string) -> message " << message << " not recognized" << std::endl;
+		return;
 	}
 }
 

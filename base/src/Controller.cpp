@@ -31,16 +31,19 @@
 #include "PlayMode.hpp"
 #include "World.hpp"
 #include "Messages.hpp"
+#include "Message.hpp"
 #include "Game.hpp"
 #include <map>
 #include "Configs.hpp"
 #include "Logger.hpp"
+#include "Trainer.cpp"
 
 namespace Phoenix {
 
 std::map<std::string, execute> player;
 std::map<std::string, execute> goalie;
 std::map<std::string, execute> coach;
+std::string script = "";
 control setup;
 control finish;
 
@@ -152,6 +155,7 @@ void Controller::connect() {
 			break;
 		default:
 			_connect->sendMessage("(eye on)");
+			_connect->sendMessage("(ear on)");
 			break;
 		}
 		_world = new World();
@@ -187,46 +191,59 @@ void Controller::registerCoachFunction(std::string play_mode, execute function) 
 	coach.insert(std::make_pair(play_mode, function));
 }
 
+void Controller::registerTrainerScript(std::string trainer) {
+	script = trainer;
+}
+
 void Controller::run() {
 	if (!connected) {
 		std::cerr << "Controller::run() -> must connect before run" << std::endl;
 		return;
 	}
-	Logger log;
-	if (Configs::LOGGING) log.log();
 	_commands = new Commands(_connect);
-	PlayMode play_mode(_commands);
-	std::string current_play_mode = "launching";
-	std::map<std::string, execute>* ai;
-	switch (Controller::AGENT_TYPE) {
-	case 'p':
-		ai = &player;
-		break;
-	case 'g':
-		ai = &goalie;
-		break;
-	case 'c':
-		ai = &coach;
-		break;
-	default:
-		ai = &player;
-		break;
-	}
-	play_mode.onStart(setup);
-	while (Game::nextCycle()) {
-		if (current_play_mode.compare(Game::PLAY_MODE) != 0) {
-			current_play_mode = Game::PLAY_MODE;
+	if (AGENT_TYPE == 't') {
+		Trainer trainer(_commands);
+		if (trainer.load(script)) {
+			while (Game::nextCycle() && trainer.continueExecution()) {
+				trainer.execute(_world->getWorldModel(), _messages->getMessages());
+			}
 		}
-		play_mode.onPreExecute();
-		std::map<std::string, execute>::iterator it = ai->find(current_play_mode);
-		if (it != ai->end()) {
-			play_mode.onExecute(_world->getWorldModel(), _messages->getMessages(), it->second);
-		} else {
-			std::cerr << "Controller::run(): " << current_play_mode << " handler not found" << std::endl;
+	} else {
+		Logger log;
+		if (Configs::LOGGING) log.log();
+		PlayMode play_mode(_commands);
+		std::string current_play_mode = "launching";
+		std::map<std::string, execute>* ai;
+		switch (Controller::AGENT_TYPE) {
+		case 'p':
+			ai = &player;
+			break;
+		case 'g':
+			ai = &goalie;
+			break;
+		case 'c':
+			ai = &coach;
+			break;
+		default:
+			ai = &player;
+			break;
 		}
-		play_mode.onPostExecute();
+		play_mode.onStart(setup);
+		while (Game::nextCycle()) {
+			if (current_play_mode.compare(Game::PLAY_MODE) != 0) {
+				current_play_mode = Game::PLAY_MODE;
+			}
+			play_mode.onPreExecute();
+			std::map<std::string, execute>::iterator it = ai->find(current_play_mode);
+			if (it != ai->end()) {
+				play_mode.onExecute(_world->getWorldModel(), _messages->getMessages(), it->second);
+			} else {
+				std::cerr << "Controller::run(): " << current_play_mode << " handler not found" << std::endl;
+			}
+			play_mode.onPostExecute();
+		}
+		play_mode.onEnd(finish);
 	}
-	play_mode.onEnd(finish);
 }
 
 void Controller::reconnect() {

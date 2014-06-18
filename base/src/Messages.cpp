@@ -19,6 +19,8 @@
  */
 
 #include "Messages.hpp"
+#include <iostream>
+#include "Controller.hpp"
 
 namespace Phoenix {
 
@@ -34,8 +36,11 @@ std::vector<Message> Messages::getMessages() {
 	return messages;
 }
 
-void Messages::setMessages(std::vector<Message> messages) {
-	this->messages = messages;
+void Messages::setMessages(std::vector<Message> new_messages) {
+	messages.clear();
+	for (std::vector<Message>::iterator it = new_messages.begin(); it != new_messages.end(); ++it) {
+		messages.push_back(*it);
+	}
 }
 
 }

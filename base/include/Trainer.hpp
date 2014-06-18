@@ -24,6 +24,7 @@
 #include "WorldModel.hpp"
 #include <vector>
 #include "Message.hpp"
+#include <string>
 
 /*! @addtogroup phoenix_main
  * @{
@@ -42,6 +43,7 @@ class Trainer {
 public:
 	Trainer(Commands *commands);
 	~Trainer();
+	bool load(std::string trainer);
 	void execute(WorldModel world, std::vector<Message> messages);
 	bool continueExecution();
 };

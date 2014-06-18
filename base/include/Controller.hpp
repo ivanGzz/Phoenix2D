@@ -103,6 +103,7 @@ public:
 	void registerCoachFunction(std::string play_mode, execute function);
   /*! @brief Run
    */
+	void registerTrainerScript(std::string trainer);
 	void run();
   /*! @brief Reconnection Logic @todo Define Method
    */
