@@ -62,7 +62,7 @@ pthread_t thread_see_global = 0;
 pthread_attr_t attr;
 std::ofstream see_stream;
 //std::ofstream hear_stream;
-//std::ofstream fs_stream;
+std::ofstream fs_stream;
 //std::ofstream body_stream;
 
 /*------------------------
@@ -160,6 +160,9 @@ void *fullstateHandler(void* arg) {
 		double vx = atof((std::string() + match[3]).c_str());
 		double vy = atof((std::string() + match[4]).c_str());
 		fs_ball.initForFullstate(x, y, vx, vy);
+	}
+	if (Configs::SAVE_FULLSTATE) {
+		fs_stream << fullstate << std::endl;
 	}
 	return 0;
 }
@@ -345,6 +348,9 @@ Parser::Parser(Self* self, World* world, Messages* messages_p) {
 	if (Configs::SAVE_SEE) {
 		see_stream.open("see.log");
 	}
+	if (Configs::SAVE_FULLSTATE) {
+		fs_stream.open("fullstate.log");
+	}
 }
 
 Parser::~Parser() {
@@ -354,9 +360,13 @@ Parser::~Parser() {
 	if (Configs::SAVE_SEE) {
 		see_stream.close();
 	}
+	if (Configs::SAVE_FULLSTATE) {
+		fs_stream.close();
+	}
 }
 
 void Parser::parseMessage(std::string message) {
+	std::cout << message << std::endl;
 	size_t found = message.find_first_of(" ");
 	std::string message_type = message.substr(1, found - 1);
 	if (message_type.compare("sense_body") == 0) {

@@ -267,9 +267,9 @@ void Player::initForPlayer(std::string name, std::string position, Position play
 
 void Player::initForFullstate(std::string team, int unum, double x, double y, double vx, double vy, double b, double n) {
 	if (Self::SIDE[0] == team[0]) {
-		team = "our";
+		this->team = "our";
 	} else {
-		team = "opp";
+		this->team = "opp";
 	}
 	uniform_number = unum;
 	this->x = x;

@@ -20,6 +20,7 @@
 
 #include "WorldModel.hpp"
 #include <list>
+#include <iostream>
 
 namespace Phoenix {
 
@@ -39,7 +40,7 @@ WorldModel::WorldModel(std::vector<Player> players, Ball ball) {
 WorldModel::WorldModel(std::vector<Player> players, Ball ball, std::vector<Player> fs_players, Ball fs_ball) {
 	this->players = players;
 	this->ball = ball;
-	for (int i = 0; i < 11; ++i) {
+	for (int i = 0; i < 12; ++i) {
 		ours[i] = Player();
 		opps[i] = Player();
 	}

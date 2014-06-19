@@ -18,43 +18,22 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "localization.hpp"
+#include "dribble.hpp"
 #include <ctime>
 #include <iostream>
 #include <boost/random.hpp>
-#include <cmath>
 #include "Position.hpp"
-#include "Self.hpp"
-#include "Server.hpp"
-#include "Game.hpp"
 
-namespace localization {
+namespace dribble {
 
 bool setup = false;
-bool fullstate = false;
 boost::mt19937 rng(time(0));
 boost::uniform_int<> xdist(0, 104);
 boost::uniform_int<> ydist(0, 68);
 Position positionToGo;
 
 void onStart() {
-	std::cout << "Starting localization test" << std::endl;
-	if (Self::SIDE[0] == 'l') {
-		if (Server::FULLSTATE_L != 0) {
-			fullstate = true;
-		}
-		else {
-			std::cerr << "localization test needs the fullstate sensor active for the left team" << std::endl;
-		}
-	}
-	else {
-		if (Server::FULLSTATE_R != 0) {
-			fullstate = true;
-		}
-		else {
-			std::cerr << "localization test needs the fullstate sensor active for the right team" << std::endl;
-		}
-	}
+	std::cout << "Starting dribble test" << std::endl;
 }
 
 void randomPosition() {
@@ -76,29 +55,11 @@ void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages, 
 }
 
 void executePlayOn(WorldModel worldModel, std::vector<Message> messages, Commands* commands) {
-	Position p = Self::getPosition();
-	if (fullstate) {
-		Player* pl = worldModel.getOurExactPlayer(Self::UNIFORM_NUMBER);
-		Position e_p = *(pl->getPosition());
-		std::clog << Game::GAME_TIME << ": (" << p.getX() << ", " << p.getY() << ", " << p.getBodyDirection() << ")"
-				                     << ", (" << e_p.getX() << ", " << e_p.getY() << ", " << e_p.getBodyDirection() << ")"
-				                     << std::endl;
-	}
-	double d = p.getDistanceTo(positionToGo);
-	if (d > 1.0) {
-		double dir = p.getDirectionTo(positionToGo);
-		if (fabs(dir) > 10.0) {
-			commands->turn(dir);
-		} else {
-			commands->dash(50.0, 0.0);
-		}
-	} else {
-		randomPosition();
-	}
+
 }
 
 void onFinish() {
-	std::cout << "Finishing localization test" << std::endl;
+	std::cout << "Finishing dribble test" << std::endl;
 }
 
 }
