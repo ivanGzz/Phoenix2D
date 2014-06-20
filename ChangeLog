@@ -1,3 +1,7 @@
+2014-06-20 Nelson Gonz‡lez <nigm2005@gmail.com>
+
+	* (ai) Added ai folder to include the AI for a complete game
+
 2014-06-16 Nelson Gonz‡lez <nigm2005@gmail.com>
 
 	* (Trainer) Added wait_for command for waiting for a specific

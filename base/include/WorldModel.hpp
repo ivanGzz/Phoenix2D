@@ -56,8 +56,8 @@ private:
 	std::vector<Player> fs_players;
 	Ball ball;
 	Ball fs_ball;
-	Player ours[11];
-	Player opps[11];
+	Player ours[12];
+	Player opps[12];
 };
 
 } // End namespace Phoenix

@@ -23,9 +23,28 @@
 #include "Controller.hpp"
 #include "Configs.hpp"
 #include "tests.hpp"
+#include "ai.hpp"
 
 void loadAI(Phoenix::Controller &controller) {
-
+	switch (Controller::AGENT_TYPE) {
+	case 'p':
+		controller.registerSetupFunction(player::onSetup);
+		controller.registerPlayerFunction("before_kick_off", player::executeBeforeKickOff);
+		controller.registerFinishFunction(player::onFinish);
+		break;
+	case 'g':
+		controller.registerSetupFunction(goalie::onSetup);
+		controller.registerPlayerFunction("before_kick_off", goalie::executeBeforeKickOff);
+		controller.registerFinishFunction(goalie::onFinish);
+		break;
+	case 'c':
+		controller.registerSetupFunction(coach::onSetup);
+		controller.registerPlayerFunction("before_kick_off", coach::executeBeforeKickOff);
+		controller.registerFinishFunction(coach::onFinish);
+		break;
+	default:
+		break;
+	}
 }
 
 void loadTest(std::string test, Phoenix::Controller &controller) {
@@ -34,6 +53,11 @@ void loadTest(std::string test, Phoenix::Controller &controller) {
 		controller.registerPlayerFunction("before_kick_off", localization::executeBeforeKickOff);
 		controller.registerPlayerFunction("play_on", localization::executePlayOn);
 		controller.registerFinishFunction(localization::onFinish);
+	} else if (test.compare("dribble") == 0) {
+		controller.registerSetupFunction(dribble::onStart);
+		controller.registerPlayerFunction("before_kick_off", dribble::executeBeforeKickOff);
+		controller.registerPlayerFunction("play_on", dribble::executePlayOn);
+		controller.registerFinishFunction(dribble::onFinish);
 	}
 }
 

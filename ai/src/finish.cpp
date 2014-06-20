@@ -18,10 +18,28 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TESTS_HPP_
-#define TESTS_HPP_
+#include "finish.hpp"
 
-#include "localization.hpp"
-#include "dribble.hpp"
+namespace player {
 
-#endif /* TESTS_HPP_ */
+void onFinish() {
+
+}
+
+}
+
+namespace goalie {
+
+void onFinish() {
+
+}
+
+}
+
+namespace coach {
+
+void onFinish() {
+
+}
+
+}

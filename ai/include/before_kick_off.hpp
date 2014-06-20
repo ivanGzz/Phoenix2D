@@ -18,10 +18,32 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TESTS_HPP_
-#define TESTS_HPP_
+#ifndef BEFORE_KICK_OFF_HPP_
+#define BEFORE_KICK_OFF_HPP_
 
-#include "localization.hpp"
-#include "dribble.hpp"
+#include "Commands.hpp"
+#include "WorldModel.hpp"
+#include "Message.hpp"
+#include <vector>
 
-#endif /* TESTS_HPP_ */
+using namespace Phoenix;
+
+namespace player {
+
+void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages, Commands* commands);
+
+}
+
+namespace goalie {
+
+void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages, Commands* commands);
+
+}
+
+namespace coach {
+
+void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages, Commands* commands);
+
+}
+
+#endif /* BEFORE_KICK_OFF_HPP_ */

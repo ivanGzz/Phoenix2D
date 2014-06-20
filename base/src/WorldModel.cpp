@@ -21,6 +21,7 @@
 #include "WorldModel.hpp"
 #include <list>
 #include <iostream>
+#include "Controller.hpp"
 
 namespace Phoenix {
 
@@ -40,15 +41,17 @@ WorldModel::WorldModel(std::vector<Player> players, Ball ball) {
 WorldModel::WorldModel(std::vector<Player> players, Ball ball, std::vector<Player> fs_players, Ball fs_ball) {
 	this->players = players;
 	this->ball = ball;
-	for (int i = 0; i < 12; ++i) {
-		ours[i] = Player();
-		opps[i] = Player();
-	}
-	for (std::vector<Player>::iterator it = fs_players.begin(); it != fs_players.end(); ++it) {
-		if (it->getTeam().compare("our") == 0) {
-			ours[it->getUniformNumber()] = *it;
-		} else {
-			opps[it->getUniformNumber()] = *it;
+	if (Controller::AGENT_TYPE == 'p' || Controller::AGENT_TYPE == 'g') {
+		for (int i = 0; i < 12; ++i) {
+			ours[i] = Player();
+			opps[i] = Player();
+		}
+		for (std::vector<Player>::iterator it = fs_players.begin(); it != fs_players.end(); ++it) {
+			if (it->getTeam().compare("our") == 0) {
+				ours[it->getUniformNumber()] = *it;
+			} else {
+				opps[it->getUniformNumber()] = *it;
+			}
 		}
 	}
 }

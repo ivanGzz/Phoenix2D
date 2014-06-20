@@ -32,5 +32,6 @@ AC_CHECK_FUNCS([bzero gethostbyname inet_ntoa pow socket sqrt])
 
 AC_CONFIG_FILES([base/Makefile
                  tests/Makefile
+                 ai/Makefile
                  Makefile])
 AC_OUTPUT

@@ -18,10 +18,23 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TESTS_HPP_
-#define TESTS_HPP_
+#ifndef DRIBBLE_HPP_
+#define DRIBBLE_HPP_
 
-#include "localization.hpp"
-#include "dribble.hpp"
+#include <vector>
+#include "WorldModel.hpp"
+#include "Messages.hpp"
+#include "Commands.hpp"
 
-#endif /* TESTS_HPP_ */
+using namespace Phoenix;
+
+namespace dribble {
+
+void onStart();
+void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages, Commands* commands);
+void executePlayOn(WorldModel worldModel, std::vector<Message> messages, Commands* commands);
+void onFinish();
+
+}
+
+#endif /* DRIBBLE_HPP_ */

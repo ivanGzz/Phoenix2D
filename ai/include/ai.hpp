@@ -18,10 +18,11 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TESTS_HPP_
-#define TESTS_HPP_
+#ifndef AI_HPP_
+#define AI_HPP_
 
-#include "localization.hpp"
-#include "dribble.hpp"
+#include "setup.hpp"
+#include "before_kick_off.hpp"
+#include "finish.hpp"
 
-#endif /* TESTS_HPP_ */
+#endif /* AI_HPP_ */

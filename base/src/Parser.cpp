@@ -366,7 +366,6 @@ Parser::~Parser() {
 }
 
 void Parser::parseMessage(std::string message) {
-	std::cout << message << std::endl;
 	size_t found = message.find_first_of(" ");
 	std::string message_type = message.substr(1, found - 1);
 	if (message_type.compare("sense_body") == 0) {
