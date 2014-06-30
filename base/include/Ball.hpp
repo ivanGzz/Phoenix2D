@@ -23,7 +23,7 @@
 
 #include <string>
 #include "Position.hpp"
-#include "Vector2D.hpp"
+#include "geometry.hpp"
 
 /*! @addtogroup phoenix_main
  * @{
@@ -39,10 +39,10 @@ public:
 	Ball();
 	~Ball();
 	void initForCoach(std::string position);
-	void initForPlayer(std::string position, Position player_position, Vector2D player_velocity);
+	void initForPlayer(std::string position, const Position* player_position, const Geometry::Vector2D* player_velocity);
 	void initForFullstate(double x, double y, double vx, double vy);
 	Position* getPosition();
-	Vector2D* getVelocity();
+	Geometry::Vector2D* getVelocity();
 	bool isInSightRange();
 private:
 	double distance;
@@ -54,7 +54,7 @@ private:
 	double vx;
 	double vy;
 	Position position;
-	Vector2D velocity;
+	Geometry::Vector2D velocity;
 	bool in_sight_range;
 };
 

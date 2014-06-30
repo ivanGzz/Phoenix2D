@@ -1,18 +1,44 @@
-2014-06-20 Nelson Gonz‡lez <nigm2005@gmail.com>
+2014-06-29 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (Vector2D) Vector2D refactored as struct and moved to 
+	utils as a geometry primitive
+
+2014-06-27 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (PFields) added potential fields template class to utils 
+	folder
+
+2014-06-25 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (contants.hpp) moved constants.hpp to utils folder
+
+2014-06-24 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (functions) Added math functions library in utils folder
+
+2014-06-23 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (utils) Added utils folder
+	* (PFilter) Particle filter class moved to utils and changed
+	to template
+	
+	* (Actions) Removed Actions class from base
+
+2014-06-20 Nelson Gonzalez <nigm2005@gmail.com>
 
 	* (ai) Added ai folder to include the AI for a complete game
 
-2014-06-16 Nelson Gonz‡lez <nigm2005@gmail.com>
+2014-06-16 Nelson Gonzalez <nigm2005@gmail.com>
 
 	* (Trainer) Added wait_for command for waiting for a specific
 	message, not yet tested
 
-2014-06-14 Nelson Gonz‡lez <nigm2005@gmail.com>
+2014-06-14 Nelson Gonzalez <nigm2005@gmail.com>
 
 	* (Configs) Added exception handlers for boost property tree
 	json reader.
 
-2014-06-12 Nelson Gonz‡lez <nigm2005@gmail.com>
+2014-06-12 Nelson Gonzalez <nigm2005@gmail.com>
 
 	* (World) World class modified to include fullstate
 	* (WorldModel) WorldModel class modified to include fullstate
@@ -23,11 +49,11 @@
 	* (Configs) Change configs file format to json using boost
 	property tree
 
-2014-06-10 Nelson Gonz‡lez <nigm2005@gmail.com>
+2014-06-10 Nelson Gonzalez <nigm2005@gmail.com>
 
 	* (localization) added localization test
 
-2014-06-10 Nelson Gonz‡lez <nigm2005@gmail.com>
+2014-06-10 Nelson Gonzalez <nigm2005@gmail.com>
 
 	* (Controller) Refactored controller class
 	* (Controller) Moved main thread to Controller class

@@ -56,10 +56,10 @@ void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages, 
 		setup = true;
 		randomPosition();
 	} else {
-		Position p = Self::getPosition();
+		const Position* p = Self::getPosition();
 		Ball* ball = worldModel.getBall();
 		if (ball->isInSightRange()) {
-			double dir = p.getDirectionTo(*(ball->getPosition()));
+			double dir = p->getDirectionTo(*(ball->getPosition()));
 			if (dir > 5.0) {
 				commands->turn(dir);
 			}
@@ -71,14 +71,14 @@ void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages, 
 
 void executePlayOn(WorldModel worldModel, std::vector<Message> messages, Commands* commands) {
 	Ball* b = worldModel.getBall();
-	Position p = Self::getPosition();
+	const Position* p = Self::getPosition();
 	if (b->isInSightRange()) {
-		double ed = p.getDistanceTo(*(b->getPosition())) - Server::PLAYER_SIZE - Server::BALL_SIZE;
+		double ed = p->getDistanceTo(*(b->getPosition())) - Server::PLAYER_SIZE - Server::BALL_SIZE;
 		if (ed < Self::KICKABLE_MARGIN) {
 			double dir = b->getPosition()->getDirectionTo(positionToGo);
 			commands->kick(25.0, dir);
 		} else {
-			double dir = p.getDirectionTo(*(b->getPosition()));
+			double dir = p->getDirectionTo(*(b->getPosition()));
 			if (dir > 5.0) {
 				commands->turn(dir);
 			} else {

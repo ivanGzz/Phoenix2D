@@ -111,14 +111,14 @@ void Player::initForCoach(std::string name, std::string position) {
 	default:
 		break;
 	}
-	velocity = Vector2D::getVector2DWithXAndY(vx, vy);
+	velocity = Geometry::Vector2D(vx, vy); //Vector2D::getVector2DWithXAndY(vx, vy);
 	this->position = Position(x, y, body, head);
 	player_id = -1;
 	is_in_sight_range = true;
 	is_localized = true;
 }
 
-void Player::initForPlayer(std::string name, std::string position, Position player_position, Vector2D player_velocity) {
+void Player::initForPlayer(std::string name, std::string position, const Position* player_position, const Geometry::Vector2D* player_velocity) {
 	std::vector<std::string> tokens;
 	std::stringstream ss_name(name);
 	std::string token;
@@ -228,7 +228,7 @@ void Player::initForPlayer(std::string name, std::string position, Position play
 	default:
 		break;
 	}
-	double source_direction = player_position.getBodyDirection() + player_position.getHeadDirection() + direction;
+	double source_direction = player_position->body + player_position->neck + direction;
 	if (source_direction > 180.0) {
 		source_direction -= 360.0;
 	} else if (source_direction <= 180.0) {
@@ -236,10 +236,10 @@ void Player::initForPlayer(std::string name, std::string position, Position play
 	}
 	double erx = cos(Math::PI * source_direction / 180.0);
 	double ery = sin(Math::PI * source_direction / 180.0);
-	x = player_position.getX() + erx * distance;
-	y = player_position.getY() + ery * distance;
+	x = player_position->x + erx * distance;
+	y = player_position->y + ery * distance;
 	if (has_body && has_head) {
-		body = bodyDirection + player_position.getBodyDirection() + player_position.getHeadDirection();
+		body = bodyDirection + player_position->body + player_position->neck;
 		if (body > 180.0) {
 			body -= 360.0;
 		} else if (body <= -180.0) {
@@ -254,11 +254,11 @@ void Player::initForPlayer(std::string name, std::string position, Position play
 		double erym = (180.0 * ery) / (Math::PI * distance);
 		double vry = (distChange * erym + dirChange * erx) / (ery * erym + erx * erxm);
 		double vrx = (distChange - ery * vry) / erx;
-		vx = player_velocity.getXComponent() + vrx;
-		vy = player_velocity.getYComponent() + vry;
-		velocity = Vector2D::getVector2DWithXAndY(vx, vy);
+		vx = player_velocity->dx + vrx;
+		vy = player_velocity->dy + vry;
+		velocity = Geometry::Vector2D(vx, vy); //Vector2D::getVector2DWithXAndY(vx, vy);
 	} else {	
-		velocity = Vector2D::getEmptyVector();
+		velocity = Geometry::Vector2D(0.0, 0.0); //Vector2D::getEmptyVector();
 	}	
 	player_id = -1;
 	is_in_sight_range = true;
@@ -279,7 +279,7 @@ void Player::initForFullstate(std::string team, int unum, double x, double y, do
 	body = b;
 	head = n;
 	position = Position(this->x, this->y, body, head);
-	velocity = Vector2D::getVector2DWithXAndY(vx, vy);
+	velocity = Geometry::Vector2D(vx, vy); //Vector2D::getVector2DWithXAndY(vx, vy);
 	is_localized = true;
 }
 
@@ -295,7 +295,7 @@ int Player::getUniformNumber() {
 	return uniform_number;
 }
 
-Vector2D* Player::getVelocity() {
+Geometry::Vector2D* Player::getVelocity() {
 	return &velocity;
 }
 

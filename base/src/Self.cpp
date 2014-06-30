@@ -32,6 +32,7 @@
 #include "Server.hpp"
 #include "Game.hpp"
 #include "PFilter.hpp"
+#include "functions.hpp"
 
 namespace Phoenix {
 
@@ -50,7 +51,7 @@ double *effort_min;
 double *kick_power_rate;
 double *foul_detect_probability;
 double *catchable_area_l_stretch;
-PFilter pfilter;
+Filters::PFilter<4> pfilter;
 
 double u[3] = {0.0, 0.0, 0.0}; //{dash_power, dash_direction, turn_moment}
 
@@ -91,7 +92,9 @@ boost::regex sense_body_regex("^\\(sense_body\\s+\\d+\\s+"
 bool   positioned = false;
 static double x          = 0.0;
 static double y          = 0.0;
-static double theta      = 0.0;
+static double body       = 0.0;
+static Position position;
+static Geometry::Vector2D velocity;
 static std::list<Command*> last_commands_sent;
 static boost::circular_buffer<std::string> view_mode_width_buffer(Configs::BUFFER_MAX_HISTORY, "normal");
 static boost::circular_buffer<std::string> view_mode_quality_buffer(Configs::BUFFER_MAX_HISTORY, "high");
@@ -272,7 +275,7 @@ Self::Self(std::string player_params, std::string team_name, int unum, std::stri
 	foul_detect_probability = new double[Self::PLAYER_TYPES];
 	catchable_area_l_stretch = new double[Self::PLAYER_TYPES];
 	if (side.compare("r")) {
-		theta = 180.0;
+		body = 180.0;
 	}
 	Flag::initializeField();
 }
@@ -386,6 +389,7 @@ void Self::processSenseBody(std::string sense_body) {
 		//direction_of_speed
 		Self::DIRECTION_OF_SPEED = atof((std::string() + match[7]).c_str());
 		direction_of_speed_buffer.push_front(Self::DIRECTION_OF_SPEED);
+		velocity = Geometry::Vector2D(AMOUNT_OF_SPEED, DIRECTION_OF_SPEED, true);
 		//head_angle
 		Self::HEAD_ANGLE = atof((std::string() + match[8]).c_str());
 		head_angle_buffer.push_front(Self::HEAD_ANGLE);
@@ -438,7 +442,17 @@ void Self::processSenseBody(std::string sense_body) {
 			if (move_ptr) {
 				x = move_ptr->getMoveX();
 				y = move_ptr->getMoveY();
-				pfilter.initWithBelief(x, y, theta, 5.0, 5.0, 10.0);
+				position = Position(x, y, body);
+//				pfilter.initWithBelief(x, y, theta, 5.0, 5.0, 10.0);
+				if (Configs::LOCALIZATION.compare("particlefilter") == 0) {
+					double mus[4];
+					mus[0] = x;
+					mus[1] = y;
+					mus[2] = cos(body * Math::PI / 180.0);
+					mus[3] = sin(body * Math::PI / 180.0);
+					double devs[] = {5.0, 5.0, 0.2, 0.2};
+					pfilter.initWithBelief(mus, devs);
+				}
 				positioned = true;
 				move_ptr->changeStatusTo(EXECUTED);
 			}
@@ -523,18 +537,6 @@ void Self::changePlayerType(int type) {
 	}
 }
 
-double angleMean(std::list<double> arcs) {
-	double x_m = 0.0;
-	double y_m = 0.0;
-	for (std::list<double>::iterator it = arcs.begin(); it != arcs.end(); ++it) {
-		x_m += cos(Math::PI * (*it) / 180.0);
-		y_m += sin(Math::PI * (*it) / 180.0);
-	}
-	x_m /= arcs.size();
-	y_m /= arcs.size();
-	return 180.0 * atan2(y_m, x_m) / Math::PI;
-}
-
 /**
  * (x - x0)^2 + (y - y0)^2 = d0
  * (x - x1)^2 + (y - y1)^2 = d1
@@ -542,7 +544,7 @@ double angleMean(std::list<double> arcs) {
  * k0 = d0^2 - x0^2 - y1^2
  * k1 = d1^2 - x1^2 - y1^2
  */
-/*bool triangular(Flag* flag0, Flag* flag1, double &x_t, double &y_t, double &theta_t, double &error_d) {
+bool flagsTriangulation(Flag* flag0, Flag* flag1, double &x_t, double &y_t, double &theta_t, double &error_d) {
 	double k0 = pow(flag0->getDistance(), 2.0) - pow(flag0->getX(), 2.0) - pow(flag0->getY(), 2.0);
 	double k1 = pow(flag1->getDistance(), 2.0) - pow(flag1->getX(), 2.0) - pow(flag1->getY(), 2.0);
 	double x0, x1, y0, y1, B, C;
@@ -594,8 +596,8 @@ double angleMean(std::list<double> arcs) {
 		x_t = x1;
 		y_t = y1;
 	}
-	gamma0 = 180 * atan2(flag0->getY() - y_t, flag0->getX() - x_t) / Self::PI - flag0->getDirection();
-	gamma1 = 180 * atan2(flag1->getY() - y_t, flag1->getX() - x_t) / Self::PI - flag1->getDirection();
+	gamma0 = 180 * atan2(flag0->getY() - y_t, flag0->getX() - x_t) / Math::PI - flag0->getDirection();
+	gamma1 = 180 * atan2(flag1->getY() - y_t, flag1->getX() - x_t) / Math::PI - flag1->getDirection();
 	if (gamma0 >= 180.0) {
 		gamma0 -= 360.0;
 	} else if (gamma0 < -180.0) {
@@ -606,119 +608,87 @@ double angleMean(std::list<double> arcs) {
 	} else if (gamma1 < -180.0) {
 		gamma1 += 360.0;
 	}
-	double x_m = (cos(Self::PI * gamma0 / 180.0) + cos(Self::PI * gamma1 / 180.0)) / 2.0;
-	double y_m = (sin(Self::PI * gamma0 / 180.0) + sin(Self::PI * gamma1 / 180.0)) / 2.0;
-	theta_t = 180.0 * atan2(y_m, x_m) / Self::PI;
+	double x_m = (cos(Math::PI * gamma0 / 180.0) + cos(Math::PI * gamma1 / 180.0)) / 2.0;
+	double y_m = (sin(Math::PI * gamma0 / 180.0) + sin(Math::PI * gamma1 / 180.0)) / 2.0;
+	theta_t = 180.0 * atan2(y_m, x_m) / Math::PI;
 	error_d = flag0->getError() + flag1->getError();
 	return true;
-}*/
-
-/*bool areaCheck(double x_min, double x_max, double rmax, double x_c, double y_c, double error) {
-	double x_t = cos(theta) * (x_c - x) + sin(theta) * (y_c - y);
-	double y_t = sin(theta) * (x - x_c) + cos(theta) * (y_c - y);
-	if (((x_t > x_min - error) && (x_t < x_max + error)) && ((y_t > -1.0 * rmax - error) && (y_t < rmax + error))) {
-		return true;
-	} else {
-		return false;
-	}
-}*/
+}
 
 double velc = 0.0;
 double dire = 0.0;
 double turn = 0.0;
 std::vector<Flag> current_flags;
 
-void predict(Particle &particle) {
-	particle.x += velc * cos(Math::PI * particle.direction / 180.0);
-	particle.y += velc * sin(Math::PI * particle.direction / 180.0);
-	particle.direction += turn;
-	if (particle.direction > 180.0) {
-		particle.direction -= 360.0;
-	} else if (particle.direction < -180.0) {
-		particle.direction += 360.0;
+void predict(Filters::Particle<4> &particle) {
+	double direction = 180.0 * atan2(particle.dimension[3], particle.dimension[2]) / Math::PI;
+	particle.dimension[0] += velc * cos(Math::PI * direction / 180.0);
+	particle.dimension[1] += velc * sin(Math::PI * direction / 180.0);
+	direction += turn;
+	if (direction > 180.0) {
+		direction -= 360.0;
+	} else if (direction < -180.0) {
+		direction += 360.0;
 	}
+	particle.dimension[2] = cos(Math::PI * direction / 180.0);
+	particle.dimension[3] = sin(Math::PI * direction / 180.0);
 }
 
-/*
- *     def Gaussian(self, mu, sigma, x):
-
-        # calculates the probability of x for 1-dim Gaussian with mean mu and var. sigma
-        return exp(- ((mu - x) ** 2) / (sigma ** 2) / 2.0) / sqrt(2.0 * pi * (sigma ** 2))
-
-         def measurement_prob(self, measurement):
-
-        # calculates how likely a measurement should be
-
-        prob = 1.0;
-        for i in range(len(landmarks)):
-            dist = sqrt((self.x - landmarks[i][0]) ** 2 + (self.y - landmarks[i][1]) ** 2)
-            prob *= self.Gaussian(dist, self.sense_noise, measurement[i])
-        return prob
- */
-
-double sqrttwopi = 2.506628275;
-
-double gaussian(double mu, double stdd, double x) {
-	double d = (1.0 / (stdd * sqrttwopi)) * exp(-0.5 * pow(((x - mu) / stdd), 2.0));
-	return d;
-}
-
-void weight(Particle &particle) {
+void update(Filters::Particle<4> &particle) {
 	particle.weight = 1.0;
-//	int counter = 0;
-//	for (std::vector<Flag>::iterator it = current_flags.begin(); it != current_flags.end(); ++it) {
-//		double x = sqrt(pow(particle.x - it->getX(), 2.0) + pow(particle.y - it->getY(), 2.0));
-//		double mu = it->getDistance() - it->getError();
-//		double stdd = 2.0 * it->getError();
-//		particle.weight *= gaussian(mu, stdd, x);
-//		x = atan2(it->getY() - particle.y, it->getX() - particle.x) - particle.direction;
-//		mu = it->getDirection() - 1.0;
-//		particle.weight *= gaussian(mu, 2.0, x);
-//		counter++;
-//		if (counter > 2) {
-//			break;
-//		}
-//		if (fabs(x - u) > d) {
-//			particle.weight *= 0.0;
-//		} else {
-//			particle.weight *= 1.0 / d;
-//		}
-//		particle.weight * = (fabs(x - u) < d ? )
-//		double error = fabs(d - it->getDistance());
-//		if (error > 0.0) {
-//			particle.weight += 1.0 / error;
-//		}
-//	}
+	for (std::vector<Flag>::iterator it = current_flags.begin(); it != current_flags.end(); ++it) {
+		double x = sqrt(pow(particle.dimension[0] - it->getX(), 2.0) + pow(particle.dimension[1] - it->getY(), 2.0));
+		double a = it->getDistance() - 2.0 * it->getError();
+		double b = it->getDistance() + it->getError();
+		Math::Uniform u(a, b);
+		particle.weight *= u.evaluate(x); //Math::uniform(u, x);
+	}
 }
 
-void Self::localize(std::vector<Flag> flags) {
-	if (!positioned) return;
-	velc = getAmountOfSpeedAtTime(1) + getEffortAtTime(1) * DASH_POWER_RATE * u[0];
-	if (velc > PLAYER_SPEED_MAX) {
-		velc = PLAYER_SPEED_MAX;
-	}
-	turn = u[2] / (1.0 + INERTIA_MOMENT * velc);
-	current_flags = flags;
-//	pfilter.predict(predict);
-//	if (flags.size() > 0) {
-//		pfilter.update(weight);
-//		pfilter.resample();
-//	}
-//	x = pfilter.x_mean;
-//	y = pfilter.y_mean;
-//	theta = pfilter.dir_mean;
-	if (flags.size() == 0) {
-		theta += turn;
-		if (theta > 180.0) {
-			theta -= 360.0;
-		} else if (theta < -180.0) {
-			theta += 360.0;
+void triangulation(std::vector<Flag> flags) {
+	std::vector<double> ds;
+	double xt = 0.0, yt = 0.0;
+	int counter = 0;
+	for (std::vector<Flag>::iterator it_i = flags.begin(); it_i != flags.end() - 1; ++it_i) {
+		for (std::vector<Flag>::iterator it_j = it_i + 1; it_j != flags.end(); ++it_j) {
+			double x, y ,d, e;
+			if (flagsTriangulation(&(*it_i), &(*it_j), x, y, d, e)) {
+				ds.push_back(d);
+				xt += x;
+				yt += y;
+				counter++;
+			}
 		}
-		x += velc * cos(Math::PI * theta / 180.0);
-		y += velc * sin(Math::PI * theta / 180.0);
+	}
+	if (counter > 0) {
+		x = xt / (double)counter;
+		y = yt / (double)counter;
+		body = Math::arcsMean(ds); //theta = angleMean(ds);
+	} else {
+		body += turn;
+		if (body > 180.0) {
+			body -= 360.0;
+		} else if (body < -180.0) {
+			body += 360.0;
+		}
+		x += velc * cos(Math::PI * body / 180.0);
+		y += velc * sin(Math::PI * body / 180.0);
+	}
+}
+
+void lowpassfilter(std::vector<Flag> flags) {
+	if (flags.size() == 0) {
+		body += turn;
+		if (body > 180.0) {
+			body -= 360.0;
+		} else if (body < -180.0) {
+			body += 360.0;
+		}
+		x += velc * cos(Math::PI * body / 180.0);
+		y += velc * sin(Math::PI * body / 180.0);
 		return;
 	}
-	std::list<double> thetas;
+	std::vector<double> thetas;
 	double x_e = x;
 	double y_e = y;
 	double tao = 0.6;
@@ -751,15 +721,45 @@ void Self::localize(std::vector<Flag> flags) {
 	}
 	x = x_e;
 	y = y_e;
-	theta = angleMean(thetas);
+	body = Math::arcsMean(thetas); //theta = angleMean(thetas);
 }
 
-Position Self::getPosition() {
-	return Position(x, y, theta);
+void particlefilter(std::vector<Flag> flags) {
+	pfilter.predict(predict);
+	if (flags.size() > 0) {
+		current_flags = flags;
+		pfilter.update(update);
+	}
+	pfilter.resample();
+	x = pfilter.getMean(0);
+	y = pfilter.getMean(1);
+	body = 180.0 * atan2(pfilter.getMean(3), pfilter.getMean(4)) / Math::PI;
 }
 
-Vector2D Self::getVelocity() {
-	return Vector2D::getVector2DWithMagnitudeAndDirection(Self::AMOUNT_OF_SPEED, Self::DIRECTION_OF_SPEED);
+void Self::localize(std::vector<Flag> flags) {
+	if (!positioned) return;
+	velc = getAmountOfSpeedAtTime(1) + getEffortAtTime(1) * DASH_POWER_RATE * u[0];
+	if (velc > PLAYER_SPEED_MAX) {
+		velc = PLAYER_SPEED_MAX;
+	}
+	turn = u[2] / (1.0 + INERTIA_MOMENT * velc);
+	current_flags = flags;
+	if (Configs::LOCALIZATION.compare("particlefilter") == 0) {
+		particlefilter(flags);
+	} else if (Configs::LOCALIZATION.compare("triangulation") == 0) {
+		triangulation(flags);
+	} else {
+		lowpassfilter(flags);
+	}
+	position = Position(x, y, body, HEAD_ANGLE);
+}
+
+const Position* Self::getPosition() {
+	return &position;
+}
+
+const Geometry::Vector2D* Self::getVelocity() {
+	return &velocity; //Vector2D::getVector2DWithMagnitudeAndDirection(Self::AMOUNT_OF_SPEED, Self::DIRECTION_OF_SPEED);
 }
 
 void Self::setLastCommandsSet(std::list<Command*> last_commands_sent_t) {

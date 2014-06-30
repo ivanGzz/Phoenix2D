@@ -28,61 +28,24 @@
 
 namespace Phoenix {
 
-Position::Position() {
-	x = 0.0;
-	y = 0.0;
-	theta = 0.0;
-	gamma = 0.0;
-}
-
-Position::Position(double x, double y) {
+Position::Position(double x, double y, double body, double neck) {
 	this->x = x;
 	this->y = y;
-	theta = 0.0;
-	gamma = 0.0;
-}
-
-Position::Position(double x, double y, double theta) {
-	this->x = x;
-	this->y = y;
-	this->theta = theta;
-	gamma = 0.0;
-}
-
-Position::Position(double x, double y, double theta, double gamma) {
-	this->x = x;
-	this->y = y;
-	this->theta = theta;
-	this->gamma = gamma;
+	this->body = body;
+	this->neck = neck;
 }
 
 Position::~Position() {
 
 }
 
-double Position::getX() {
-	return x;
-}
-
-double Position::getY() {
-	return y;
-}
-
-double Position::getBodyDirection() {
-	return theta;
-}
-
-double Position::getHeadDirection() {
-	return gamma;
-}
-
-double Position::getDistanceTo(Position position) {
-	double distance = sqrt(pow(position.getX() - x, 2.0) + pow(position.getY() - y, 2.0));
+double Position::getDistanceTo(Position position) const {
+	double distance = sqrt(pow(position.x - x, 2.0) + pow(position.y - y, 2.0));
 	return distance;
 }
 
-double Position::getDirectionTo(Position position) {
-	double direction = 180.0 * (atan2(position.getY() - y, position.getX() - x)) / Math::PI - (theta + gamma);
+double Position::getDirectionTo(Position position) const {
+	double direction = 180.0 * (atan2(position.y - y, position.x - x)) / Math::PI - (body + neck);
 	if (direction >= 180.0) {
 		direction -= 360.0;
 	} else if (direction < -180.0) {
@@ -94,6 +57,10 @@ double Position::getDirectionTo(Position position) {
 void Position::mirror() {
 	if (x != 0.0) x *= -1.0;
 	if (y != 0.0) y *= -1.0;
+}
+
+Geometry::Point Position::getPoint() {
+	return Geometry::Point(x, y);
 }
 
 }

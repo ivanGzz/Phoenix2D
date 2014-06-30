@@ -76,17 +76,17 @@ void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages, 
 }
 
 void executePlayOn(WorldModel worldModel, std::vector<Message> messages, Commands* commands) {
-	Position p = Self::getPosition();
+	const Position* p = Self::getPosition();
 	if (fullstate) {
 		Player* pl = worldModel.getOurExactPlayer(Self::UNIFORM_NUMBER);
-		Position e_p = *(pl->getPosition());
-		std::clog << Game::GAME_TIME << ": (" << p.getX() << ", " << p.getY() << ", " << p.getBodyDirection() << ")"
-				                     << ", (" << e_p.getX() << ", " << e_p.getY() << ", " << e_p.getBodyDirection() << ")"
+		Position* e_p = pl->getPosition();
+		std::clog << Game::GAME_TIME << ": (" << p->x << ", " << p->y << ", " << p->body << ")"
+				                     << ", (" << e_p->x << ", " << e_p->y << ", " << e_p->body << ")"
 				                     << std::endl;
 	}
-	double d = p.getDistanceTo(positionToGo);
+	double d = p->getDistanceTo(positionToGo);
 	if (d > 1.0) {
-		double dir = p.getDirectionTo(positionToGo);
+		double dir = p->getDirectionTo(positionToGo);
 		if (fabs(dir) > 10.0) {
 			commands->turn(dir);
 		} else {

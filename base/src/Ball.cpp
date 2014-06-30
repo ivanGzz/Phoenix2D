@@ -58,11 +58,11 @@ void Ball::initForCoach(std::string position) {
 		break;
 	}
 	this->position = Position(x, y);
-	velocity = Vector2D::getVector2DWithXAndY(vx, vy);
+	velocity = Geometry::Vector2D(vx, vy); //Vector2D::getVector2DWithXAndY(vx, vy);
 	in_sight_range = true;
 }
 
-void Ball::initForPlayer(std::string position, Position player_position, Vector2D player_velocity) {
+void Ball::initForPlayer(std::string position, const Position* player_position, const Geometry::Vector2D* player_velocity) {
 	std::vector<std::string> tokens;
 	std::stringstream ss_position(position);
 	std::string token;
@@ -90,7 +90,7 @@ void Ball::initForPlayer(std::string position, Position player_position, Vector2
 	default:
 		break;
 	}
-	double source_direction = player_position.getBodyDirection() + player_position.getHeadDirection() - direction;
+	double source_direction = player_position->body + player_position->neck - direction;
 	if (source_direction > 180.0) {
 		source_direction -= 360.0;
 	} else if (source_direction <= 180.0) {
@@ -98,19 +98,19 @@ void Ball::initForPlayer(std::string position, Position player_position, Vector2
 	}
 	double erx = cos(Math::PI * source_direction / 180.0);
 	double ery = sin(Math::PI * source_direction / 180.0);
-	x = player_position.getX() + erx * distance;
-	y = player_position.getY() + ery * distance;
+	x = player_position->x + erx * distance;
+	y = player_position->y + ery * distance;
 	this->position = Position(x, y);
 	if (vel) {
 		double erxm = (180.0 * erx) / (Math::PI * distance);
 		double erym = (180.0 * ery) / (Math::PI * distance);
 		double vry = (distChange * erym + dirChange * erx) / (ery * erym + erx * erxm);
 		double vrx = (distChange - ery * vry) / erx;
-		vx = player_velocity.getXComponent() + vrx;
-		vy = player_velocity.getYComponent() + vry;
-		velocity = Vector2D::getVector2DWithXAndY(vx, vy);
+		vx = player_velocity->dx + vrx;
+		vy = player_velocity->dy + vry;
+		velocity = Geometry::Vector2D(vx, vy); //Vector2D::getVector2DWithXAndY(vx, vy);
 	} else {
-		velocity = Vector2D::getEmptyVector();
+		velocity = Geometry::Vector2D(0.0, 0.0); //Vector2D::getEmptyVector();
 	}
 	in_sight_range = true;
 }
@@ -130,7 +130,7 @@ Position* Ball::getPosition() {
 	return &position;
 }
 
-Vector2D* Ball::getVelocity() {
+Geometry::Vector2D* Ball::getVelocity() {
 	return &velocity;
 }
 

@@ -33,7 +33,7 @@
 #include "Position.hpp"
 #include "World.hpp"
 #include "Ball.hpp"
-#include "Vector2D.hpp"
+#include "geometry.hpp"
 #include "Configs.hpp"
 #include "Message.hpp"
 #include "Messages.hpp"
@@ -248,8 +248,8 @@ void *seeHandler(void* arg) {
 		return 0;
 	}
 	int simulation_time = Game::SIMULATION_TIME;
-	Position player_position = Self::getPosition();
-	Vector2D player_velocity = Self::getVelocity();
+	const Position* player_position = Self::getPosition();
+	const Geometry::Vector2D* player_velocity = Self::getVelocity();
 	std::string::const_iterator start, end;
 	start = see.begin();
 	end = see.end();

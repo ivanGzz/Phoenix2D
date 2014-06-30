@@ -26,7 +26,7 @@
 #include <vector>
 #include "Flag.hpp"
 #include "Position.hpp"
-#include "Vector2D.hpp"
+#include "geometry.hpp"
 
 /*! @addtogroup phoenix_main
  * @{
@@ -146,8 +146,8 @@ public:
 	static int         getFoulChargedAtTime(unsigned int time);
 	static std::string FOUL_CARD;
 	static std::string getFoulCardAtTime(unsigned int time);
-	static Position getPosition();
-	static Vector2D getVelocity();
+	static const Position* getPosition();
+	static const Geometry::Vector2D* getVelocity();
 	static void setLastCommandsSet(std::list<Command*> last_commands_sent);
 	Self(std::string player_params, std::string team_name, int unum, std::string side);
 	~Self();

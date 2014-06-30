@@ -21,12 +21,25 @@
 #ifndef CONSTANTS_HPP_
 #define CONSTANTS_HPP_
 
+namespace Filters {
+	const int PARTICLES = 200;
+}
+
+namespace Fuzzy {
+
+}
+
+namespace Geometry {
+
+}
+
+namespace Learning {
+
+}
+
 namespace Math {
 	const double PI = 3.14159265359;
 }
 
-namespace Filter {
-	const int PARTICLES = 200;
-}
 
 #endif /* CONSTANTS_HPP_ */

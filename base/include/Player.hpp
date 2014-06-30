@@ -24,7 +24,7 @@
 #include <string>
 #include <vector>
 #include "Position.hpp"
-#include "Vector2D.hpp"
+#include "geometry.hpp"
 
 /*! @addtogroup phoenix_main
  * @{
@@ -39,13 +39,13 @@ class Player {
 public:
 	Player();
 	~Player();
-	void initForPlayer(std::string name, std::string data, Position player_position, Vector2D player_velocity);
+	void initForPlayer(std::string name, std::string data, const Position* player_position, const Geometry::Vector2D* player_velocity);
 	void initForCoach(std::string name, std::string data);
 	void initForFullstate(std::string team, int unum, double x, double y, double vx, double vy, double b, double n);
 	Position* getPosition();
 	std::string getTeam();
 	int getUniformNumber();
-	Vector2D* getVelocity();
+	Geometry::Vector2D* getVelocity();
 	bool isGoalie();
 	bool isPointing();
 	double getPointingDirection();
@@ -82,7 +82,7 @@ private:
 	bool is_in_sight_range;
 	bool is_localized;
 	Position position;
-	Vector2D velocity;
+	Geometry::Vector2D velocity;
 };
 
 } // End namespace Phoenix

@@ -58,6 +58,7 @@ public:
 	static unsigned int COMMAND_PRECISION;
 	static std::string LOG_NAME;
 	static bool PLAYER_HISTORY;
+	static std::string LOCALIZATION;
 };
 /*! @} */
 } // End namespace Phoenix

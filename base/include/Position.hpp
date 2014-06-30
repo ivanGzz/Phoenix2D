@@ -22,6 +22,7 @@
 #define POSITION_HPP_
 
 #include <string>
+#include "geometry.hpp"
 
 /*! @addtogroup phoenix_main
  * @{
@@ -33,22 +34,16 @@ namespace Phoenix {
  * The Position lorem Ipsum
  */
 class Position {
+public:
 	double x;
 	double y;
-	double theta;
-	double gamma;
-public:
-	Position();
-	Position(double x, double y);
-	Position(double x, double y, double theta);
-	Position(double x, double y, double theta, double gamma);
+	double body;
+	double neck;
+	Position(double x = 0.0, double y = 0.0, double body = 0.0, double neck = 0.0);
 	~Position();
-	double getX();
-	double getY();
-	double getBodyDirection();
-	double getHeadDirection();
-	double getDistanceTo(Position position);
-	double getDirectionTo(Position position);
+	double getDistanceTo(Position position) const;
+	double getDirectionTo(Position position) const;
+	Geometry::Point getPoint();
 	void mirror();
 };
 

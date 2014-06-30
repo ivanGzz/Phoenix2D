@@ -18,43 +18,13 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACTIONS_HPP_
-#define ACTIONS_HPP_
+#ifndef FUZZY_HPP_
+#define FUZZY_HPP_
 
-#include "Position.hpp"
-
-/*! @addtogroup phoenix_main
- * @{
+/*
+ * Based on:
+ *     A Course in Fuzzy Systems and Control
+ *     Li-Xin Wang
  */
-namespace Phoenix {
 
-class Commands;
-
- /*!
- * @brief <STRONG> Actions <BR> </STRONG>
- * The Actions lorem Ipsum
- */
-class Actions {
-public:
-	enum ACTION {
-		GO_TO,
-		DRIBBLE_TO,
-		HOLD_POSITION,
-		PASS_TO_SECTION,
-		ATTACK_SECTION
-	};
-	Commands *commands;
-	Actions(Commands *commands);
-	~Actions();
-	bool goTo(Position position);
-	void dribbleTo(Position position);
-	void holdPosition(Position position);
-	void passToSection(Position position);
-	void attackSection(Position position);
-};
-
-} // End namespace Phoenix
-/*! @} */
-
-
-#endif /* ACTIONS_HPP_ */
+#endif /* FUZZY_HPP_ */

@@ -48,6 +48,7 @@ bool Configs::PLAYER_HISTORY = false;
 bool Configs::LOGGING = false;
 bool Configs::TRAINER_LOGGING = false;
 bool Configs::VERBOSE = false;
+std::string Configs::LOCALIZATION = "lowpassfilter";
 
 /*
  * Example:
@@ -75,7 +76,8 @@ bool Configs::VERBOSE = false;
  *      "params": {
  *        "buffer": 8
  *      },
- *      "offset": 20
+ *      "offset": 20,
+ *      "localization": "lowpassfilter"
  *    }
  *  }
  *  }
@@ -102,6 +104,7 @@ void Configs::loadConfigs(std::string filename) {
 			Configs::COMMANDS_MAX_HISTORY = pt.get("configs.commands.buffer", 4);
 			Configs::COMMAND_PRECISION    = pt.get("configs.commands.precision", 4);
 			Configs::LOG_NAME             = pt.get("configs.logging.logname", "");
+			Configs::LOCALIZATION         = pt.get("configs.self.localization", "lowpassfilter");
 			file.close();
 		}
 		catch (std::exception const &e) {
