@@ -22,14 +22,17 @@
 #include <ctime>
 #include <iostream>
 #include <boost/random.hpp>
+#include <cmath>
 #include "Position.hpp"
 #include "Ball.hpp"
 #include "Self.hpp"
 #include "Server.hpp"
+#include "Game.hpp"
 
 namespace dribble {
 
 bool setup = false;
+bool fullstate = false;
 boost::mt19937 rng(time(0));
 boost::uniform_int<> xdist(0, 104);
 boost::uniform_int<> ydist(0, 68);
@@ -37,6 +40,22 @@ Position positionToGo;
 
 void onStart() {
 	std::cout << "Starting dribble test" << std::endl;
+	if (Self::SIDE[0] == 'l') {
+		if (Server::FULLSTATE_L != 0) {
+			fullstate = true;
+		}
+		else {
+			std::cerr << "localization test needs the fullstate sensor active for the left team" << std::endl;
+		}
+	}
+	else {
+		if (Server::FULLSTATE_R != 0) {
+			fullstate = true;
+		}
+		else {
+			std::cerr << "localization test needs the fullstate sensor active for the right team" << std::endl;
+		}
+	}
 }
 
 void randomPosition() {
@@ -59,8 +78,8 @@ void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages, 
 		const Position* p = Self::getPosition();
 		Ball* ball = worldModel.getBall();
 		if (ball->isInSightRange()) {
-			double dir = p->getDirectionTo(*(ball->getPosition()));
-			if (dir > 5.0) {
+			double dir = p->getDirectionTo(ball->getPosition());
+			if (fabs(dir) > 20.0) {
 				commands->turn(dir);
 			}
 		} else {
@@ -72,14 +91,20 @@ void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages, 
 void executePlayOn(WorldModel worldModel, std::vector<Message> messages, Commands* commands) {
 	Ball* b = worldModel.getBall();
 	const Position* p = Self::getPosition();
+	if (fullstate) {
+		Ball* e_b = worldModel.getExactBall();
+		std::clog << Game::GAME_TIME << ": (" << b->getPosition()->x << ", " << b->getPosition()->y << ")"
+				                     << ", (" << e_b->getPosition()->x << ", " << e_b->getPosition()->y << ")"
+				                     << std::endl;
+	}
 	if (b->isInSightRange()) {
-		double ed = p->getDistanceTo(*(b->getPosition())) - Server::PLAYER_SIZE - Server::BALL_SIZE;
+		double ed = p->getDistanceTo(b->getPosition()) - Server::PLAYER_SIZE - Server::BALL_SIZE;
 		if (ed < Self::KICKABLE_MARGIN) {
-			double dir = b->getPosition()->getDirectionTo(positionToGo);
-			commands->kick(25.0, dir);
+			double dir = p->getDirectionTo(&positionToGo);
+			commands->kick(10.0, dir);
 		} else {
-			double dir = p->getDirectionTo(*(b->getPosition()));
-			if (dir > 5.0) {
+			double dir = p->getDirectionTo(b->getPosition());
+			if (fabs(dir) > 20.0) {
 				commands->turn(dir);
 			} else {
 				commands->dash(50.0, 0.0);

@@ -25,7 +25,7 @@
 #include <iostream>
 #include <boost/regex.hpp>
 #include <boost/circular_buffer.hpp>
-#include "Constants.hpp"
+#include "constants.hpp"
 #include "Command.hpp"
 #include "Configs.hpp"
 #include "Self.hpp"
@@ -712,16 +712,17 @@ void lowpassfilter(std::vector<Flag> flags) {
 		x_e = tao * x_e + (1 - tao) * x_i;
 		y_e = tao * y_e + (1 - tao) * y_i;
 		double gamma = 180 * atan2(it_flag->getY() - y_e, it_flag->getX() - x_e) / Math::PI - it_flag->getDirection();
-		if (gamma > 180.0) {
-			gamma -= 360.0;
-		} else if (gamma < -180.0) {
-			gamma += 360.0;
-		}
-		thetas.push_back(gamma);
+//		if (gamma > 180.0) {
+//			gamma -= 360.0;
+//		} else if (gamma < -180.0) {
+//			gamma += 360.0;
+//		}
+//		thetas.push_back(gamma);
+		thetas.push_back(Geometry::toRadians(gamma));
 	}
 	x = x_e;
 	y = y_e;
-	body = Math::arcsMean(thetas); //theta = angleMean(thetas);
+	body = Geometry::toDegrees(Math::arcsMean(thetas)); //theta = angleMean(thetas);
 }
 
 void particlefilter(std::vector<Flag> flags) {

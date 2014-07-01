@@ -24,7 +24,7 @@
 #include "Player.hpp"
 #include "Self.hpp"
 #include "Controller.hpp"
-#include "Constants.hpp"
+#include "constants.hpp"
 
 namespace Phoenix {
 

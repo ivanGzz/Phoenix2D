@@ -28,8 +28,8 @@ namespace Phoenix {
 Position positionToCompare;
 
 bool compareDistances(Player* player0, Player* player1) {
-	double distance0 = player0->getPosition()->getDistanceTo(positionToCompare);
-	double distance1 = player1->getPosition()->getDistanceTo(positionToCompare);
+	double distance0 = player0->getPosition()->getDistanceTo(&positionToCompare);
+	double distance1 = player1->getPosition()->getDistanceTo(&positionToCompare);
 	return (distance0 < distance1);
 }
 
@@ -53,6 +53,7 @@ WorldModel::WorldModel(std::vector<Player> players, Ball ball, std::vector<Playe
 				opps[it->getUniformNumber()] = *it;
 			}
 		}
+		this->fs_ball = fs_ball;
 	}
 }
 
@@ -161,7 +162,6 @@ Ball* WorldModel::getBall() {
 }
 
 Ball* WorldModel::getExactBall() {
-
 	return &fs_ball;
 }
 

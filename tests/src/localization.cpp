@@ -84,9 +84,9 @@ void executePlayOn(WorldModel worldModel, std::vector<Message> messages, Command
 				                     << ", (" << e_p->x << ", " << e_p->y << ", " << e_p->body << ")"
 				                     << std::endl;
 	}
-	double d = p->getDistanceTo(positionToGo);
+	double d = p->getDistanceTo(&positionToGo);
 	if (d > 1.0) {
-		double dir = p->getDirectionTo(positionToGo);
+		double dir = p->getDirectionTo(&positionToGo);
 		if (fabs(dir) > 10.0) {
 			commands->turn(dir);
 		} else {

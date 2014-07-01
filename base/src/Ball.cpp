@@ -24,7 +24,7 @@
 #include <cstdlib>
 #include "Self.hpp"
 #include <cmath>
-#include "Constants.hpp"
+#include "constants.hpp"
 
 namespace Phoenix {
 

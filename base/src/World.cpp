@@ -49,7 +49,7 @@ void World::updateWorld() {
 		vision_angle = 120.0 + 10.0;
 	}
 	for (std::vector<Player>::iterator it = players.begin(); it != players.end(); ++it) {
-		if (std::abs(Self::getPosition()->getDirectionTo(*it->getPosition())) > vision_angle / 2.0) {
+		if (std::abs(Self::getPosition()->getDirectionTo(it->getPosition())) > vision_angle / 2.0) {
 			it->toggleSightRange();
 		} else if (!(it->isInSightRange())) {
 			it->toggleSightRange();
@@ -68,7 +68,7 @@ void World::updateWorld(std::vector<Player> new_players, Ball new_ball) {
 			}
 			for (std::vector<Player>::iterator it = players.begin(); it != players.end(); ++it) {
 				//If the player is out of the sight range, we add the last position of the object
-				if (std::abs(Self::getPosition()->getDirectionTo(*it->getPosition())) > vision_angle / 2.0) {
+				if (std::abs(Self::getPosition()->getDirectionTo(it->getPosition())) > vision_angle / 2.0) {
 					new_players.push_back(*it);
 				}
 			}
@@ -92,7 +92,7 @@ void World::updateWorld(std::vector<Player> new_players, Ball new_ball, std::vec
 			}
 			for (std::vector<Player>::iterator it = players.begin(); it != players.end(); ++it) {
 				//If the player is out of the sight range, we add the last position of the object
-				if (std::abs(Self::getPosition()->getDirectionTo(*it->getPosition())) > vision_angle / 2.0) {
+				if (std::abs(Self::getPosition()->getDirectionTo(it->getPosition())) > vision_angle / 2.0) {
 					new_players.push_back(*it);
 				}
 			}

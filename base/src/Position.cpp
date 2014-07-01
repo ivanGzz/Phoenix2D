@@ -24,7 +24,7 @@
 #include <sstream>
 #include <iostream>
 #include <iomanip>
-#include "Constants.hpp"
+#include "constants.hpp"
 
 namespace Phoenix {
 
@@ -39,13 +39,13 @@ Position::~Position() {
 
 }
 
-double Position::getDistanceTo(Position position) const {
-	double distance = sqrt(pow(position.x - x, 2.0) + pow(position.y - y, 2.0));
+double Position::getDistanceTo(Position* position) const {
+	double distance = sqrt(pow(position->x - x, 2.0) + pow(position->y - y, 2.0));
 	return distance;
 }
 
-double Position::getDirectionTo(Position position) const {
-	double direction = 180.0 * (atan2(position.y - y, position.x - x)) / Math::PI - (body + neck);
+double Position::getDirectionTo(Position* position) const {
+	double direction = 180.0 * (atan2(position->y - y, position->x - x)) / Math::PI - (body + neck);
 	if (direction >= 180.0) {
 		direction -= 360.0;
 	} else if (direction < -180.0) {

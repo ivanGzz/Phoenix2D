@@ -41,8 +41,8 @@ public:
 	double neck;
 	Position(double x = 0.0, double y = 0.0, double body = 0.0, double neck = 0.0);
 	~Position();
-	double getDistanceTo(Position position) const;
-	double getDirectionTo(Position position) const;
+	double getDistanceTo(Position* position) const;
+	double getDirectionTo(Position* position) const;
 	Geometry::Point getPoint();
 	void mirror();
 };
