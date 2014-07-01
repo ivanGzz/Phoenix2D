@@ -1,0 +1,101 @@
+2014-06-30 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (Position) all the positions returned by Self, Player and
+	Ball objects are now pointers.  The Self objects returns a
+	const Position* ponter.
+
+2014-06-29 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (Vector2D) Vector2D refactored as struct and moved to 
+	utils as a geometry primitive
+
+2014-06-27 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (PFields) added potential fields template class to utils 
+	folder
+
+2014-06-25 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (contants.hpp) moved constants.hpp to utils folder
+
+2014-06-24 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (functions) Added math functions library in utils folder
+
+2014-06-23 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (utils) Added utils folder
+	* (PFilter) Particle filter class moved to utils and changed
+	to template
+	
+	* (Actions) Removed Actions class from base
+
+2014-06-20 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (ai) Added ai folder to include the AI for a complete game
+
+2014-06-16 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (Trainer) Added wait_for command for waiting for a specific
+	message, not yet tested
+
+2014-06-14 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (Configs) Added exception handlers for boost property tree
+	json reader.
+
+2014-06-12 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (World) World class modified to include fullstate
+	* (WorldModel) WorldModel class modified to include fullstate
+	
+	* (Self) Reverted localization to low pass filter while the
+	particle filter is tuned
+	
+	* (Configs) Change configs file format to json using boost
+	property tree
+
+2014-06-10 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (localization) added localization test
+
+2014-06-10 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (Controller) Refactored controller class
+	* (Controller) Moved main thread to Controller class
+
+2014-06-09 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (Trainer) Changed trainer class to support messages and the
+	new command WAIT_FOR in the trainer scripting
+	
+	* (PlayMode) Changed from inherit behaviour to function pointers
+
+2014-06-08 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (Parser.cpp) Refactored handlers for sensors
+
+	* (Message) Message class created
+	* (Messages) Messages class created
+	* (Controller) Controller class modified to support Messages
+
+	* (Player) Player class refactored
+	* (Ball) Ball class refactored
+
+	* (World.cpp) Removed bounding code
+
+	* (Self) Self class localize() method removed
+	
+	* (PlayMode) Removed setup and onMessage methods from PlayMode class
+
+2014-06-06 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* Removed autotools generated files
+
+Copyright (C) 1994 - 1996, 1999, 2000 - 2002, 2004 - 2011 Free Software 
+Foundation, Inc.
+
+   Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.  This file is offered as-is,
+without warranty of any kind.

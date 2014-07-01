@@ -1,0 +1,15 @@
+{"team": {
+    "1": {
+      "x": -10.0,
+      "y": 0.0,
+      "logging": false,
+      "verbose": false
+    },
+    "2": {
+      "x": -20.0,
+      "y": 0.0,
+      "logging": false,
+      "verbose": false
+    }
+  }
+}

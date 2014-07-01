@@ -1,0 +1,56 @@
+============
+INTRODUCTION
+============
+
+Pheonix2D is a research and educational tool for multi-agent systems and
+artificial intelligence using the RoboCup Soccer Simulator Server
+(rcssserver).
+
+===========
+QUICK START
+===========
+
+From the Phoenix2D directory execute:
+
+`autoreconf -i'
+`./configure'
+`make'
+
+This will built the neccesary binaries to get you up and running.
+
+`Phoenix2D/base/' is the library for the communication and control of 
+the agent.
+
+`Phoenix2D/libs/' are high level libraries to construct AI for the agent.
+
+`Phoenix2D/main.cpp' contains the main function which setup all the 
+necessary stuff to control the agent and play soccer.
+
+===========
+CONFIGURING
+===========
+
+Before you can build the Phoenix2D agent you will need to run the
+`configure' script located in the root of the distribution directory.
+
+========
+BUILDING
+========
+
+Once you have successfully configured the server, simply run `make' to
+build the sources.
+
+========
+CLEANING
+========
+
+You can clean all the compilation running `make distclean' to remove all
+the files created with the `make' command.
+
+===============
+USING THE AGENT
+===============
+
+To start the agent type
+
+`./agent'

@@ -1,0 +1,29 @@
+{"configs": {
+    "savesensors": {
+      "see": false,
+      "body": false,
+      "hear": false,
+      "fullstate": false
+    },
+    "commands": {
+      "buffer": 4,
+      "precision": 4
+    },
+    "players": {
+      "buffer": 8
+    },
+    "ball": {
+      "buffer": 8
+    },
+    "logging": {
+      "logname": "localization"
+    },
+    "self": {
+      "params": {
+        "buffer": 8
+      },
+      "offset": 20,
+      "localization": "lowpassfilter"
+    }
+  }
+}
