@@ -1,3 +1,12 @@
+[2.0]
+
+  *  Geometrical primitives were added and included into the base code.  This primitives are included in
+     the new folder utils were general methods were also included as particle filters, potential fields,
+     etc.  All the source code in the utils folder are headers which needs no compilation.
+
+  *  All the positions are now returned as pointers for the Self, Player and Ball objects.  Also, a
+     Position object receives a pointer for the methods getDirectionTo and getDistanceTo.
+
 [1.1]
 
   *  The trainer has a new command: wait_for_msg <MESSAGE>, this is a blocking method which will wait 
@@ -24,6 +33,7 @@
  		  "params": {
  		    "buffer": 8      //buffer size for the sense body params
  		  },
+      "localization": "lowpassfilter", //"particlefilter" and "triangulation" supported but not tested
  		  "offset": 20       //milliseconds the agent will wait for messages
  		}                    // from the server once the sense body is received and
 	 }                       // before the new cycle begins
