@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013 Ivan Gonzalez
+ * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -16,6 +16,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @file Ball.cpp
+ *
+ * @author Nelson Ivan Gonzalez
  */
 
 #ifndef BALL_HPP_
@@ -25,17 +29,21 @@
 #include "Position.hpp"
 #include "geometry.hpp"
 
-/*! @addtogroup phoenix_main
+/*! @addtogroup phoenix_base
  * @{
  */
 namespace Phoenix {
 
  /*!
  * @brief <STRONG> Ball <BR> </STRONG>
- * The Ball lorem Ipsum
+ * The Ball contains information about the current state of the ball in the field.  A Ball object is
+ * generated every new cycle and can be empty.  You must check isInSightRange() to know if the ball is
+ * seen in the current cycle.
  */
 class Ball {
 public:
+	/*
+	 */
 	Ball();
 	~Ball();
 	void initForCoach(std::string position);
