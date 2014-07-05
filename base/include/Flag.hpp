@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013 Ivan Gonzalez
+ * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -16,58 +16,96 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @file Flag.hpp
+ *
+ * @author Nelson Ivan Gonzalez
  */
 
 #ifndef FLAG_HPP_
 #define FLAG_HPP_
 
 #include <string>
-#include <map>
 
-/*! @addtogroup phoenix_main
+/*! @addtogroup phoenix_base
  * @{
  */
 namespace Phoenix {
-/*!
- * @brief <STRONG> _coordinate <BR> </STRONG>
- * The Coordinate is  just a holder for coordinates
- */
-struct _coordinate {
-	double x;
-	double y;
-};
 
 /*!
  * @brief <STRONG> Flag <BR> </STRONG>
- * The Flag lorem Ipsum
+ * A Flag object stores information about a flag seen in the visual sensor for a
+ * given simulation cycle.  It is used by the localization method.
  */
 class Flag {
-	std::string name;
-	double distance;
-	double direction;
-	double x;
-	double y;
-	double minDistance;
-	double maxDistance;
-	double error;
-	double derror;
-	int simulation_time;
-	static std::map<std::string, _coordinate> FIELD;
 public:
+	/*!
+	 * @brief Flag default constructor
+	 * @param name name string for the flag received in the see sensor
+	 * @param position string received in the see sensor
+	 * @param simulation_time simulation time the flag was seen
+	 */
 	Flag(std::string name, std::string position, int simulation_time);
+	/*!
+	 * @brief Flag default destructor
+	 */
 	~Flag();
+	/*!
+	 * @brief This method initializes the flag absolute positions in the fiel
+	 * Since the coordinate axis changes in function of the team assigned side, the
+	 * flags must be initialized after the agent connects and the server sends the
+	 * corresponding side of the agent
+	 */
 	static void initializeField();
+	/*!
+	 * @brief Returns the flag string name
+	 */
 	std::string getName();
+	/*!
+	 * @brief Returns the flag relative distance
+	 */
 	double getDistance();
+	/*!
+	 * @brief Returns the relative direction
+	 */
 	double getDirection();
+	/*!
+	 * @brief Returns the absolute flag position in x
+	 */
 	double getX();
+	/*!
+	 * @brief Returns the absolute flag position in y
+	 */
 	double getY();
+	/*!
+	 * @brief Returns the minimum relative distance the flag could have
+	 */
 	double getMinDistance();
+	/*!
+	 * @brief Returns the maximum relative distance the flag could have
+	 */
 	double getMaxDistance();
+	/*!
+	 * @brief Returns the maximum error in the flag relative distance
+	 */
 	double getError();
+	/*!
+	 * @brief Returns the maximum error in the flag relative direction
+	 */
 	double getDError();
+private:
+	std::string name;		///< flag string name received by the see sensor
+	double distance;		///< flag relative distance received by the see sensor
+	double direction;		///< flag relative direction received by the see sensor
+	double x;				///< flag absolute position in x
+	double y;				///< flag absolute position in y
+	double minDistance;		///< flag minimum relative distance
+	double maxDistance;		///< flag maximum relative distance
+	double error;			///< flag maximum error in the relative distance
+	double derror;			///< flag maximum error in the relative direction
+	int simulation_time;	///< simulation time the object was created
 };
-/*! @} */
+
 } // End namespace Phoenix
 /*! @} */
 

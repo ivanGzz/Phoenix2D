@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013 Ivan Gonzalez
+ * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -16,6 +16,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @file World.hpp
+ *
+ * @author Nelson Ivan Gonzalez
  */
 
 #ifndef WORLD_HPP_
@@ -26,28 +30,52 @@
 #include "Ball.hpp"
 #include "WorldModel.hpp"
 
-/*! @addtogroup phoenix_main
+/*! @addtogroup phoenix_base
  * @{
  */
 namespace Phoenix {
-/*! @addtogroup core
- * @{
- */
+
 /*!
  * @brief <STRONG> World <BR> </STRONG>
- * The World lorem Ipsum
+ * The World object stores the information about the current state of the world.  It also
+ * includes routines to perform object track and object linking.
  */
 class World {
 public:
+	/*!
+	 * @brief World default constructor
+	 */
 	World();
+	/*!
+	 * @brief World default destructor
+	 */
 	~World();
+	/*!
+	 * @brief Deprecated
+	 */
 	void updateWorld();
+	/*!
+	 * @brief Deprecated
+	 */
 	void updateWorld(std::vector<Player> players, Ball ball);
+	/*!
+	 * @brief Update the world model with the new information received in the see sensor
+	 * @param players List of current players received in the see sensor
+	 * @param ball Ball object containing information about the ball received in the see sensor
+	 * @param fs_players List of players received in the full state sensor
+	 * @param fs_ball ball object received in the full state sensor
+	 */
 	void updateWorld(std::vector<Player> players, Ball ball, std::vector<Player> fs_players, Ball fs_ball);
+	/*!
+	 * @brief Deprecated
+	 */
 	void updateObserverWorld(std::vector<Player> players, Ball ball);
+	/*!
+	 * @brief Returns the current world model
+	 */
 	WorldModel getWorldModel();
 };
-/*! @} */
+
 } // End namespace Phoenix
 /*! @} */
 

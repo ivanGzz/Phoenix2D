@@ -34,7 +34,7 @@
  */
 namespace Phoenix {
 
- /*!
+/*!
  * @brief <STRONG> Ball <BR> </STRONG>
  * The Ball contains information about the current state of the ball in the field.  A Ball object is
  * generated every new cycle and can be empty.  You must check isInSightRange() to know if the ball is
@@ -42,28 +42,58 @@ namespace Phoenix {
  */
 class Ball {
 public:
-	/*
+	/*!
+	 * @brief Ball default constructor
 	 */
 	Ball();
+	/*!
+	 * @brief Ball default destructor
+	 */
 	~Ball();
+	/*!
+	 * @brief Init method for agent type coach
+	 * @param position string received from the server in the see_global sensor
+	 */
 	void initForCoach(std::string position);
+	/*!
+	 * @brief Init method for agent type player
+	 * @param position string received from the server in the see sensor
+	 * @param player_position current agent position used to compute the absolute position for the ball
+	 * @param player_velocity current agent velocity used to compute the absolute velocity for the ball
+	 */
 	void initForPlayer(std::string position, const Position* player_position, const Geometry::Vector2D* player_velocity);
+	/*!
+	 * @brief Init method for agent type player using fullstate sensor
+	 * @param x ball absolute position in x
+	 * @param y ball absolute position in y
+	 * @param vx ball absolute velocity in x
+	 * @param vy ball absolute velocity in y
+	 */
 	void initForFullstate(double x, double y, double vx, double vy);
+	/*!
+	 * @brief Returns the current ball absolute position in a Position pointer
+	 */
 	Position* getPosition();
+	/*!
+	 * @brief Return the current ball absolute velocity in a Vector2D pointer
+	 */
 	Geometry::Vector2D* getVelocity();
+	/*!
+	 * @brief Returns true is the ball is in the vision range in the current cycle, and false otherwise
+	 */
 	bool isInSightRange();
 private:
-	double distance;
-	double direction;
-	double distChange;
-	double dirChange;
-	double x;
-	double y;
-	double vx;
-	double vy;
-	Position position;
-	Geometry::Vector2D velocity;
-	bool in_sight_range;
+	double distance;				///< ball relative distance
+	double direction;				///< ball relative direction
+	double distChange;				///< ball relative distance change
+	double dirChange;				///< ball relative direction change
+	double x;						///< computed ball position in x
+	double y;						///< computed ball position in y
+	double vx;						///< computed ball velocity in x
+	double vy;						///< computed ball velocity in y
+	Position position;				///< computed ball absolute position using x and y
+	Geometry::Vector2D velocity;	///< computed ball absolute velocity using vx and vy
+	bool in_sight_range;			///< boolean indicating if the ball is in the vision sensor
 };
 
 } // End namespace Phoenix

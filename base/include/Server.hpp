@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013 Ivan Gonzalez
+ * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -16,6 +16,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @file server.hpp
+ *
+ * @author Nelson Ivan Gonzalez
  */
 
 #ifndef SERVER_HPP_
@@ -23,213 +27,223 @@
 
 #include <string>
 
-/*! @addtogroup phoenix_main
+/*! @addtogroup phoenix_base
  * @{
  */
 namespace Phoenix {
-/*! @addtogroup core
- * @{
- */
+
 /*!
  * @brief <STRONG> Server <BR> </STRONG>
- * The Server lorem Ipsum
+ * The Server object stores general information about the server and the current simulation.
  */
 class Server {
-	std::string server_params;
-	std::string getParameter(std::string parameter);
 public:
-	static double      AUDIO_CUT_DIST;
-	static int         AUTO_MODE;
-	static double      BACK_DASH_RATE;
-	static int         BACK_PASSES;
-	static double      BALL_ACCEL_MAX;
-	static double      BALL_DECAY;
-	static double      BALL_RAND;
-	static double      BALL_SIZE;
-	static double      BALL_SPEED_MAX;
-	static double      BALL_STUCK_AREA;
-	static double      BALL_WEIGHT;
-	static int         CATCH_BAN_CYCLE;
-	static double      CATCH_PROBABILITY;
-	static double      CATCHABLE_AREA_L;
-	static double      CATCHABLE_AREA_W;
-	static double      CKICK_MARGIN;
-	static int         CLANG_ADVICE_WIN;
-	static int         CLANG_DEFINE_WIN;
-	static int         CLANG_DEL_WIN;
-	static int         CLANG_INFO_WIN;
-	static int         CLANG_MESS_DELAY;
-	static int         CLANG_MESS_PER_CYCLE;
-	static int         CLANG_META_WIN;
-	static int         CLANG_RULE_WIN;
-	static int         CLANG_WIN_SIZE;
-	static int         COACH;
-	static int         COACH_PORT;
-	static int         COACH_W_REFEREE;
-	static int         CONNECT_WAIT;
-	static double      CONTROL_RADIUS;
-	static double      DASH_ANGLE_STEP;
-	static double      DASH_POWER_RATE;
-	static int         DROP_BALL_TIME;
-	static double      EFFORT_DEC;
-	static double      EFFORT_DEC_THR;
-	static double      EFFORT_INC;
-	static double      EFFORT_INC_THR;
-	static double      EFFORT_INIT;
-	static double      EFFORT_MIN;
-	static int         EXTRA_HALF_TIME;
-	static int         EXTRA_STAMINA;
-	static int         FORBID_KICK_OFF_OFFSIDE;
-	static int         FOUL_CYCLES;
-	static double      FOUL_DETECT_PROBABILITY;
-	static int         FOUL_EXPONENT;
-	static int         FREE_KICK_FAULTS;
-	static int         FREEFORM_SEND_PERIOD;
-	static int         FREEFORM_WAIT_PERIOD;
-	static int         FULLSTATE_L;
-	static int         FULLSTATE_R;
-	static int         GAME_LOG_COMPRESSION;
-	static int         GAME_LOG_DATED;
-	static std::string GAME_LOG_DIR;
-	static int         GAME_LOG_FIXED;
-	static std::string GAME_LOG_FIXED_NAME;
-	static int         GAME_LOG_VERSION;
-	static int         GAME_LOGGING;
-	static int         GAME_OVER_WAIT;
-	static double      GOAL_WIDTH;
-	static int         GOALIE_MAX_MOVES;
-	static int         GOLDEN_GOAL;
-	static int         HALF_TIME;
-	static int         HEAR_DECAY;
-	static int         HEAR_INC;
-	static int         HEAR_MAX;
-	static int         INERTIA_MOMENT;
-	static int         KEEPAWAY;
-	static int         KEEPAWAY_LENGTH;
-	static int         KEEPAWAY_LOG_DATED;
-	static std::string KEEPAWAY_LOG_DIR;
-	static int         KEEPAWAY_LOG_FIXED;
-	static std::string KEEPAWAY_LOG_FIXED_NAME;
-	static int         KEEPAWAY_LOGGING;
-	static int         KEEPAWAY_START;
-	static int         KEEPAWAY_WIDTH;
-	static int         KICK_OFF_WAIT;
-	static double      KICK_POWER_RATE;
-	static double      KICK_RAND;
-	static double      KICK_RAND_FACTOR_L;
-	static double      KICK_RAND_FACTOR_R;
-	static double      KICKABLE_MARGIN;
-	static std::string LANDMARK_FILE;
-	static std::string LOG_DATE_FORMAT;
-	static int         LOG_TIMES;
-	static double      MAX_BACK_TACKLE_POWER;
-	static double      MAX_DASH_ANGLE;
-	static double      MAX_DASH_POWER;
-	static int         MAX_GOAL_KICKS;
-	static double      MAX_TACKLE_POWER;
-	static double      MAXMOMENT;
-	static double      MAXNECKANG;
-	static double      MAXNECKMOMENT;
-	static double      MAXPOWER;
-	static double      MIN_DASH_ANGLE;
-	static double      MIN_DASH_POWER;
-	static double      MINMOMENT;
-	static double      MINNECKANG;
-	static double      MINNECKMOMENT;
-	static double      MINPOWER;
-	static int         NR_EXTRA_HALFS;
-	static int         NR_NORMAL_HALFS;
-	static double      OFFSIDE_ACTIVE_AREA_SIZE;
-	static double      OFFSIDE_KICK_MARGIN;
-	static int         OLCOACH_PORT;
-	static int         OLD_COACH_HEAR;
-	static int         PEN_ALLOW_MULT_KICKS;
-	static int         PEN_BEFORE_SETUP_WAIT;
-	static int         PEN_COACH_MOVES_PLAYERS;
-	static double      PEN_DIST_X;
-	static int         PEN_MAX_EXTRA_KICKS;
-	static double      PEN_MAX_GOALIE_DIST_X;
-	static int         PEN_NR_KICKS;
-	static double      PEN_RANDOM_WINNER;
-	static int         PEN_READY_WAIT;
-	static int         PEN_SETUP_WAIT;
-	static int         PEN_TAKEN_WAIT;
-	static int         PENALTY_SHOOT_OUTS;
-	static double      PLAYER_ACCEL_MAX;
-	static double      PLAYER_DECAY;
-	static double      PLAYER_RAND;
-	static double      PLAYER_SIZE;
-	static double      PLAYER_SPEED_MAX;
-	static double      PLAYER_SPEED_MAX_MIN;
-	static double      PLAYER_WEIGHT;
-	static int         POINT_TO_BAN;
-	static int         POINT_TO_DURATION;
-	static int         PORT;
-	static double      PRAND_FACTOR_L;
-	static double      PRAND_FACTOR_R;
-	static int         PROFILE;
-	static int         PROPER_GOAL_KICKS;
-	static double      QUANTIZE_STEP;
-	static double      QUANTIZE_STEP_L;
-	static int         RECORD_MESSAGES;
-	static double      RECOVER_DEC;
-	static double      RECOVER_DEC_THR;
-	static double      RECOVER_INIT;
-	static double      RECOVER_MIN;
-	static int         RECV_STEP;
-	static double      RED_CARD_PROBABILITY;
-	static int         SAY_COACH_CNT_MAX;
-	static int         SAY_COACH_MSG_SIZE;
-	static int         SAY_MSG_SIZE;
-	static int         SEND_COMMS;
-	static int         SEND_STEP;
-	static int         SEND_VI_STEP;
-	static int         SENSE_BODY_STEP;
-	static double      SIDE_DASH_RATE;
-	static int         SIMULATOR_STEP;
-	static double      SLOW_DOWN_FACTOR;
-	static double      SLOWNESS_ON_TOP_FOR_LEFT_TEAM;
-	static double      SLOWNESS_ON_TOP_FOR_RIGHT_TEAM;
-	static int         STAMINA_CAPACITY;
-	static int         STAMINA_INC_MAX;
-	static int         STAMINA_MAX;
-	static int         START_GOAL_L;
-	static int         START_GOAL_R;
-	static double      STOPPED_BALL_VEL;
-	static int         SYNCH_MICRO_SLEEP;
-	static int         SYNCH_MODE;
-	static int         SYNCH_OFFSET;
-	static int         SYNCH_SEE_OFFSET;
-	static double      TACKLE_BACK_DIST;
-	static int         TACKLE_CYCLES;
-	static double      TACKLE_DIST;
-	static int         TACKLE_EXPONENT;
-	static double      TACKLE_POWER_RATE;
-	static double      TACKLE_RAND_FACTOR;
-	static double      TACKLE_WIDTH;
-	static double      TEAM_ACTUATOR_NOISE;
-	static std::string TEAM_L_START;
-	static std::string TEAM_R_START;
-	static int         TEXT_LOG_COMPRESSION;
-	static int         TEXT_LOG_DATED;
-	static std::string TEXT_LOG_DIR;
-	static int         TEXT_LOG_FIXED;
-	static std::string TEXT_LOG_FIXED_NAME;
-	static int         TEXT_LOGGING;
-	static int         USE_OFFSIDE;
-	static int         VERBOSE;
-	static double      VISIBLE_ANGLE;
-	static double      VISIBLE_DISTANCE;
-	static double      WIND_ANG;
-	static double      WIND_DIR;
-	static double      WIND_FORCE;
-	static double      WIND_NONE;
-	static double      WIND_RAND;
-	static double      WIND_RANDOM;
+	static double      AUDIO_CUT_DIST;					///< Maximum distance a message can be heard by a player
+	static int         AUTO_MODE;						///< Auto mode
+	static double      BACK_DASH_RATE;					///< Back dash rate
+	static int         BACK_PASSES;						///< Back passes
+	static double      BALL_ACCEL_MAX;					///< Maximum ball acceleration
+	static double      BALL_DECAY;						///< Ball decay
+	static double      BALL_RAND;						///< Ball randomizer
+	static double      BALL_SIZE;						///< Ball size
+	static double      BALL_SPEED_MAX;					///< Maximum ball speed
+	static double      BALL_STUCK_AREA;					///< Ball stuck area
+	static double      BALL_WEIGHT;						///< Ball weight
+	static int         CATCH_BAN_CYCLE;					///< Catch ban cycles
+	static double      CATCH_PROBABILITY;				///< Catch probablity for goalies
+	static double      CATCHABLE_AREA_L;				///< Length of catch able area for goalies
+	static double      CATCHABLE_AREA_W;				///< Width of catch able area for goalies
+	static double      CKICK_MARGIN;					///< Margin of corner kicks
+	static int         CLANG_ADVICE_WIN;				///< Coach language advice message window
+	static int         CLANG_DEFINE_WIN;				///< Coach language define message window
+	static int         CLANG_DEL_WIN;					///< Coach language delete message window
+	static int         CLANG_INFO_WIN;					///< Coach language info message window
+	static int         CLANG_MESS_DELAY;				///< Coach language messages delay
+	static int         CLANG_MESS_PER_CYCLE;			///< Maximum coach language messages sent per cycles
+	static int         CLANG_META_WIN;					///< Coach language meta message window
+	static int         CLANG_RULE_WIN;					///< Coach language rule message window
+	static int         CLANG_WIN_SIZE;					///< Coach language window size
+	static int         COACH;							///< If true the coach can connect to the server
+	static int         COACH_PORT;						///< Port for the online coach to connect to the server
+	static int         COACH_W_REFEREE;					///< If true the trainer can be used
+	static int         CONNECT_WAIT;					///< Connect wait
+	static double      CONTROL_RADIUS;					///< Control radius
+	static double      DASH_ANGLE_STEP;					///< Dash direction quantization value
+	static double      DASH_POWER_RATE;					///< Dash power rate
+	static int         DROP_BALL_TIME;					///< Drop ball time
+	static double      EFFORT_DEC;						///< Effort decrement
+	static double      EFFORT_DEC_THR;					///< Effort decrement threshold
+	static double      EFFORT_INC;						///< Effort increment
+	static double      EFFORT_INC_THR;					///< Effort increment threshold
+	static double      EFFORT_INIT;						///< Initial effort
+	static double      EFFORT_MIN;						///< Minimum effort
+	static int         EXTRA_HALF_TIME;					///< If true the game will continue in extra time after a draw
+	static int         EXTRA_STAMINA;					///< Extra player stamina
+	static int         FORBID_KICK_OFF_OFFSIDE;			///< Forbid kick off off side
+	static int         FOUL_CYCLES;						///< Foul cycles
+	static double      FOUL_DETECT_PROBABILITY;			///< Foul detect probability
+	static int         FOUL_EXPONENT;					///< Foul exponent
+	static int         FREE_KICK_FAULTS;				///< Free kick faults
+	static int         FREEFORM_SEND_PERIOD;			///< Cycles to wait after a free form message is send by the coach
+	static int         FREEFORM_WAIT_PERIOD;			///< Cycles to wait after a new free form message can be issued by the coach
+	static int         FULLSTATE_L;						///< If true the server will send the full state sensor to the left team
+	static int         FULLSTATE_R;						///< If true the server will send the full state sensor to the right team
+	static int         GAME_LOG_COMPRESSION;			///< Compression level to use for the log files
+	static int         GAME_LOG_DATED;					///< Game log dated
+	static std::string GAME_LOG_DIR;					///< Directory to save the game logs
+	static int         GAME_LOG_FIXED;					///< Game log fixed
+	static std::string GAME_LOG_FIXED_NAME;				///< Game log fixed name
+	static int         GAME_LOG_VERSION;				///< Version logging to use
+	static int         GAME_LOGGING;					///< If true the game will be logged
+	static int         GAME_OVER_WAIT;					///< Cycles to wait after a game is over
+	static double      GOAL_WIDTH;						///< Width of the goals
+	static int         GOALIE_MAX_MOVES;				///< How many times the goalie can use the move command after a catch
+	static int         GOLDEN_GOAL;						///< If true the server will change to golden goal, after a draw
+	static int         HALF_TIME;						///< Duration of a half time in cycles
+	static int         HEAR_DECAY;						///< Hear decay
+	static int         HEAR_INC;						///< Hear capacity increment per cycle
+	static int         HEAR_MAX;						///< Maximum amount of messages heard per cycle
+	static int         INERTIA_MOMENT;					///< Inertia moment
+	static int         KEEPAWAY;						///< If true the server will play a keep away game
+	static int         KEEPAWAY_LENGTH;					///< Duration of a keep away game
+	static int         KEEPAWAY_LOG_DATED;				///< If true the keep away game log will include the date
+	static std::string KEEPAWAY_LOG_DIR;				///< Directory to save the keep away game log
+	static int         KEEPAWAY_LOG_FIXED;				///< Keep away fixed
+	static std::string KEEPAWAY_LOG_FIXED_NAME;			///< Keep away fixed name
+	static int         KEEPAWAY_LOGGING;				///< If true the server will log the keep away game
+	static int         KEEPAWAY_START;					///< Keep away start
+	static int         KEEPAWAY_WIDTH;					///< Keep away width
+	static int         KICK_OFF_WAIT;					///< Duration of kick off play mode
+	static double      KICK_POWER_RATE;					///< Kick power rate
+	static double      KICK_RAND;						///< Kick randomizer
+	static double      KICK_RAND_FACTOR_L;				///< Kick randomize factor for left team
+	static double      KICK_RAND_FACTOR_R;				///< Kick randomize factor for right team
+	static double      KICKABLE_MARGIN;					///< Kick-able margin
+	static std::string LANDMARK_FILE;					///< Landmark file path
+	static std::string LOG_DATE_FORMAT;					///< Date format for log files
+	static int         LOG_TIMES;						///< If true the server will log the time between cycles
+	static double      MAX_BACK_TACKLE_POWER;			///< Maximum power for backwards tackle
+	static double      MAX_DASH_ANGLE;					///< Maximum dash direction for dash command
+	static double      MAX_DASH_POWER;					///< Maximum dash power for dash command
+	static int         MAX_GOAL_KICKS;					///< Maximum goal kicks
+	static double      MAX_TACKLE_POWER;				///< Maximum power for tackle command
+	static double      MAXMOMENT;						///< Maximum turn angle for turn command
+	static double      MAXNECKANG;						///< Maximum possible head angle
+	static double      MAXNECKMOMENT;					///< Maximum angle turn for turn neck command
+	static double      MAXPOWER;						///< Maximum power for dash and kick command
+	static double      MIN_DASH_ANGLE;					///< Minimum dash direction for dash command
+	static double      MIN_DASH_POWER;					///< Minimum dash power for dash command
+	static double      MINMOMENT;						///< Minimum angle turn for turn command
+	static double      MINNECKANG;						///< Minimum possible head angle
+	static double      MINNECKMOMENT;					///< Minimum angle turn for turn neck command
+	static double      MINPOWER;						///< Minimum power for dash and kick command
+	static int         NR_EXTRA_HALFS;					///< Number of extra halves
+	static int         NR_NORMAL_HALFS;					///< Number of halves
+	static double      OFFSIDE_ACTIVE_AREA_SIZE;		///< Off side active area size
+	static double      OFFSIDE_KICK_MARGIN;				///< Off side kick margin
+	static int         OLCOACH_PORT;					///< Port for an online coach to connect to the server
+	static int         OLD_COACH_HEAR;					///< If true the server will send the old coach hear
+	static int         PEN_ALLOW_MULT_KICKS;			///< True if a player can kick the ball after a penalty
+	static int         PEN_BEFORE_SETUP_WAIT;			///< Cycles to wait after the first round of penalties
+	static int         PEN_COACH_MOVES_PLAYERS;			///< Penalty coach moves players
+	static double      PEN_DIST_X;						///< Distance from the goal to the ball in a penalty
+	static int         PEN_MAX_EXTRA_KICKS;				///< Maximum kicks after first round of penalties
+	static double      PEN_MAX_GOALIE_DIST_X;			///< Maximum distance allowed for a goalie in a penalty
+	static int         PEN_NR_KICKS;					///< Penalties for first round
+	static double      PEN_RANDOM_WINNER;				///< Penalty random winner
+	static int         PEN_READY_WAIT;					///< Cycles to wait once the player is ready for a penalty
+	static int         PEN_SETUP_WAIT;					///< Cycles to wait before a penalty
+	static int         PEN_TAKEN_WAIT;					///< Cycles to wait after a penalty
+	static int         PENALTY_SHOOT_OUTS;				///< Penalty shoot outs
+	static double      PLAYER_ACCEL_MAX;				///< Player maximum acceleration
+	static double      PLAYER_DECAY;					///< Player decay
+	static double      PLAYER_RAND;						///< Player randomizer
+	static double      PLAYER_SIZE;						///< Player size (radius)
+	static double      PLAYER_SPEED_MAX;				///< Player maximum maximum speed
+	static double      PLAYER_SPEED_MAX_MIN;			///< Player minimum maximum speed
+	static double      PLAYER_WEIGHT;					///< Player weight
+	static int         POINT_TO_BAN;					///< Stillness of a point to command
+	static int         POINT_TO_DURATION;				///< Duration of point to command
+	static int         PORT;							///< Server port for players to connect
+	static double      PRAND_FACTOR_L;					///< Player randomize factor for left team
+	static double      PRAND_FACTOR_R;					///< Player randomize factor for right team
+	static int         PROFILE;							///< Profile
+	static int         PROPER_GOAL_KICKS;				///< Proper goal kicks
+	static double      QUANTIZE_STEP;					///< Quantization value for dynamic objects
+	static double      QUANTIZE_STEP_L;					///< Quantization value for static objects
+	static int         RECORD_MESSAGES;					///< Record messages
+	static double      RECOVER_DEC;						///< Recovery decrement
+	static double      RECOVER_DEC_THR;					///< Recovery decrement threshold
+	static double      RECOVER_INIT;					///< Initial recovery
+	static double      RECOVER_MIN;						///< Minimum recovery
+	static int         RECV_STEP;						///< Commands process frequency
+	static double      RED_CARD_PROBABILITY;			///< Red card probability
+	static int         SAY_COACH_CNT_MAX;				///< Maximum coach messages
+	static int         SAY_COACH_MSG_SIZE;				///< Maximum say coach message size
+	static int         SAY_MSG_SIZE;					///< Maximum say message size
+	static int         SEND_COMMS;						///< Monitor data sending frequency
+	static int         SEND_STEP;						///< See sensor update frequency
+	static int         SEND_VI_STEP;					///< See global sensor update frequency
+	static int         SENSE_BODY_STEP;					///< Sense body sensor update frequency
+	static double      SIDE_DASH_RATE;					///< Side dash rate
+	static int         SIMULATOR_STEP;					///< Duration of a simulation cycle
+	static double      SLOW_DOWN_FACTOR;				///< Slow down factor
+	static double      SLOWNESS_ON_TOP_FOR_LEFT_TEAM;	///< Slowness on top for the left team
+	static double      SLOWNESS_ON_TOP_FOR_RIGHT_TEAM;	///< Slowness on top for the right team
+	static int         STAMINA_CAPACITY;				///< Stamina capacity for the players
+	static int         STAMINA_INC_MAX;					///< Maximum stamina increment
+	static int         STAMINA_MAX;						///< Maximum stamina
+	static int         START_GOAL_L;					///< Start goals for the left team
+	static int         START_GOAL_R;					///< start goals for the right team
+	static double      STOPPED_BALL_VEL;				///< Stopped ball velocity
+	static int         SYNCH_MICRO_SLEEP;				///< Sleeping microseconds for the server in synchronized mode
+	static int         SYNCH_MODE;						///< True if the server is in synchronized mode
+	static int         SYNCH_OFFSET;					///< Offset in synchronized mode
+	static int         SYNCH_SEE_OFFSET;				///< Offset of the see sensor in synchronized mode
+	static double      TACKLE_BACK_DIST;				///< Tackle back distance
+	static int         TACKLE_CYCLES;					///< Tackle cycles
+	static double      TACKLE_DIST;						///< Tackle distance
+	static int         TACKLE_EXPONENT;					///< Exponent of tackle equation
+	static double      TACKLE_POWER_RATE;				///< Tackle power rate
+	static double      TACKLE_RAND_FACTOR;				///< Tackle randomize factor
+	static double      TACKLE_WIDTH;					///< Tackle width
+	static double      TEAM_ACTUATOR_NOISE;				///< Team actuator noise
+	static std::string TEAM_L_START;					///< Left team start
+	static std::string TEAM_R_START;					///< Right team start
+	static int         TEXT_LOG_COMPRESSION;			///< True if the log is compressed
+	static int         TEXT_LOG_DATED;					///< True if the date is appended to the log name
+	static std::string TEXT_LOG_DIR;					///< Directory for the log files
+	static int         TEXT_LOG_FIXED;					///< Text log fixed
+	static std::string TEXT_LOG_FIXED_NAME;				///< Text log fixed name
+	static int         TEXT_LOGGING;					///< True if the server logs the game
+	static int         USE_OFFSIDE;						///< True if the off sides are marked
+	static int         VERBOSE;							///< True if the server works in verbose mode
+	static double      VISIBLE_ANGLE;					///< Visible angle aperture
+	static double      VISIBLE_DISTANCE;				///< Visible distance for objects behind the agent
+	static double      WIND_ANG;						///< Wind angle
+	static double      WIND_DIR;						///< Wind direction
+	static double      WIND_FORCE;						///< Wind force
+	static double      WIND_NONE;						///< Wind none
+	static double      WIND_RAND;						///< Wind randomize
+	static double      WIND_RANDOM;						///< Widn randomize
+	/*!
+	 * @brief Server default constructor
+	 * @param server_params Server parameters received from the server
+	 */
 	Server(std::string server_params);
+	/*!
+	 * @brief Server default destructor
+	 */
 	~Server();
+private:
+	std::string server_params;							///< Server parameters received from the server
+	/*!
+	 * @brief Returns the value for the given parameter
+	 * @param parameter Parameter to be searched
+	 */
+	std::string getParameter(std::string parameter);
 };
-/*! @} */
+
 } // End namespace Phoenix
 /*! @} */
 

@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013 Ivan Gonzalez
+ * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -16,6 +16,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @file Logger.hpp
+ *
+ * @author Nelson Ivan Gonzalez
  */
 
 #ifndef LOGGER_HPP_
@@ -29,14 +33,24 @@
 namespace Phoenix {
 /*!
  * @brief <STRONG> Logger <BR> </STRONG>
- * The Logger lorem Ipsum
+ * The Logger object setup the logging feature of a Phoenix2D agent
  */
 class Logger {
-	bool logging;
 public:
+	/*!
+	 * @brief Logger default constructor
+	 */
 	Logger();
+	/*!
+	 * @brief Logger default destructor
+	 */
 	~Logger();
+	/*!
+	 * @brief Starts the logging feature
+	 */
 	void log();
+private:
+	bool logging;	///< If true the stream std::clog will be redirected to the log file
 };
 
 } // End namespace Phoenix
