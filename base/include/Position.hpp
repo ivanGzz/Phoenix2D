@@ -65,8 +65,10 @@ public:
 	/*!
 	 * @brief Returns the relative direction from this position to the provided position
 	 * @param position Position to compute the direction
-	 * This method uses the body and head direction of the source, in consequence, this
-	 * method should not be used with Ball objects.
+	 * @return Relative direction to the provided position
+	 * This method uses the body direction of the source, in consequence, this
+	 * method should not be used with Ball objects.  Disclaimer: this method always
+	 * returns the direction relative to the body, never to the head.
 	 */
 	double getDirectionTo(Position* position) const;
 	/*!

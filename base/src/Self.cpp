@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013 Ivan Gonzalez
+ * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -16,6 +16,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @file Self.cpp
+ *
+ * @author Nelson Ivan Gonzalez
  */
 
 #include <cstdlib>
@@ -653,7 +657,7 @@ void triangulation(std::vector<Flag> flags) {
 		for (std::vector<Flag>::iterator it_j = it_i + 1; it_j != flags.end(); ++it_j) {
 			double x, y ,d, e;
 			if (flagsTriangulation(&(*it_i), &(*it_j), x, y, d, e)) {
-				ds.push_back(d);
+				ds.push_back(Geometry::toRadians(d));
 				xt += x;
 				yt += y;
 				counter++;
@@ -663,7 +667,7 @@ void triangulation(std::vector<Flag> flags) {
 	if (counter > 0) {
 		x = xt / (double)counter;
 		y = yt / (double)counter;
-		body = Math::arcsMean(ds); //theta = angleMean(ds);
+		body = Geometry::toDegrees(Math::arcsMean(ds)) - Self::HEAD_ANGLE; //theta = angleMean(ds);
 	} else {
 		body += turn;
 		if (body > 180.0) {
@@ -722,7 +726,7 @@ void lowpassfilter(std::vector<Flag> flags) {
 	}
 	x = x_e;
 	y = y_e;
-	body = Geometry::toDegrees(Math::arcsMean(thetas)); //theta = angleMean(thetas);
+	body = Geometry::toDegrees(Math::arcsMean(thetas)) - Self::HEAD_ANGLE; //theta = angleMean(thetas);
 }
 
 void particlefilter(std::vector<Flag> flags) {
@@ -752,7 +756,7 @@ void Self::localize(std::vector<Flag> flags) {
 	} else {
 		lowpassfilter(flags);
 	}
-	position = Position(x, y, body, HEAD_ANGLE);
+	position = Position(x, y, body, Self::HEAD_ANGLE);
 }
 
 const Position* Self::getPosition() {

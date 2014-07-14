@@ -205,7 +205,7 @@ struct Inverse {
 	}
 };
 
-double arcsMean(std::vector<double> arcs) {
+inline double arcsMean(std::vector<double> arcs) {
 	double xs = 0.0;
 	double ys = 0.0;
 	for (std::vector<double>::iterator it = arcs.begin(); it != arcs.end(); ++it) {

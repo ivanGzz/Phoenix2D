@@ -201,7 +201,7 @@ void runAI(char type, char* teamname, char* hostname) {
 }
 
 void runTrainer(char* script, char* hostname) {
-	Configs::loadConfigs("");
+//	Configs::loadConfigs("");
 	Phoenix::Controller controller("trainer", 't', hostname);
 	controller.registerTrainerScript(std::string(script));
 	controller.connect();

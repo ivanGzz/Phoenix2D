@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013 Ivan Gonzalez
+ * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -16,6 +16,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @file Parser.cpp
+ *
+ * @author Nelson Ivan Gonzalez
  */
 
 #include <iostream>
@@ -63,7 +67,7 @@ pthread_attr_t attr;
 std::ofstream see_stream;
 //std::ofstream hear_stream;
 std::ofstream fs_stream;
-//std::ofstream body_stream;
+std::ofstream body_stream;
 
 /*------------------------
  | Timers and Control    |
@@ -114,6 +118,9 @@ void *senseBodyHandler(void *arg) {
 	if (pthread_mutex_unlock(&sense_body_mutex) != 0) {
 		std::cerr << "Parser::process_sense_body(void*) -> cannot unlock sense body mutex" << std::endl;
 		return 0;
+	}
+	if (Configs::SAVE_SENSE_BODY) {
+		body_stream << sense_body << std::endl;
 	}
 	return 0;
 }
@@ -351,6 +358,9 @@ Parser::Parser(Self* self, World* world, Messages* messages_p) {
 	if (Configs::SAVE_FULLSTATE) {
 		fs_stream.open("fullstate.log");
 	}
+	if (Configs::SAVE_SENSE_BODY) {
+		body_stream.open("sense_body.log");
+	}
 }
 
 Parser::~Parser() {
@@ -362,6 +372,9 @@ Parser::~Parser() {
 	}
 	if (Configs::SAVE_FULLSTATE) {
 		fs_stream.close();
+	}
+	if (Configs::SAVE_SENSE_BODY) {
+		body_stream.close();
 	}
 }
 

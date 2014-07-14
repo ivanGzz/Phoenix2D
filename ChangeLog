@@ -1,3 +1,10 @@
+2014-07-14 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (Position) removed the head factor in the getDirectionTo
+	method.
+	
+	* (Self) added head offset in the localization methods.
+
 2014-06-30 Nelson Gonzalez <nigm2005@gmail.com>
 
 	* (Position) all the positions returned by Self, Player and
