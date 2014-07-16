@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013 Ivan Gonzalez
+ * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -16,6 +16,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @file Configs.cpp
+ *
+ * @author Nelson Ivan Gonzalez
  */
 
 #include <fstream>
@@ -25,6 +29,7 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <exception>
+#include "Controller.hpp"
 
 namespace Phoenix {
 
@@ -40,6 +45,7 @@ bool Configs::SAVE_SEE = false;
 bool Configs::SAVE_HEAR = false;
 bool Configs::SAVE_FULLSTATE = false;
 bool Configs::SAVE_SENSE_BODY = false;
+bool Configs::SAVE_COMMANDS = false;
 //individuals
 double xs[] = {-50.0, -10.0, -1.0, -1.0, -12.0, -2.0, -2.0, -14.0, -14.0, -14.0, -14.0};
 double ys[] = {0.0, 0.0, -10.0, 10.0, 0.0, -11.0, 11.0, -5.0, 5.0, -10.0, 10.0};
@@ -57,7 +63,8 @@ std::string Configs::LOCALIZATION = "lowpassfilter";
  *      "see": false,
  *      "body": false,
  *      "hear": false,
- *      "fullstate": false
+ *      "fullstate": false,
+ *      "commands": false
  *    }
  *    "commands": {
  *      "buffer": 4,
@@ -97,6 +104,7 @@ void Configs::loadConfigs(std::string filename) {
 			Configs::SAVE_SENSE_BODY      = pt.get("configs.savesensors.body", false);
 			Configs::SAVE_HEAR            = pt.get("configs.savesensors.hear", false);
 			Configs::SAVE_FULLSTATE       = pt.get("configs.savesensors.fullstate", false);
+			Configs::SAVE_COMMANDS		  = pt.get("configs.savesensors.commands", false);
 			Configs::CYCLE_OFFSET         = pt.get("configs.self.offset", 20);
 			Configs::BUFFER_MAX_HISTORY   = pt.get("configs.self.params.buffer", 8);
 			Configs::PLAYER_MAX_HISTORY   = pt.get("configs.players.buffer", 16);

@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013 Ivan Gonzalez
+ * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -16,6 +16,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @file Position.cpp
+ *
+ * @author Nelson Ivan Gonzalez
  */
 
 #include "Position.hpp"
@@ -35,6 +39,13 @@ Position::Position(double x, double y, double body, double neck) {
 	this->neck = neck;
 }
 
+Position::Position(Geometry::Point point) {
+	x = point.x;
+	y = point.y;
+	body = 0;
+	neck = 0;
+}
+
 Position::~Position() {
 
 }
@@ -45,7 +56,7 @@ double Position::getDistanceTo(Position* position) const {
 }
 
 double Position::getDirectionTo(Position* position) const {
-	double direction = 180.0 * (atan2(position->y - y, position->x - x)) / Math::PI - (body + neck);
+	double direction = 180.0 * (atan2(position->y - y, position->x - x)) / Math::PI - body;
 	if (direction >= 180.0) {
 		direction -= 360.0;
 	} else if (direction < -180.0) {
@@ -61,6 +72,18 @@ void Position::mirror() {
 
 Geometry::Point Position::getPoint() {
 	return Geometry::Point(x, y);
+}
+
+double Position::getX() {
+	return x;
+}
+
+double Position::getY() {
+	return y;
+}
+
+double Position::getDirection() {
+	return body;
 }
 
 }

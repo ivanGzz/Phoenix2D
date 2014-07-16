@@ -76,6 +76,9 @@ struct Point {
 	Vector2D operator -(Point point) {
 		return Vector2D(x - point.x, y - point.y);
 	}
+	Point operator +(Vector2D vector) {
+		return Point(x + vector.dx, y + vector.dy);
+	}
 };
 
 inline double toDegrees(double radians) {

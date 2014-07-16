@@ -76,10 +76,12 @@ public:
 	Position* getPosition();
 	/*!
 	 * @brief Return the current ball absolute velocity in a Vector2D pointer
+	 * @return Pointer to ball velocity
 	 */
 	Geometry::Vector2D* getVelocity();
 	/*!
 	 * @brief Returns true is the ball is in the vision range in the current cycle, and false otherwise
+	 * @return true if the ball is in the vision range, false otherwise
 	 */
 	bool isInSightRange();
 private:

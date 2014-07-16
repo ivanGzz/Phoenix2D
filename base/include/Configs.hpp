@@ -58,6 +58,7 @@ public:
 	static bool SAVE_HEAR;						///< If true the agent will log the data received in the hear sensor
 	static bool SAVE_FULLSTATE;					///< If true the agent will log the data received in the fullstate sensor
 	static bool SAVE_SENSE_BODY;				///< If true the agent will log the data received in the sense_body sensor
+	static bool SAVE_COMMANDS;					///< If true the agent will log the commands sent to the server
 	static unsigned int CYCLE_OFFSET;			///< Number of millisencods to wait for new messages before the new cycle start
 	static unsigned int BUFFER_MAX_HISTORY;		///< Size of the circular buffers used for the sense body data
 	static unsigned int PLAYER_MAX_HISTORY;		///< Size of the player buffers used for the see data

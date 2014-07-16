@@ -108,6 +108,13 @@ void PFilter<N>::resample() {
 		particles[i] = new_particles[i];
 		total_w += particles[i].weight;
 	}
+	// Re-normalize
+	double total_w_bu = 0.0;
+	for (int i = 0; i < PARTICLES; ++i) {
+		particles[i].weight /= total_w;
+		total_w_bu += particles[i].weight;
+	}
+	total_w = total_w_bu;
 }
 
 template <unsigned int N>
@@ -124,9 +131,13 @@ void PFilter<N>::update(void(* update)(Particle<N> &p)) {
 		update(particles[i]);
 		total_w += particles[i].weight;
 	}
+	// Re-normalize
+	double total_w_bu = 0.0;
 	for (int i = 0; i < PARTICLES; ++i) {
 		particles[i].weight /= total_w;
+		total_w_bu += particles[i].weight;
 	}
+	total_w = total_w_bu;
 }
 
 template <unsigned int N>

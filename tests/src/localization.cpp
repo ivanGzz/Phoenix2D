@@ -27,6 +27,7 @@
 #include "Self.hpp"
 #include "Server.hpp"
 #include "Game.hpp"
+#include "Configs.hpp"
 
 namespace localization {
 
@@ -36,6 +37,12 @@ boost::mt19937 rng(time(0));
 boost::uniform_int<> xdist(0, 104);
 boost::uniform_int<> ydist(0, 68);
 Position positionToGo;
+std::vector<double> error_means;
+std::vector<double> dir_means;
+double error_accum = 0.0;
+double dir_accum = 0.0;
+int iteration = -1;
+int cycles = 0;
 
 void onStart() {
 	std::cout << "Starting localization test" << std::endl;
@@ -66,12 +73,27 @@ void randomPosition() {
 
 void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages, Commands* commands) {
 	if (!setup) {
+		if (iteration > -1) {
+			double mean = error_accum / cycles;
+			std::cout << "Iteration: " << iteration << ", error mean: " << mean << ", direction error mean: ";
+			std::clog << mean << ", ";
+			error_means.push_back(mean);
+			mean = dir_accum / cycles;
+			std::cout << mean << std::endl;
+			std::clog << mean << std::endl;
+			dir_means.push_back(mean);
+		}
 		double x = -1.0 * fabs((double)xdist(rng) - 52.0); //we need a negative coordinate in x
 		double y = (double)ydist(rng) - 34.0;
 		std::cout << "Moving to: (" << x << ", " << y << ")" << std::endl;
+		commands->changeView("narrow");
 		commands->move(x, y);
 		setup = true;
 		randomPosition();
+		error_accum = 0.0;
+		dir_accum = 0.0;
+		cycles = 0;
+		iteration++;
 	}
 }
 
@@ -80,9 +102,17 @@ void executePlayOn(WorldModel worldModel, std::vector<Message> messages, Command
 	if (fullstate) {
 		Player* pl = worldModel.getOurExactPlayer(Self::UNIFORM_NUMBER);
 		Position* e_p = pl->getPosition();
-		std::clog << Game::GAME_TIME << ": (" << p->x << ", " << p->y << ", " << p->body << ")"
-				                     << ", (" << e_p->x << ", " << e_p->y << ", " << e_p->body << ")"
-				                     << std::endl;
+//		std::clog << Game::GAME_TIME << ": (" << p->x << ", " << p->y << ", " << p->body << ")"
+//				                     << ", (" << e_p->x << ", " << e_p->y << ", " << e_p->body << ")"
+//				                     << std::endl;
+		error_accum += sqrt(pow(p->x - e_p->x, 2.0) + pow(p->y - e_p->y, 2.0));
+		double min_arc = p->body - e_p->body;
+		if (min_arc > 180.0) {
+			min_arc -= 360.0;
+		} else if (min_arc < -180.0) {
+			min_arc += 360.0;
+		}
+		dir_accum += fabs(min_arc);
 	}
 	double d = p->getDistanceTo(&positionToGo);
 	if (d > 1.0) {
@@ -94,6 +124,10 @@ void executePlayOn(WorldModel worldModel, std::vector<Message> messages, Command
 		}
 	} else {
 		randomPosition();
+	}
+	cycles++;
+	if (setup) {
+		setup = false;
 	}
 }
 

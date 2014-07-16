@@ -1,0 +1,7 @@
+wait 10
+do 30
+change_to play_on
+wait 2000
+change_to before_kick_off
+wait 10
+end_do
