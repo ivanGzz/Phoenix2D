@@ -46,7 +46,7 @@ public:
 	double body;	///< Absolute body direction for players
 	double neck;	///< Relative head direction for players
 	/*!
-	 * @brief Position default constructor
+	 * @brief Position constructor with x, y, body direction and head direction as arguments
 	 * @param x Absolute coordinate in x
 	 * @param y Absolute coordinate in y
 	 * @param body Absolute body direction for players
@@ -54,12 +54,18 @@ public:
 	 */
 	Position(double x = 0.0, double y = 0.0, double body = 0.0, double neck = 0.0);
 	/*!
+	 * @brief Position constructor with Point argument
+	 * @param point Absolute point
+	 */
+	Position(Geometry::Point point);
+	/*!
 	 * @brief Position default destructor
 	 */
 	~Position();
 	/*!
 	 * @brief Returns The euclidean distance between this position and the provided position
 	 * @param position Position to compute the distance
+	 * @return Distance to the given position
 	 */
 	double getDistanceTo(Position* position) const;
 	/*!
@@ -73,12 +79,28 @@ public:
 	double getDirectionTo(Position* position) const;
 	/*!
 	 * @brief Returns point primitive created with the absolute positions
+	 * @return Absolute point structure for this position
 	 */
 	Geometry::Point getPoint();
 	/*!
 	 * @brief Multiply by -1 the absolute position in x and y
 	 */
 	void mirror();
+	/*!
+	 * @brief Returns the absolute position in x
+	 * @return Absolute position in x
+	 */
+	double getX();
+	/*!
+	 * @brief Returns the absolute position in y
+	 * @return Absolute position in y
+	 */
+	double getY();
+	/*!
+	 * @brief Returns the absolute direction for player objects
+	 * @return Absolute direction
+	 */
+	double getDirection();
 };
 
 } // End namespace Phoenix

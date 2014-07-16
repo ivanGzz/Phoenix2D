@@ -39,6 +39,13 @@ Position::Position(double x, double y, double body, double neck) {
 	this->neck = neck;
 }
 
+Position::Position(Geometry::Point point) {
+	x = point.x;
+	y = point.y;
+	body = 0;
+	neck = 0;
+}
+
 Position::~Position() {
 
 }
@@ -65,6 +72,18 @@ void Position::mirror() {
 
 Geometry::Point Position::getPoint() {
 	return Geometry::Point(x, y);
+}
+
+double Position::getX() {
+	return x;
+}
+
+double Position::getY() {
+	return y;
+}
+
+double Position::getDirection() {
+	return body;
 }
 
 }

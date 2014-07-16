@@ -1,3 +1,16 @@
+2014-07-15 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (tests) Moved test files to trainer directory
+	
+	* (Flag) Changed some method names in Flag class and added
+	direction methods
+	
+	* (Point) added operator + to Point structure which returns
+	a new point with the displacement Vector in the argument
+	
+	* (Position) new constructor for Position using a Point
+	structure, re-added getX, getY and getDirection.
+
 2014-07-14 Nelson Gonzalez <nigm2005@gmail.com>
 
 	* (Position) removed the head factor in the getDirectionTo
@@ -9,7 +22,7 @@
 
 	* (Position) all the positions returned by Self, Player and
 	Ball objects are now pointers.  The Self objects returns a
-	const Position* ponter.
+	const Position* pointer.
 
 2014-06-29 Nelson Gonzalez <nigm2005@gmail.com>
 

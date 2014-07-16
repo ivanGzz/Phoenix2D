@@ -1,9 +1,10 @@
 {"configs": {
     "savesensors": {
-      "see": false,
-      "body": false,
+      "see": true,
+      "body": true,
       "hear": false,
-      "fullstate": false
+      "fullstate": false,
+      "commands": true
     },
     "commands": {
       "buffer": 4,

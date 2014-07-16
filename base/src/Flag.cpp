@@ -65,15 +65,24 @@ Flag::Flag(std::string name, std::string position, int simulation_time) {
 	error = (maxDistance - minDistance) / 2.0;
 	std::getline(ss, token, ' ');
 	direction = atof(token.c_str());
-	double maxDir, minDir;
+	maxDirection = direction;
+	minDirection = direction;
 	if (direction > 0.1) {
-		double maxDir = direction;
-		double minDir = exp(log(direction - 0.1) - Server::QUANTIZE_STEP_L);
-	} else {
-		maxDir = direction;
-		minDir = direction;
+		minDirection = exp(log(direction - 0.1) - Server::QUANTIZE_STEP_L);
+		if (minDirection > 180.0) {
+			minDirection -= 360.0;
+		} else if (minDirection < -180.0){
+			minDirection += 360.0;
+		}
+	} else if (direction < -0.1) {
+		maxDirection = -1.0 * exp(log(-1.0 * direction - 0.1) - Server::QUANTIZE_STEP_L);
+		if (maxDirection > 180.0) {
+			maxDirection -= 360.0;
+		} else if (maxDirection < -180.0) {
+			maxDirection += 360.0;
+		}
 	}
-	derror = (maxDir - minDir) / 2.0;
+	derror = (maxDirection - minDirection) / 2.0;
 	x = FIELD[name].x;
 	y = FIELD[name].y;
 }
@@ -168,11 +177,19 @@ double Flag::getMaxDistance() {
 	return maxDistance;
 }
 
-double Flag::getError() {
+double Flag::getDistanceError() {
 	return error;
 }
 
-double Flag::getDError() {
+double Flag::getMinDirection() {
+	return minDirection;
+}
+
+double Flag::getMaxDirection() {
+	return maxDirection;
+}
+
+double Flag::getDirectionError() {
 	return derror;
 }
 

@@ -44,6 +44,24 @@ struct Gaussian {
 };
 
 /*
+ * f(x) = exp(-0.5 * pow(((x - mu) / stdv), 2.0))
+ */
+struct UGaussian {
+	double mu;
+	double stdv;
+	UGaussian() : mu(0.0), stdv(1.0) {};
+	UGaussian(double mu, double stdv) : mu(mu), stdv(stdv) {};
+	double evaluate(double x) {
+		if (stdv > 0.0) {
+			return exp(-0.5 * pow(((x - mu) / stdv), 2.0));
+		}
+		else {
+			return 1.0;
+		}
+	};
+};
+
+/*
  * f(x) =
  * 1       /\
  *        /  \

@@ -41,9 +41,9 @@ class Flag {
 public:
 	/*!
 	 * @brief Flag default constructor
-	 * @param name name string for the flag received in the see sensor
-	 * @param position string received in the see sensor
-	 * @param simulation_time simulation time the flag was seen
+	 * @param name Name string for the flag received in the see sensor
+	 * @param position String received in the see sensor
+	 * @param simulation_time Simulation time the flag was seen
 	 */
 	Flag(std::string name, std::string position, int simulation_time);
 	/*!
@@ -59,40 +59,59 @@ public:
 	static void initializeField();
 	/*!
 	 * @brief Returns the flag string name
+	 * @return Flag name
 	 */
 	std::string getName();
 	/*!
 	 * @brief Returns the flag relative distance
+	 * @return Relative distance
 	 */
 	double getDistance();
 	/*!
 	 * @brief Returns the relative direction
+	 * @return Relative direction
 	 */
 	double getDirection();
 	/*!
 	 * @brief Returns the absolute flag position in x
+	 * @return Absolute position in x
 	 */
 	double getX();
 	/*!
 	 * @brief Returns the absolute flag position in y
+	 * @return Absolute position in y
 	 */
 	double getY();
 	/*!
 	 * @brief Returns the minimum relative distance the flag could have
+	 * @return Minimum distance
 	 */
 	double getMinDistance();
 	/*!
 	 * @brief Returns the maximum relative distance the flag could have
+	 * @return Maximum distance
 	 */
 	double getMaxDistance();
 	/*!
 	 * @brief Returns the maximum error in the flag relative distance
+	 * @return Distance error
 	 */
-	double getError();
+	double getDistanceError();
+	/*!
+	 * @brief Returns the minimum relative direction the flag could have
+	 * @return Minimum direction
+	 */
+	double getMinDirection();
+	/*!
+	 * @brief Returns the maximum relative direction the flag could have
+	 * @return Maximum direction
+	 */
+	double getMaxDirection();
 	/*!
 	 * @brief Returns the maximum error in the flag relative direction
+	 * @return Direction error
 	 */
-	double getDError();
+	double getDirectionError();
 private:
 	std::string name;		///< flag string name received by the see sensor
 	double distance;		///< flag relative distance received by the see sensor
@@ -101,6 +120,8 @@ private:
 	double y;				///< flag absolute position in y
 	double minDistance;		///< flag minimum relative distance
 	double maxDistance;		///< flag maximum relative distance
+	double minDirection;	///< flag minimum relative direction
+	double maxDirection;	///< flag maximum relative direction
 	double error;			///< flag maximum error in the relative distance
 	double derror;			///< flag maximum error in the relative direction
 	int simulation_time;	///< simulation time the object was created
