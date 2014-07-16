@@ -722,7 +722,7 @@ void lowpassfilter(std::vector<Flag> flags) {
 	}
 	x = x_e;
 	y = y_e;
-	body = Geometry::toDegrees(Math::arcsMean(thetas)); //theta = angleMean(thetas);
+	body = Geometry::toDegrees(Math::arcsMean(thetas)) - Self::HEAD_ANGLE; //theta = angleMean(thetas);
 }
 
 void particlefilter(std::vector<Flag> flags) {

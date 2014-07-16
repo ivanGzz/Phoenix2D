@@ -58,6 +58,11 @@ void loadTest(std::string test, Phoenix::Controller &controller) {
 		controller.registerPlayerFunction("before_kick_off", dribble::executeBeforeKickOff);
 		controller.registerPlayerFunction("play_on", dribble::executePlayOn);
 		controller.registerFinishFunction(dribble::onFinish);
+	} else if (test.compare("world") == 0) {
+		controller.registerSetupFunction(worldtest::onStart);
+		controller.registerPlayerFunction("before_kick_off", worldtest::executeBeforeKickOff);
+		controller.registerPlayerFunction("play_on", worldtest::executePlayOn);
+		controller.registerFinishFunction(worldtest::onFinish);
 	}
 }
 
