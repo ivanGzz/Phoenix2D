@@ -190,7 +190,6 @@ void runTest(std::string test, char type, char* teamname, char* hostname) {
 	Phoenix::Controller controller(teamname, type, hostname);
 	loadTest(test, controller);
 	controller.connect();
-	Configs::loadTeam("");
 	controller.run();
 	controller.disconnect();
 }
@@ -200,7 +199,6 @@ void runAI(char type, char* teamname, char* hostname) {
 	Phoenix::Controller controller(teamname, type, hostname);
 	loadAI(controller);
 	controller.connect();
-	Configs::loadTeam("");
 	controller.run();
 	controller.disconnect();
 }

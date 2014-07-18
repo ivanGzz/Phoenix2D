@@ -74,15 +74,15 @@ Geometry::Point Position::getPoint() {
 	return Geometry::Point(x, y);
 }
 
-double Position::getX() {
+double Position::getX() const {
 	return x;
 }
 
-double Position::getY() {
+double Position::getY() const {
 	return y;
 }
 
-double Position::getDirection() {
+double Position::getDirection() const {
 	return body;
 }
 

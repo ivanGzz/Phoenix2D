@@ -45,7 +45,11 @@ std::ofstream comm_stream;
 Commands::Commands(Connect *connect) {
 	commands_connect_ptr = connect;
 	if (Configs::SAVE_COMMANDS) {
-		comm_stream.open("commands.log");
+		std::stringstream ss;
+		ss << Self::TEAM_NAME << "_" << Self::UNIFORM_NUMBER << "_" << std::endl;
+		std::string prefix;
+		std::getline(ss, prefix);
+		comm_stream.open(prefix + "commands.log");
 	}
 }
 

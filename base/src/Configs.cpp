@@ -41,11 +41,6 @@ unsigned int Configs::BALL_MAX_HISTORY = 16;
 unsigned int Configs::COMMANDS_MAX_HISTORY = 4;
 unsigned int Configs::COMMAND_PRECISION = 4;
 std::string Configs::LOG_NAME = "";
-bool Configs::SAVE_SEE = false;
-bool Configs::SAVE_HEAR = false;
-bool Configs::SAVE_FULLSTATE = false;
-bool Configs::SAVE_SENSE_BODY = false;
-bool Configs::SAVE_COMMANDS = false;
 //individuals
 double xs[] = {-50.0, -10.0, -1.0, -1.0, -12.0, -2.0, -2.0, -14.0, -14.0, -14.0, -14.0};
 double ys[] = {0.0, 0.0, -10.0, 10.0, 0.0, -11.0, 11.0, -5.0, 5.0, -10.0, 10.0};
@@ -55,17 +50,15 @@ bool Configs::LOGGING = false;
 bool Configs::TRAINER_LOGGING = false;
 bool Configs::VERBOSE = false;
 std::string Configs::LOCALIZATION = "lowpassfilter";
+bool Configs::SAVE_SEE = false;
+bool Configs::SAVE_HEAR = false;
+bool Configs::SAVE_FULLSTATE = false;
+bool Configs::SAVE_SENSE_BODY = false;
+bool Configs::SAVE_COMMANDS = false;
 
 /*
  * Example:
  * {"configs": {
- *    "savesensors": {
- *      "see": false,
- *      "body": false,
- *      "hear": false,
- *      "fullstate": false,
- *      "commands": false
- *    }
  *    "commands": {
  *      "buffer": 4,
  *      "precision": 4
@@ -100,11 +93,11 @@ void Configs::loadConfigs(std::string filename) {
 		try {
 			boost::property_tree::ptree pt;
 			boost::property_tree::read_json(file, pt);
-			Configs::SAVE_SEE             = pt.get("configs.savesensors.see", false);
-			Configs::SAVE_SENSE_BODY      = pt.get("configs.savesensors.body", false);
-			Configs::SAVE_HEAR            = pt.get("configs.savesensors.hear", false);
-			Configs::SAVE_FULLSTATE       = pt.get("configs.savesensors.fullstate", false);
-			Configs::SAVE_COMMANDS		  = pt.get("configs.savesensors.commands", false);
+//			Configs::SAVE_SEE             = pt.get("configs.savesensors.see", false);
+//			Configs::SAVE_SENSE_BODY      = pt.get("configs.savesensors.body", false);
+//			Configs::SAVE_HEAR            = pt.get("configs.savesensors.hear", false);
+//			Configs::SAVE_FULLSTATE       = pt.get("configs.savesensors.fullstate", false);
+//			Configs::SAVE_COMMANDS		  = pt.get("configs.savesensors.commands", false);
 			Configs::CYCLE_OFFSET         = pt.get("configs.self.offset", 20);
 			Configs::BUFFER_MAX_HISTORY   = pt.get("configs.self.params.buffer", 8);
 			Configs::PLAYER_MAX_HISTORY   = pt.get("configs.players.buffer", 16);
@@ -117,6 +110,7 @@ void Configs::loadConfigs(std::string filename) {
 		}
 		catch (std::exception const &e) {
 			std::cerr << e.what() << std::endl;
+			file.close();
 		}
 	} else {
 		if (!using_default) {
@@ -133,6 +127,13 @@ void Configs::loadConfigs(std::string filename) {
  *      "y": 0.0,
  *      "logging": false,
  *      "verbose": false
+ *      "sensors": {
+ *      	"see": false,
+ *      	"body": false,
+ *      	"hear": false,
+ *      	"fullstate": false,
+ *    	},
+ *    	"commands": false
  *    },
  *    "2": {
  *      "x": -20.0,
@@ -162,13 +163,20 @@ void Configs::loadTeam(std::string filename) {
 			double y_default = ys[Self::UNIFORM_NUMBER - 1];
 			double x = pt.get(path + "x", x_default);
 			double y = pt.get(path + "y", y_default);
-			Configs::POSITION = Position(x, y);
-			Configs::LOGGING  = pt.get(path + "logging", false);
-			Configs::VERBOSE  = pt.get(path + "verbose", false);
+			Configs::POSITION 			= Position(x, y);
+			Configs::LOGGING  			= pt.get(path + "logging", false);
+			Configs::VERBOSE  			= pt.get(path + "verbose", false);
+			Configs::PLAYER_HISTORY 	= pt.get(path + "history", false);
+			Configs::SAVE_FULLSTATE 	= pt.get(path + "sensors.fullstate", false);
+			Configs::SAVE_SEE 			= pt.get(path + "sensors.see", false);
+			Configs::SAVE_SENSE_BODY 	= pt.get(path + "sensors.body", false);
+			Configs::SAVE_HEAR			= pt.get(path + "sensors.hear", false);
+			Configs::SAVE_COMMANDS		= pt.get(path + "commands", false);
 			file.close();
 		}
 		catch (std::exception const &e) {
 			std::cerr << e.what() << std::endl;
+			file.close();
 		}
 	} else {
 		if (!using_default) {

@@ -51,14 +51,6 @@ public:
 	 */
 	~World();
 	/*!
-	 * @brief Deprecated
-	 */
-	void updateWorld();
-	/*!
-	 * @brief Deprecated
-	 */
-	void updateWorld(std::vector<Player> players, Ball ball);
-	/*!
 	 * @brief Update the world model with the new information received in the see sensor
 	 * @param players List of current players received in the see sensor
 	 * @param ball Ball object containing information about the ball received in the see sensor
@@ -67,11 +59,8 @@ public:
 	 */
 	void updateWorld(std::vector<Player> players, Ball ball, std::vector<Player> fs_players, Ball fs_ball);
 	/*!
-	 * @brief Deprecated
-	 */
-	void updateObserverWorld(std::vector<Player> players, Ball ball);
-	/*!
 	 * @brief Returns the current world model
+	 * @return Current world model
 	 */
 	WorldModel getWorldModel();
 };

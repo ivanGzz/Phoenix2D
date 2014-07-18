@@ -1,3 +1,34 @@
+2014-07-18 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (Configs) now the save sensors and commands options are 
+	read from the team config file.
+	* (Parser) the sensors and commands file logs have the
+	format name <TEAM_NAME>_<UNIFORM_NUMBER>_<SENSOR>.log
+
+2014-07-17 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (Player) method initForPlayer splitted in setDataForPlayer
+	to pass the war data to the object and then InitForPlayer
+	compute the absolute position and direction
+	* (Parser) fixed an ugly bug which desynchronizes the players
+	with the player self localization
+	
+	* (Player) added time to live member to Player class to
+	indicate to the World class how many cycles the player will
+	remain in memory after it is out of sight range
+
+2014-07-16 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (Player) Removed isLocalized method, and added
+	getDistanceError method.
+	
+	* (Flag) Refactored computing of distance error and
+	direction error.
+	
+	* (PFilter) Updated revision of particle filters class
+	
+	* (worldtest) Added world model test
+
 2014-07-15 Nelson Gonzalez <nigm2005@gmail.com>
 
 	* (tests) Moved test files to trainer directory
@@ -10,6 +41,9 @@
 	
 	* (Position) new constructor for Position using a Point
 	structure, re-added getX, getY and getDirection.
+	
+	* (WorldModel) Added getAllExactPlayers method to WorldModel
+	class
 
 2014-07-14 Nelson Gonzalez <nigm2005@gmail.com>
 

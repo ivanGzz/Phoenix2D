@@ -43,6 +43,7 @@
 #include "Messages.hpp"
 #include "Controller.hpp"
 #include <fstream>
+#include <sstream>
 
 namespace Phoenix {
 
@@ -65,7 +66,7 @@ pthread_t thread_see = 0;
 pthread_t thread_see_global = 0;
 pthread_attr_t attr;
 std::ofstream see_stream;
-//std::ofstream hear_stream;
+std::ofstream hear_stream;
 std::ofstream fs_stream;
 std::ofstream body_stream;
 
@@ -82,13 +83,15 @@ std::vector<Message> messages;
 std::vector<Message> out_of_cycle;
 int time = 0;
 bool new_cycle = true;
+static bool localized = false;
 
 int wait = 0;
 
 void *timer(void* arg) {
 	usleep(1000 * wait);
-	if (Controller::AGENT_TYPE == 'p' || Controller::AGENT_TYPE == 'g') {
-		self_ptr->localize(flags);
+	if ((Controller::AGENT_TYPE == 'p' || Controller::AGENT_TYPE == 'g') && !localized) {
+		std::vector<Flag> empty;
+		self_ptr->localize(empty);
 	}
 	world_ptr->updateWorld(players, ball, fs_players, fs_ball);
 	messages_ptr->setMessages(messages);
@@ -127,7 +130,7 @@ void *senseBodyHandler(void *arg) {
 
 /* fullstate handler */
 
-std::string fullstate;
+static std::string fullstate;
 boost::regex fullstate_ball("\\(\\(b\\)\\s+([\\d\\.\\-e]+)\\s+([\\d\\.\\-e]+)\\s+([\\d\\.\\-e]+)\\s+([\\d\\.\\-e]+)\\)");
 boost::regex fullstate_player("\\(\\(p\\s+(l|r)\\s+(\\d+)\\s+(g|\\d+)\\)\\s+" //group 1 group 2 group 3
 	                          "([\\d\\.\\-e]+)\\s+([\\d\\.\\-e]+)\\s+" //group 4 (x) group 5 (y)
@@ -231,6 +234,9 @@ void *hearHandler(void* arg) {
 	else {
 		std::cerr << Game::SIMULATION_TIME << ": message not supported " << hear << std::endl;
 	}
+	if (Configs::SAVE_HEAR) {
+		hear_stream << hear << std::endl;
+	}
 	return 0;
 }
 
@@ -255,8 +261,7 @@ void *seeHandler(void* arg) {
 		return 0;
 	}
 	int simulation_time = Game::SIMULATION_TIME;
-	const Position* player_position = Self::getPosition();
-	const Geometry::Vector2D* player_velocity = Self::getVelocity();
+	std::string raw_ball = "";
 	std::string::const_iterator start, end;
 	start = see.begin();
 	end = see.end();
@@ -275,12 +280,13 @@ void *seeHandler(void* arg) {
 		}
 		case 'p': {
 			Player p;
-			p.initForPlayer(name, data, player_position, player_velocity);
+			p.setDataForPlayer(name, data);
 			players.push_back(p);
 			break;
 		}
 		case 'b': {
-			ball.initForPlayer(data, player_position, player_velocity);
+//			ball.initForPlayer(data, player_position, player_velocity);
+			raw_ball = data;
 			break;
 		}
 		default: {
@@ -290,6 +296,16 @@ void *seeHandler(void* arg) {
 		start = match[0].second;
 		search_flags |= boost::match_prev_avail;
 		search_flags |= boost::match_not_bob;
+	}
+	self_ptr->localize(flags);
+	localized = true;
+	const Position* player_position = Self::getPosition();
+	const Geometry::Vector2D* player_velocity = Self::getVelocity();
+	if (raw_ball.compare("") != 0) {
+		ball.initForPlayer(raw_ball, player_position, player_velocity);
+	}
+	for (std::vector<Player>::iterator it = players.begin(); it != players.end(); ++it) {
+		it->initForPlayer(player_position, player_velocity);
 	}
 	if (Configs::SAVE_SEE) {
 		see_stream << see << std::endl;
@@ -352,14 +368,21 @@ Parser::Parser(Self* self, World* world, Messages* messages_p) {
 	if (Server::SYNCH_SEE_OFFSET > wait) {
 		wait = Server::SYNCH_SEE_OFFSET;
 	}
+	std::stringstream ss;
+	ss << Self::TEAM_NAME << "_" << Self::UNIFORM_NUMBER << "_" << std::endl;
+	std::string prefix;
+	std::getline(ss, prefix);
 	if (Configs::SAVE_SEE) {
-		see_stream.open("see.log");
+		see_stream.open(prefix + "see.log");
 	}
 	if (Configs::SAVE_FULLSTATE) {
-		fs_stream.open("fullstate.log");
+		fs_stream.open(prefix + "fullstate.log");
 	}
 	if (Configs::SAVE_SENSE_BODY) {
-		body_stream.open("sense_body.log");
+		body_stream.open(prefix + "sense_body.log");
+	}
+	if (Configs::SAVE_HEAR) {
+		hear_stream.open(prefix + "hear.log");
 	}
 }
 
@@ -376,6 +399,9 @@ Parser::~Parser() {
 	if (Configs::SAVE_SENSE_BODY) {
 		body_stream.close();
 	}
+	if (Configs::SAVE_HEAR) {
+		hear_stream.close();
+	}
 }
 
 void Parser::parseMessage(std::string message) {
@@ -389,6 +415,7 @@ void Parser::parseMessage(std::string message) {
 		ball = Ball();
 		fs_ball = Ball();
 		messages.clear();
+		localized = false;
 		for (std::vector<Message>::iterator it = out_of_cycle.begin(); it != out_of_cycle.end(); ++it) {
 			messages.push_back(*it);
 		}
@@ -450,7 +477,7 @@ void Parser::parseMessage(std::string message) {
 	if (message_type.compare("see") == 0) {
 		see = message;
 		if (pthread_create(&thread_see, &attr, seeHandler, 0) != 0) {
-			std::cerr << "Parser::parseMessage(string) -> error creating sense_body thread" << std::endl;
+			std::cerr << "Parser::parseMessage(string) -> error creating see thread" << std::endl;
 		}
 		return;
 	}	

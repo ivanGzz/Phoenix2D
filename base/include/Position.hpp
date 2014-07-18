@@ -90,17 +90,17 @@ public:
 	 * @brief Returns the absolute position in x
 	 * @return Absolute position in x
 	 */
-	double getX();
+	double getX() const;
 	/*!
 	 * @brief Returns the absolute position in y
 	 * @return Absolute position in y
 	 */
-	double getY();
+	double getY() const;
 	/*!
 	 * @brief Returns the absolute direction for player objects
 	 * @return Absolute direction
 	 */
-	double getDirection();
+	double getDirection() const;
 };
 
 } // End namespace Phoenix

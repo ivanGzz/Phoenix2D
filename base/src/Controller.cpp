@@ -141,6 +141,11 @@ void Controller::connect() {
 		_server = new Server(message);
 		message = _connect->receiveMessage(); //player_params
 		_self = new Self(message, team_name, unum, side);
+		// We need to load the team configs before all the objects are created, and after the Self object is
+		// created since it needs the Self object
+		if (Controller::AGENT_TYPE == 'p' || Controller::AGENT_TYPE == 'g') {
+			Configs::loadTeam("");
+		}
 		for (int i = 0; i < Self::PLAYER_TYPES; i++) {
 			message = _connect->receiveMessage(); //player_type
 			_self->addPlayerType(message);

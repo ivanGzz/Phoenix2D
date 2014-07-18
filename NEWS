@@ -1,3 +1,18 @@
+[2.1]
+
+  *  New tests: world model test that test the world model generation using memory and tracking for
+  	 each player.
+  	 
+  *  Now, the save sensors and commands options are loaded from the team config file following the format:
+     "sensors": {
+       "see": false,
+       "fullstate": false,
+       "hear": false,
+       "body": false,
+     }
+     "commands": false
+     And they are saved in log files with format name <TEAM_NAME>_<UNIFORM_NUMBER>_<SENSOR|commands>.log
+
 [2.0]
 
   *  Geometrical primitives were added and included into the base code.  This primitives are included in

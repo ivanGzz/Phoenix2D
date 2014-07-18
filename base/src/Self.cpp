@@ -615,7 +615,7 @@ bool flagsTriangulation(Flag* flag0, Flag* flag1, double &x_t, double &y_t, doub
 	double x_m = (cos(Math::PI * gamma0 / 180.0) + cos(Math::PI * gamma1 / 180.0)) / 2.0;
 	double y_m = (sin(Math::PI * gamma0 / 180.0) + sin(Math::PI * gamma1 / 180.0)) / 2.0;
 	theta_t = 180.0 * atan2(y_m, x_m) / Math::PI;
-	error_d = flag0->getError() + flag1->getError();
+	error_d = flag0->getDistanceError() + flag1->getDistanceError();
 	return true;
 }
 
@@ -642,8 +642,8 @@ void update(Filters::Particle<4> &particle) {
 	particle.weight = 1.0;
 	for (std::vector<Flag>::iterator it = current_flags.begin(); it != current_flags.end(); ++it) {
 		double x = sqrt(pow(particle.dimension[0] - it->getX(), 2.0) + pow(particle.dimension[1] - it->getY(), 2.0));
-		double a = it->getDistance() - 2.0 * it->getError();
-		double b = it->getDistance() + it->getError();
+		double a = it->getDistance() - 2.0 * it->getDistanceError();
+		double b = it->getDistance() + it->getDistanceError();
 		Math::Uniform u(a, b);
 		particle.weight *= u.evaluate(x); //Math::uniform(u, x);
 	}

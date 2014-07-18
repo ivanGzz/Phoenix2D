@@ -6,10 +6,23 @@ then
 	./agent trainer trainer/localization.phx 
 elif [ "$1" == "dribble" ]
 then
-	./agent test dribble &
+	./agent test dribble & sleep 1
 	./agent trainer trainer/dribble.phx
+elif [ "$1" == "world" ]
+then
+	./agent test world Phoenix & sleep 1
+	./agent test world Nemesis & sleep 1
+	./agent test world Nemesis & sleep 1
+	./agent test world Nemesis & sleep 1
+	./agent test world Nemesis & sleep 1
+	./agent test world Nemesis & sleep 1
+	./agent trainer trainer/world.phx
 else
-	echo "Tests available:"
-	echo "localization"
-	echo "dribble"
+	echo "Phoenix2D - 2014"
+	echo "Available tests:"
+	echo "- localization: test the self localization method"
+	echo "- dribble:      test the dribble algorithm"
+	echo "- world:        test the world model generation"
+	echo ""
+	echo "usage: ./test.sh <TEST_NAME>"
 fi

@@ -43,6 +43,7 @@ namespace Phoenix {
  * isInSightRange method.
  */
 class Player {
+friend class World;
 public:
 	/*!
 	 * @brief Player default constructor
@@ -53,13 +54,19 @@ public:
 	 */
 	~Player();
 	/*!
-	 * @brief Init method for agent type player and goalie
+	 * @brief Set the necessary data for the player to be created
 	 * @param name Name string received from the server in the see sensor
 	 * @param data Position string received from the server in the see sensor
+	 * This method just parse the information as is received from the server, and then the
+	 * player is initialized in the iniForPlayer method
+	 */
+	void setDataForPlayer(std::string name, std::string data);
+	/*!
+	 * @brief Init method for agent type player and goalie
 	 * @param player_position current agent position used to compute the absolute position for the ball
 	 * @param player_velocity current agent velocity used to compute the absolute velocity for the ball
 	 */
-	void initForPlayer(std::string name, std::string data, const Position* player_position, const Geometry::Vector2D* player_velocity);
+	void initForPlayer(const Position* player_position, const Geometry::Vector2D* player_velocity);
 	/*!
 	 * @brief Init method for agent type coach
 	 * @param name Name string received from the server in the see_global sensor
@@ -80,38 +87,47 @@ public:
 	void initForFullstate(std::string team, int unum, double x, double y, double vx, double vy, double b, double n);
 	/*!
 	 * @brief Returns the current player absolute position in a Position pointer
+	 * @return Pointer to player position
 	 */
 	Position* getPosition();
 	/*!
 	 * @brief Returns the team name of the player if available, returns "undefined" otherwise
+	 * @return Player team name
 	 */
 	std::string getTeam();
 	/*!
 	 * @brief Returns the uniform number of the player if available, return 0 otherwise
+	 * @return Player uniform number
 	 */
 	int getUniformNumber();
 	/*!
 	 * @brief Return the current ball absolute velocity in a Vector2D pointer
+	 * @return Pointer to player velocity
 	 */
 	Geometry::Vector2D* getVelocity();
 	/*!
 	 * @brief Returns true if the seen player is a goalie
+	 * @return True if the player is goalie and false otherwise
 	 */
 	bool isGoalie();
 	/*!
-	 * @brief Returns true is the player is pointing
+	 * @brief Returns true if the player is pointing in the current cycle
+	 * @return True if the player is pointing and false otherwise
 	 */
 	bool isPointing();
 	/*!
 	 * @brief Returns the relative direction of the arm when the player is pointing
+	 * @return Relative direction the player is pointing to
 	 */
 	double getPointingDirection();
 	/*!
 	 * @brief Returns true if the player is kicking in the current cycle
+	 * @return True if the player is kicking and false otherwise
 	 */
 	bool isKicking();
 	/*!
 	 * @brief Returns true if the player is tackling in the current cycle
+	 * @return True if the playee is tackling and false otherwise
 	 */
 	bool isTackling();
 	/*!
@@ -121,6 +137,7 @@ public:
 	void setPlayerId(int player_id);
 	/*!
 	 * @brief Returns the players id
+	 * @return Player id
 	 */
 	int getPlayerId();
 	/*!
@@ -129,12 +146,14 @@ public:
 	void toggleSightRange();
 	/*!
 	 * @brief Returns true if the player is in the vision sensor
+	 * @return True if the player is in the vision range and false otherwise
 	 */
 	bool isInSightRange();
 	/*!
-	 * @brief I do not know why I created this method
+	 * @brief Returns the player distance error
+	 * @return Player distance error
 	 */
-	bool isLocalized();
+	double getDistanceError();
 private:
 	double distance;				///< Player relative distance in the see sensor
 	double direction;				///< Player relative direction in the see sensor
@@ -159,9 +178,11 @@ private:
 	bool goalie;					///< True if the player is a goalie
 	int player_id;					///< Player id
 	bool is_in_sight_range;			///< True if the player is in the current visual sensor
-	bool is_localized;				///< Do not waht what it does
 	Position position;				///< Current player absolute position
 	Geometry::Vector2D velocity;	///< Current player absolute velocity
+	double error;					///< Player distance error
+	bool vel;						///< Flag for velocity information received
+	int ttl;						///< Time to live in memory for this player
 };
 
 } // End namespace Phoenix

@@ -50,6 +50,7 @@ WorldModel::WorldModel(std::vector<Player> players, Ball ball, std::vector<Playe
 			ours[i] = Player();
 			opps[i] = Player();
 		}
+		this->fs_players = fs_players;
 		for (std::vector<Player>::iterator it = fs_players.begin(); it != fs_players.end(); ++it) {
 			if (it->getTeam().compare("our") == 0) {
 				ours[it->getUniformNumber()] = *it;
@@ -151,6 +152,14 @@ std::vector<Player*> WorldModel::getUndPlayersOrderedByDistanceTo(Position posit
 	und_players.sort(compareDistances);
 	std::vector<Player*> ps(und_players.begin(), und_players.end());
 	return ps;
+}
+
+std::vector<Player*> WorldModel::getAllExactPlayers() {
+	std::vector<Player*> e_players;
+	for (std::vector<Player>::iterator it = fs_players.begin(); it != fs_players.end(); ++it) {
+		e_players.push_back(&(*it));
+	}
+	return e_players;
 }
 
 Player* WorldModel::getOurExactPlayer(int unum) {
