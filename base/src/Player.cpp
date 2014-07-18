@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013 Ivan Gonzalez
+ * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -16,6 +16,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @file Player.cpp
+ *
+ * @author Nelson Ivan Gonzalez
  */
 
 #include <sstream>
@@ -25,6 +29,7 @@
 #include "Self.hpp"
 #include "Controller.hpp"
 #include "constants.hpp"
+#include "Server.hpp"
 
 namespace Phoenix {
 
@@ -52,7 +57,9 @@ Player::Player() {
 	goalie = false;
 	player_id = -1;
 	is_in_sight_range = false;
-	is_localized = false;
+	error = 0.0;
+	vel = false;
+	ttl = 0;
 }
 
 Player::~Player() {
@@ -115,10 +122,9 @@ void Player::initForCoach(std::string name, std::string position) {
 	this->position = Position(x, y, body, head);
 	player_id = -1;
 	is_in_sight_range = true;
-	is_localized = true;
 }
 
-void Player::initForPlayer(std::string name, std::string position, const Position* player_position, const Geometry::Vector2D* player_velocity) {
+void Player::setDataForPlayer(std::string name, std::string position) {
 	std::vector<std::string> tokens;
 	std::stringstream ss_name(name);
 	std::string token;
@@ -170,7 +176,6 @@ void Player::initForPlayer(std::string name, std::string position, const Positio
 			tokens.push_back(token);
 		}
 	}
-	bool vel = false;
 	switch (tokens.size()) {
 	case 1:
 		direction = atof(tokens[0].c_str());
@@ -228,6 +233,9 @@ void Player::initForPlayer(std::string name, std::string position, const Positio
 	default:
 		break;
 	}
+}
+
+void Player::initForPlayer(const Position* player_position, const Geometry::Vector2D* player_velocity) {
 	double source_direction = player_position->body + player_position->neck + direction;
 	if (source_direction > 180.0) {
 		source_direction -= 360.0;
@@ -238,6 +246,9 @@ void Player::initForPlayer(std::string name, std::string position, const Positio
 	double ery = sin(Math::PI * source_direction / 180.0);
 	x = player_position->x + erx * distance;
 	y = player_position->y + ery * distance;
+	if (distance > 0.1) {
+		error = (distance - exp(log(distance - 0.1) - Server::QUANTIZE_STEP)) / 2.0;
+	}
 	if (has_body && has_head) {
 		body = bodyDirection + player_position->body + player_position->neck;
 		if (body > 180.0) {
@@ -262,7 +273,6 @@ void Player::initForPlayer(std::string name, std::string position, const Positio
 	}	
 	player_id = -1;
 	is_in_sight_range = true;
-	is_localized = true;
 }
 
 void Player::initForFullstate(std::string team, int unum, double x, double y, double vx, double vy, double b, double n) {
@@ -280,7 +290,6 @@ void Player::initForFullstate(std::string team, int unum, double x, double y, do
 	head = n;
 	position = Position(this->x, this->y, body, head);
 	velocity = Geometry::Vector2D(vx, vy); //Vector2D::getVector2DWithXAndY(vx, vy);
-	is_localized = true;
 }
 
 Position* Player::getPosition() {
@@ -335,8 +344,8 @@ bool Player::isInSightRange() {
 	return is_in_sight_range;
 }
 
-bool Player::isLocalized() {
-	return is_localized;
+double Player::getDistanceError() {
+	return error;
 }
 
 }

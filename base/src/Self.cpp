@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013 Ivan Gonzalez
+ * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -16,6 +16,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @file Self.cpp
+ *
+ * @author Nelson Ivan Gonzalez
  */
 
 #include <cstdlib>
@@ -611,7 +615,7 @@ bool flagsTriangulation(Flag* flag0, Flag* flag1, double &x_t, double &y_t, doub
 	double x_m = (cos(Math::PI * gamma0 / 180.0) + cos(Math::PI * gamma1 / 180.0)) / 2.0;
 	double y_m = (sin(Math::PI * gamma0 / 180.0) + sin(Math::PI * gamma1 / 180.0)) / 2.0;
 	theta_t = 180.0 * atan2(y_m, x_m) / Math::PI;
-	error_d = flag0->getError() + flag1->getError();
+	error_d = flag0->getDistanceError() + flag1->getDistanceError();
 	return true;
 }
 
@@ -638,8 +642,8 @@ void update(Filters::Particle<4> &particle) {
 	particle.weight = 1.0;
 	for (std::vector<Flag>::iterator it = current_flags.begin(); it != current_flags.end(); ++it) {
 		double x = sqrt(pow(particle.dimension[0] - it->getX(), 2.0) + pow(particle.dimension[1] - it->getY(), 2.0));
-		double a = it->getDistance() - 2.0 * it->getError();
-		double b = it->getDistance() + it->getError();
+		double a = it->getDistance() - 2.0 * it->getDistanceError();
+		double b = it->getDistance() + it->getDistanceError();
 		Math::Uniform u(a, b);
 		particle.weight *= u.evaluate(x); //Math::uniform(u, x);
 	}
@@ -653,7 +657,7 @@ void triangulation(std::vector<Flag> flags) {
 		for (std::vector<Flag>::iterator it_j = it_i + 1; it_j != flags.end(); ++it_j) {
 			double x, y ,d, e;
 			if (flagsTriangulation(&(*it_i), &(*it_j), x, y, d, e)) {
-				ds.push_back(d);
+				ds.push_back(Geometry::toRadians(d));
 				xt += x;
 				yt += y;
 				counter++;
@@ -663,7 +667,7 @@ void triangulation(std::vector<Flag> flags) {
 	if (counter > 0) {
 		x = xt / (double)counter;
 		y = yt / (double)counter;
-		body = Math::arcsMean(ds); //theta = angleMean(ds);
+		body = Geometry::toDegrees(Math::arcsMean(ds)) - Self::HEAD_ANGLE; //theta = angleMean(ds);
 	} else {
 		body += turn;
 		if (body > 180.0) {
@@ -722,7 +726,7 @@ void lowpassfilter(std::vector<Flag> flags) {
 	}
 	x = x_e;
 	y = y_e;
-	body = Geometry::toDegrees(Math::arcsMean(thetas)); //theta = angleMean(thetas);
+	body = Geometry::toDegrees(Math::arcsMean(thetas)) - Self::HEAD_ANGLE; //theta = angleMean(thetas);
 }
 
 void particlefilter(std::vector<Flag> flags) {
@@ -752,7 +756,7 @@ void Self::localize(std::vector<Flag> flags) {
 	} else {
 		lowpassfilter(flags);
 	}
-	position = Position(x, y, body, HEAD_ANGLE);
+	position = Position(x, y, body, Self::HEAD_ANGLE);
 }
 
 const Position* Self::getPosition() {

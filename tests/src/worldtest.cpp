@@ -18,18 +18,20 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "localization.hpp"
+#include "worldtest.hpp"
+#include "Self.hpp"
+#include "Server.hpp"
+#include "Position.hpp"
+#include "Game.hpp"
+#include "Configs.hpp"
 #include <ctime>
 #include <iostream>
 #include <boost/random.hpp>
 #include <cmath>
-#include "Position.hpp"
-#include "Self.hpp"
-#include "Server.hpp"
-#include "Game.hpp"
-#include "Configs.hpp"
 
-namespace localization {
+using namespace Phoenix;
+
+namespace worldtest {
 
 bool setup = false;
 bool fullstate = false;
@@ -37,29 +39,16 @@ boost::mt19937 rng(time(0));
 boost::uniform_int<> xdist(0, 104);
 boost::uniform_int<> ydist(0, 68);
 Position positionToGo;
-std::vector<double> error_means;
-std::vector<double> dir_means;
-double error_accum = 0.0;
-double dir_accum = 0.0;
-int iteration = -1;
-int cycles = 0;
+int fails = 0;
 
 void onStart() {
-	std::cout << "Starting localization test" << std::endl;
+	if (Self::SIDE[0] == 'l') std::cout << "Starting world test" << std::endl;
 	if (Self::SIDE[0] == 'l') {
 		if (Server::FULLSTATE_L != 0) {
 			fullstate = true;
 		}
 		else {
-			std::cerr << "localization test needs the fullstate sensor active for the left team" << std::endl;
-		}
-	}
-	else {
-		if (Server::FULLSTATE_R != 0) {
-			fullstate = true;
-		}
-		else {
-			std::cerr << "localization test needs the fullstate sensor active for the right team" << std::endl;
+			std::cerr << "world test needs the fullstate sensor active for the left team" << std::endl;
 		}
 	}
 }
@@ -68,52 +57,29 @@ void randomPosition() {
 	double x = (double)xdist(rng) - 52.0;
 	double y = (double)ydist(rng) - 34.0;
 	positionToGo = Position(x, y);
-	std::cout << "New random position: (" << x << ", " << y << ")" << std::endl;
 }
 
 void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages, Commands* commands) {
 	if (!setup) {
-		if (iteration > -1) {
-			double mean = error_accum / cycles;
-			std::cout << "Iteration: " << iteration << ", error mean: " << mean << ", direction error mean: ";
-			std::clog << mean << ", ";
-			error_means.push_back(mean);
-			mean = dir_accum / cycles;
-			std::cout << mean << std::endl;
-			std::clog << mean << std::endl;
-			dir_means.push_back(mean);
-		}
 		double x = -1.0 * fabs((double)xdist(rng) - 52.0); //we need a negative coordinate in x
 		double y = (double)ydist(rng) - 34.0;
-		std::cout << "Moving to: (" << x << ", " << y << ")" << std::endl;
-		commands->changeView("narrow");
 		commands->move(x, y);
 		setup = true;
 		randomPosition();
-		error_accum = 0.0;
-		dir_accum = 0.0;
-		cycles = 0;
-		iteration++;
+		if (Self::SIDE[0] == 'l') {
+			commands->changeView("narrow");
+		}
+	} else {
+		const Position* p = Self::getPosition();
+		Position zero(0.0, 0.0);
+		if (fabs(p->getDirectionTo(&zero)) > 5.0) {
+			commands->turn(p->getDirectionTo(&zero));
+		}
 	}
 }
 
 void executePlayOn(WorldModel worldModel, std::vector<Message> messages, Commands* commands) {
 	const Position* p = Self::getPosition();
-	if (fullstate) {
-		Player* pl = worldModel.getOurExactPlayer(Self::UNIFORM_NUMBER);
-		Position* e_p = pl->getPosition();
-//		std::clog << Game::GAME_TIME << ": (" << p->x << ", " << p->y << ", " << p->body << ")"
-//				                     << ", (" << e_p->x << ", " << e_p->y << ", " << e_p->body << ")"
-//				                     << std::endl;
-		error_accum += sqrt(pow(p->x - e_p->x, 2.0) + pow(p->y - e_p->y, 2.0));
-		double min_arc = p->body - e_p->body;
-		if (min_arc > 180.0) {
-			min_arc -= 360.0;
-		} else if (min_arc < -180.0) {
-			min_arc += 360.0;
-		}
-		dir_accum += fabs(min_arc);
-	}
 	double d = p->getDistanceTo(&positionToGo);
 	if (d > 1.0) {
 		double dir = p->getDirectionTo(&positionToGo);
@@ -125,14 +91,33 @@ void executePlayOn(WorldModel worldModel, std::vector<Message> messages, Command
 	} else {
 		randomPosition();
 	}
-	cycles++;
-	if (setup) {
-		setup = false;
+	if (Self::SIDE[0] == 'l') {
+		int total = -1;
+		int size = worldModel.getPlayers().size();
+		if (fullstate) {
+			total = worldModel.getAllExactPlayers().size();
+		}
+		if (total > -1 && size > total - 1) {
+			std::cout << Game::GAME_TIME << " bad: " << size << " out " << (total - 1) << std::endl;
+			fails++;
+		}
+		if (Configs::LOGGING) {
+			std::vector<Player*> players = worldModel.getPlayers();
+			std::clog << Game::GAME_TIME << ": (" << p->getX() << ", " << p->getY() << ", " << p->getDirection() << ") "<< (total - 1) << " ";
+			for (std::vector<Player*>::iterator it = players.begin(); it != players.end(); ++it) {
+				Position* pp = (*it)->getPosition();
+				std::clog << "(" << pp->getX() << ", " << pp->getY() << ", " << ((*it)->isInSightRange() ? "v" : "u") << ") ";
+			}
+			std::clog << std::endl;
+		}
 	}
 }
 
 void onFinish() {
-	std::cout << "Finishing localization test" << std::endl;
+	if (Self::SIDE[0] == 'l') {
+		std::cout << "Fails: " << fails << std::endl;
+		std::cout << "Finishing localization test" << std::endl;
+	}
 }
 
 }

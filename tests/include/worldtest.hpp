@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
+ * Copyright (c) 2013 Ivan Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -16,48 +16,25 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
- *
- * @file Message.cpp
- *
- * @author Nelson Ivan Gonzalez
  */
 
-#include "Message.hpp"
+#ifndef WORLDTEST_HPP_
+#define WORLDTEST_HPP_
 
-namespace Phoenix {
+#include <vector>
+#include "WorldModel.hpp"
+#include "Messages.hpp"
+#include "Commands.hpp"
 
-Message::Message(double d, std::string team, std::string message) {
-	direction = d;
-	this->team = team;
-	unum = 0;
-	this->message = message;
-}
+using namespace Phoenix;
 
-Message::Message(double d, std::string team, int unum, std::string message) {
-	direction = d;
-	this->team = team;
-	this->unum = unum;
-	this->message = message;
-}
+namespace worldtest {
 
-Message::~Message() {
+void onStart();
+void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages, Commands* commands);
+void executePlayOn(WorldModel worldModel, std::vector<Message> messages, Commands* commands);
+void onFinish();
 
 }
 
-std::string Message::getMessage() {
-	return message;
-}
-
-std::string Message::getTeam() {
-	return team;
-}
-
-int Message::getUniformNumber() {
-	return unum;
-}
-
-double Message::getDirection() {
-	return direction;
-}
-
-}
+#endif /* WORLDTEST_HPP_ */

@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013 Ivan Gonzalez
+ * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -16,6 +16,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @file Controller.cpp
+ *
+ * @author Nelson Ivan Gonzalez
  */
 
 #include "Controller.hpp"
@@ -137,6 +141,11 @@ void Controller::connect() {
 		_server = new Server(message);
 		message = _connect->receiveMessage(); //player_params
 		_self = new Self(message, team_name, unum, side);
+		// We need to load the team configs before all the objects are created, and after the Self object is
+		// created since it needs the Self object
+		if (Controller::AGENT_TYPE == 'p' || Controller::AGENT_TYPE == 'g') {
+			Configs::loadTeam("");
+		}
 		for (int i = 0; i < Self::PLAYER_TYPES; i++) {
 			message = _connect->receiveMessage(); //player_type
 			_self->addPlayerType(message);

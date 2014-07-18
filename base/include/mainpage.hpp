@@ -1,10 +1,10 @@
 /**
  * @mainpage Phoenix2D-Library
  *
- * @author Iván González Magaña
- * @author claudiordgz
+ * @author Nelson Ivan Gonzalez
+ * @author Claudio Rodriguez
  *
- * @version 0.0010
+ * @version 2.0
  *
  * @section intro Introduction
  * Phoenix2D team base code for RoboCup 2D Simulation League.

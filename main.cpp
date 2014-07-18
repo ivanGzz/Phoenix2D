@@ -58,6 +58,11 @@ void loadTest(std::string test, Phoenix::Controller &controller) {
 		controller.registerPlayerFunction("before_kick_off", dribble::executeBeforeKickOff);
 		controller.registerPlayerFunction("play_on", dribble::executePlayOn);
 		controller.registerFinishFunction(dribble::onFinish);
+	} else if (test.compare("world") == 0) {
+		controller.registerSetupFunction(worldtest::onStart);
+		controller.registerPlayerFunction("before_kick_off", worldtest::executeBeforeKickOff);
+		controller.registerPlayerFunction("play_on", worldtest::executePlayOn);
+		controller.registerFinishFunction(worldtest::onFinish);
 	}
 }
 
@@ -185,7 +190,6 @@ void runTest(std::string test, char type, char* teamname, char* hostname) {
 	Phoenix::Controller controller(teamname, type, hostname);
 	loadTest(test, controller);
 	controller.connect();
-	Configs::loadTeam("");
 	controller.run();
 	controller.disconnect();
 }
@@ -195,13 +199,12 @@ void runAI(char type, char* teamname, char* hostname) {
 	Phoenix::Controller controller(teamname, type, hostname);
 	loadAI(controller);
 	controller.connect();
-	Configs::loadTeam("");
 	controller.run();
 	controller.disconnect();
 }
 
 void runTrainer(char* script, char* hostname) {
-	Configs::loadConfigs("");
+//	Configs::loadConfigs("");
 	Phoenix::Controller controller("trainer", 't', hostname);
 	controller.registerTrainerScript(std::string(script));
 	controller.connect();

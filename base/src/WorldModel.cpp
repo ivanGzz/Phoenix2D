@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013 Ivan Gonzalez
+ * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -16,6 +16,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @file WorldModel.cpp
+ *
+ * @author Nelson Ivan Gonzalez
  */
 
 #include "WorldModel.hpp"
@@ -46,6 +50,7 @@ WorldModel::WorldModel(std::vector<Player> players, Ball ball, std::vector<Playe
 			ours[i] = Player();
 			opps[i] = Player();
 		}
+		this->fs_players = fs_players;
 		for (std::vector<Player>::iterator it = fs_players.begin(); it != fs_players.end(); ++it) {
 			if (it->getTeam().compare("our") == 0) {
 				ours[it->getUniformNumber()] = *it;
@@ -147,6 +152,14 @@ std::vector<Player*> WorldModel::getUndPlayersOrderedByDistanceTo(Position posit
 	und_players.sort(compareDistances);
 	std::vector<Player*> ps(und_players.begin(), und_players.end());
 	return ps;
+}
+
+std::vector<Player*> WorldModel::getAllExactPlayers() {
+	std::vector<Player*> e_players;
+	for (std::vector<Player>::iterator it = fs_players.begin(); it != fs_players.end(); ++it) {
+		e_players.push_back(&(*it));
+	}
+	return e_players;
 }
 
 Player* WorldModel::getOurExactPlayer(int unum) {

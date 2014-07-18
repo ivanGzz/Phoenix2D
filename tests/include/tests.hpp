@@ -21,7 +21,8 @@
 #ifndef TESTS_HPP_
 #define TESTS_HPP_
 
-#include "localization.hpp"
 #include "dribble.hpp"
+#include "localization.hpp"
+#include "worldtest.hpp"
 
 #endif /* TESTS_HPP_ */

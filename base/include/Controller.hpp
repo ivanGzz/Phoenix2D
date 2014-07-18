@@ -1,7 +1,6 @@
-// $Id$
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013 Ivan Gonzalez
+ * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -18,13 +17,10 @@
  * You should have received a copy of the GNU General Public License
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @file Controller.h
+ * @file Controller.hpp
  * 
- *
- *
- * @author Iván González
+ * @author Nelson Ivan Gonzalez
  */
- // $Log$
 
 #ifndef CONTROLLER_HPP_
 #define CONTROLLER_HPP_
@@ -34,35 +30,23 @@
 #include "WorldModel.hpp"
 #include "Message.hpp"
 
-/*!
- * @defgroup phoenix_main Phoenix Library Namespace
- * @brief <STRONG> Phoenix2D Master <BR> </STRONG>
- * The namespace that contains everything related to the Phoenix Library
+/*! @addtogroup phoenix_base
  * @{
  */
 namespace Phoenix {
 
 class Commands;
 
-typedef void (* execute)(WorldModel, std::vector<Message>, Commands*);
-typedef void (* control)(void);
-
 /*!
- * @defgroup core Phoenix Core Objects
- * @brief <STRONG> Phoenix2D Core Objects <BR> </STRONG>
- * The following namespace contains the following objects<BR>
- * 	<ul>
- *    <li>Controller</li>
- *	  <li>Connect</li>
- *	  <li>Reader</li>
- *	  <li>Server</li>
- *	  <li>Parser</li>
- *	  <li>Commands</li>
- *	  <li>World</li>
- *	  <li>Self</li>
- *	</ul> 
- * @{
+ * @typedef
+ * @brief Function signatures for play modes function
  */
+typedef void (* execute)(WorldModel, std::vector<Message>, Commands*);
+/*!
+ * @typedef
+ * @brief Function signature for setup and finish function
+ */
+typedef void (* control)(void);
 
 /*!
  * @brief <STRONG> Controller <BR> </STRONG>
@@ -74,48 +58,70 @@ typedef void (* control)(void);
 class Controller {
 public:
 	static char AGENT_TYPE; ///< p = Player, g = Goalie, c = Coach, t = Trainer
-  /*! @brief Default Constructor
-   * @param teamName User Defined Team Name
-   * @param agentType see AGENT_TYPE
-   * @param hostname ip address or host
-   */
+	/*!
+	 * @brief Controller default Constructor
+     * @param teamName User Defined Team Name
+     * @param agentType see AGENT_TYPE
+     * @param hostname ip address or host
+     */
 	Controller(const char *teamName, char agentType, const char *hostname);
-  /*! @brief Default Destructor
-   */
+	/*!
+	 * @brief Controller default Destructor
+     */
 	~Controller();
-  /*! @brief The main connection, should be called before anything
-      else in Phoenix2D
-   */
+	/*!
+	 * @brief The main connection, should be called before anything else in Phoenix2D
+     */
 	void connect();
-  /*! @return Connection Status Getter
-   */
+	/*!
+	 * @return Connection status
+     */
 	bool isConnected();
+	/*!
+	 * @brief Register the function to be executed before the simulation start
+	 * This method should be used to setup the necessary data structures to be used by the
+	 * intelligent agent.
+	 */
 	void registerSetupFunction(control function);
+	/*!
+	 * @brief Register the function to be executed at the end of the simulation
+	 * This method should be used to release resources used during the simulation, such as
+	 * dynamic memory, files, services, etc.
+	 */
 	void registerFinishFunction(control function);
-  /*! @brief Player function register
-   */
+	/*!
+	 * @brief Player play mode function register
+     */
 	void registerPlayerFunction(std::string play_mode, execute function);
-  /*! @brief Goalie function register
-   */
+	/*!
+	 * @brief Goalie play mode function register
+     */
 	void registerGoalieFunction(std::string play_mode, execute function);
-  /*! @brief Coach function register
-   */
+	/*!
+	 * @brief Coach play mode function register
+     */
 	void registerCoachFunction(std::string play_mode, execute function);
-  /*! @brief Run
-   */
+	/*!
+	 * @brief Trainer script register
+	 * @param trainer
+     */
 	void registerTrainerScript(std::string trainer);
+	/*!
+	 * @brief Runs the main thread of execution
+	 */
 	void run();
-  /*! @brief Reconnection Logic @todo Define Method
-   */
+	/*!
+	 * @brief Reconnect a previously disconnected agent
+     */
 	void reconnect();
-  /*! @brief Disconnect service
-   */
+	/*! @brief Disconnect from the server
+     */
 	void disconnect();
 private:
 	bool connected;         ///< Connection status
-	std::string hostname;
+	std::string hostname;	///< Host to connect
 };
-/*! @} */
+
 } // End namespace Phoenix
 /*! @} */
 

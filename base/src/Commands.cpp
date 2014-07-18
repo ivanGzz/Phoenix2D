@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013 Ivan Gonzalez
+ * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -16,6 +16,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @file Commands.cpp
+ *
+ * @author Nelson Ivan Gonzalez
  */
 
 #include <iostream>
@@ -29,19 +33,31 @@
 #include "Server.hpp"
 #include "Configs.hpp"
 #include "Game.hpp"
+#include <fstream>
 
 namespace Phoenix {
 
 Connect* commands_connect_ptr = 0;
 std::list<Command> commands_history;
 std::list<Command*> commands_to_send;
+std::ofstream comm_stream;
 
 Commands::Commands(Connect *connect) {
 	commands_connect_ptr = connect;
+	if (Configs::SAVE_COMMANDS) {
+		std::stringstream ss;
+		ss << Self::TEAM_NAME << "_" << Self::UNIFORM_NUMBER << "_" << std::endl;
+		std::string prefix;
+		std::getline(ss, prefix);
+		comm_stream.open(prefix + "commands.log");
+	}
 }
 
 Commands::~Commands() {
 	if (Configs::VERBOSE) std::cout << "Commands out" << std::endl;
+	if (Configs::SAVE_COMMANDS) {
+		comm_stream.close();
+	}
 }
 
 void Commands::flush() {
@@ -195,6 +211,7 @@ void Commands::recover() {
 int Commands::sendCommands() {
 	int commands_sent_counter = 0;
 	std::list<Command*> commands_sent;
+	if (Configs::SAVE_COMMANDS) comm_stream << Game::GAME_TIME << ": ";
 	if (commands_to_send.size() > 0) {
 		std::string message = "";
 		int weight = 0;
@@ -209,10 +226,12 @@ int Commands::sendCommands() {
 				commands_sent_counter++;
 			}
 		} while (weight < 2 && commands_to_send.size() > 0);
+		if (Configs::SAVE_COMMANDS) comm_stream << message;
 		commands_connect_ptr->sendMessage(message);
 	}
 	commands_to_send.clear(); //we clear the commands to send queue
 	Self::setLastCommandsSet(commands_sent);
+	if (Configs::SAVE_COMMANDS) comm_stream << std::endl;
 	return commands_sent_counter;
 }
 
