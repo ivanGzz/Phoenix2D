@@ -51,11 +51,13 @@ public:
 	void resample();
 	double getMean(int n);
 	double getVariance(int n);
+	double getFit();
 private:
 	Particle<N> particles[Filters::PARTICLES];
 	double means[N];
 	double variances[N];
 	double total_w;
+	double fit;
 	void computeParameters();
 };
 
@@ -66,6 +68,7 @@ PFilter<N>::PFilter() {
 		variances[i] = 0.0;
 	}
 	total_w = 1.0;
+	fit = 1.0;
 }
 
 template <unsigned int N>
@@ -108,6 +111,7 @@ void PFilter<N>::resample() {
 		particles[i] = new_particles[i];
 		total_w += particles[i].weight;
 	}
+	fit = total_w;
 	// Re-normalize
 	double total_w_bu = 0.0;
 	for (int i = 0; i < PARTICLES; ++i) {
@@ -131,6 +135,7 @@ void PFilter<N>::update(void(* update)(Particle<N> &p)) {
 		update(particles[i]);
 		total_w += particles[i].weight;
 	}
+	fit = total_w;
 	// Re-normalize
 	double total_w_bu = 0.0;
 	for (int i = 0; i < PARTICLES; ++i) {
@@ -148,6 +153,11 @@ double PFilter<N>::getMean(int n) {
 template <unsigned int N>
 double PFilter<N>::getVariance(int n) {
 	return variances[n];
+}
+
+template <unsigned int N>
+double PFilter<N>::getFit() {
+	return fit;
 }
 
 template <unsigned int N>

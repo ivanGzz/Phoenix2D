@@ -81,7 +81,7 @@ public:
 	 * @brief Returns point primitive created with the absolute positions
 	 * @return Absolute point structure for this position
 	 */
-	Geometry::Point getPoint();
+	Geometry::Point getPoint() const;
 	/*!
 	 * @brief Multiply by -1 the absolute position in x and y
 	 */

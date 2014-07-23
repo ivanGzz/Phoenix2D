@@ -60,6 +60,8 @@ Player::Player() {
 	error = 0.0;
 	vel = false;
 	ttl = 0;
+	tracked = false;
+	match = -1.0;
 }
 
 Player::~Player() {
@@ -267,6 +269,11 @@ void Player::initForPlayer(const Position* player_position, const Geometry::Vect
 		double vrx = (distChange - ery * vry) / erx;
 		vx = player_velocity->dx + vrx;
 		vy = player_velocity->dy + vry;
+		double m = sqrt(vx * vx + vy * vy);
+		if (m > Self::PLAYER_SPEED_MAX) {
+			vx = vx * Self::PLAYER_SPEED_MAX / m;
+			vy = vy * Self::PLAYER_SPEED_MAX / m;
+		}
 		velocity = Geometry::Vector2D(vx, vy); //Vector2D::getVector2DWithXAndY(vx, vy);
 	} else {	
 		velocity = Geometry::Vector2D(0.0, 0.0); //Vector2D::getEmptyVector();
@@ -328,10 +335,6 @@ bool Player::isTackling() {
 	return tackling;
 }
 
-void Player::setPlayerId(int player_id) {
-	this->player_id = player_id;
-}
-
 int Player::getPlayerId() {
 	return player_id;
 }
@@ -346,6 +349,10 @@ bool Player::isInSightRange() {
 
 double Player::getDistanceError() {
 	return error;
+}
+
+double Player::getMatchValue() {
+	return match;
 }
 
 }

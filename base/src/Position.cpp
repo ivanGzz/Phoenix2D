@@ -70,7 +70,7 @@ void Position::mirror() {
 	if (y != 0.0) y *= -1.0;
 }
 
-Geometry::Point Position::getPoint() {
+Geometry::Point Position::getPoint() const {
 	return Geometry::Point(x, y);
 }
 

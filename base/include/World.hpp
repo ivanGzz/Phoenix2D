@@ -63,6 +63,18 @@ public:
 	 * @return Current world model
 	 */
 	WorldModel getWorldModel();
+private:
+	/*!
+	 * @brief Performs the tracking for the players
+	 * @param past_players List of players in the immediately previous cycle
+	 * @param new_players List of players received in the current cycle
+	 */
+	void matchPlayers(std::vector<Player> &past_players, std::vector<Player> &new_players);
+	/*!
+	 * @brief Performs the tracking for tha players using particle filters
+	 * @param new_players List of players received in the current cycle
+	 */
+	void matchPlayersPF(std::vector<Player> &new_players);
 };
 
 } // End namespace Phoenix

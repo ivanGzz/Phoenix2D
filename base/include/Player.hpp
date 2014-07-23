@@ -131,11 +131,6 @@ public:
 	 */
 	bool isTackling();
 	/*!
-	 * @brief Set the player id (used by the tracking algorithm)
-	 * @param player_id Player id assigned to the player
-	 */
-	void setPlayerId(int player_id);
-	/*!
 	 * @brief Returns the players id
 	 * @return Player id
 	 */
@@ -154,6 +149,7 @@ public:
 	 * @return Player distance error
 	 */
 	double getDistanceError();
+	double getMatchValue();
 private:
 	double distance;				///< Player relative distance in the see sensor
 	double direction;				///< Player relative direction in the see sensor
@@ -183,6 +179,8 @@ private:
 	double error;					///< Player distance error
 	bool vel;						///< Flag for velocity information received
 	int ttl;						///< Time to live in memory for this player
+	bool tracked;					///< True if this object has been matched with a new Player object
+	double match;					///< Match value
 };
 
 } // End namespace Phoenix
