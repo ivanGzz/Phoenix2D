@@ -1,9 +1,20 @@
+2014-07-23 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (PField) Added vector header to class.
+	
+	* (World) Added matching algorithm, and particle filters
+	to track players
+
 2014-07-18 Nelson Gonzalez <nigm2005@gmail.com>
 
 	* (Configs) now the save sensors and commands options are 
 	read from the team config file.
 	* (Parser) the sensors and commands file logs have the
 	format name <TEAM_NAME>_<UNIFORM_NUMBER>_<SENSOR>.log
+	
+	* (Player) when velocity data is received in the see sensor,
+	the player velocity is truncated to PLAYER_SPEED_MAX after it
+	is computed
 
 2014-07-17 Nelson Gonzalez <nigm2005@gmail.com>
 

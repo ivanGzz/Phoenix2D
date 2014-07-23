@@ -59,7 +59,7 @@ public:
 	static bool SAVE_FULLSTATE;					///< If true the agent will log the data received in the fullstate sensor
 	static bool SAVE_SENSE_BODY;				///< If true the agent will log the data received in the sense_body sensor
 	static bool SAVE_COMMANDS;					///< If true the agent will log the commands sent to the server
-	static unsigned int CYCLE_OFFSET;			///< Number of millisencods to wait for new messages before the new cycle start
+	static unsigned int CYCLE_OFFSET;			///< Number of milliseconds to wait for new messages before the new cycle start
 	static unsigned int BUFFER_MAX_HISTORY;		///< Size of the circular buffers used for the sense body data
 	static unsigned int PLAYER_MAX_HISTORY;		///< Size of the player buffers used for the see data
 	static unsigned int BALL_MAX_HISTORY;		///< Size of the ball buffer used for the see data
@@ -67,6 +67,8 @@ public:
 	static unsigned int COMMAND_PRECISION;		///< Decimal precision for the string commands to be sent to the server
 	static std::string LOG_NAME;				///< Log name to be used if LOGGING is enabled
 	static bool PLAYER_HISTORY;					///< If true the agent will use the player buffers to access data from previous cycles
+	static bool PLAYER_TRACKING;				///< If true the agent will construct the path for each player in the field
+	static double TRACKING_THRESHOLD;			///< When the match for two players is below this value the player will not be tracked
 	static std::string LOCALIZATION;			///< Indicates which localization method will be used for the player and goalie agents
 };
 

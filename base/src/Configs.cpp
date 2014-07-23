@@ -41,11 +41,13 @@ unsigned int Configs::BALL_MAX_HISTORY = 16;
 unsigned int Configs::COMMANDS_MAX_HISTORY = 4;
 unsigned int Configs::COMMAND_PRECISION = 4;
 std::string Configs::LOG_NAME = "";
+double Configs::TRACKING_THRESHOLD = 1.5;
 //individuals
 double xs[] = {-50.0, -10.0, -1.0, -1.0, -12.0, -2.0, -2.0, -14.0, -14.0, -14.0, -14.0};
 double ys[] = {0.0, 0.0, -10.0, 10.0, 0.0, -11.0, 11.0, -5.0, 5.0, -10.0, 10.0};
 Position Configs::POSITION;
 bool Configs::PLAYER_HISTORY = false;
+bool Configs::PLAYER_TRACKING = false;
 bool Configs::LOGGING = false;
 bool Configs::TRAINER_LOGGING = false;
 bool Configs::VERBOSE = false;
@@ -106,6 +108,7 @@ void Configs::loadConfigs(std::string filename) {
 			Configs::COMMAND_PRECISION    = pt.get("configs.commands.precision", 4);
 			Configs::LOG_NAME             = pt.get("configs.logging.logname", "");
 			Configs::LOCALIZATION         = pt.get("configs.self.localization", "lowpassfilter");
+			Configs::TRACKING_THRESHOLD   = pt.get("configs.world.threshold", 0.25);
 			file.close();
 		}
 		catch (std::exception const &e) {
@@ -127,6 +130,10 @@ void Configs::loadConfigs(std::string filename) {
  *      "y": 0.0,
  *      "logging": false,
  *      "verbose": false
+ *      "world" : {
+ *      	"history": false,
+ *      	"tracking": false,
+ *      },
  *      "sensors": {
  *      	"see": false,
  *      	"body": false,
@@ -166,7 +173,8 @@ void Configs::loadTeam(std::string filename) {
 			Configs::POSITION 			= Position(x, y);
 			Configs::LOGGING  			= pt.get(path + "logging", false);
 			Configs::VERBOSE  			= pt.get(path + "verbose", false);
-			Configs::PLAYER_HISTORY 	= pt.get(path + "history", false);
+			Configs::PLAYER_HISTORY 	= pt.get(path + "world.history", false);
+			Configs::PLAYER_TRACKING	= pt.get(path + "world.tracking", false);
 			Configs::SAVE_FULLSTATE 	= pt.get(path + "sensors.fullstate", false);
 			Configs::SAVE_SEE 			= pt.get(path + "sensors.see", false);
 			Configs::SAVE_SENSE_BODY 	= pt.get(path + "sensors.body", false);

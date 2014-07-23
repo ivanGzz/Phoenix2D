@@ -22,7 +22,7 @@
 #define CONSTANTS_HPP_
 
 namespace Filters {
-	const int PARTICLES = 200;
+	const int PARTICLES = 100;
 }
 
 namespace Fuzzy {

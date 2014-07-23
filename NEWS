@@ -1,5 +1,9 @@
 [2.1]
 
+  *  The player can now have memory about what it sees in the previous cycles.  If the player sets up
+     the Configs::PLAYER_HISTORY option then, the players in the world model will remain in memory for 
+     Configs::PLAYER_MAX_HISTORY cycles once they are no more in the visual range.
+
   *  New tests: world model test that test the world model generation using memory and tracking for
   	 each player.
   	 

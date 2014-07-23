@@ -26,7 +26,7 @@
 
 /*
  * Disclaimer: all this primitives use radians instead of sexagesimal degrees
- *  unless otherwise stated
+ *  unless stated otherwise
  */
 namespace Geometry {
 

@@ -106,7 +106,8 @@ void executePlayOn(WorldModel worldModel, std::vector<Message> messages, Command
 			std::clog << Game::GAME_TIME << ": (" << p->getX() << ", " << p->getY() << ", " << p->getDirection() << ") "<< (total - 1) << " ";
 			for (std::vector<Player*>::iterator it = players.begin(); it != players.end(); ++it) {
 				Position* pp = (*it)->getPosition();
-				std::clog << "(" << pp->getX() << ", " << pp->getY() << ", " << ((*it)->isInSightRange() ? "v" : "u") << ") ";
+				std::clog << "(" << pp->getX() << ", " << pp->getY() << ", " << (*it)->getPlayerId() << ", " << (*it)->getMatchValue() << ", "
+						<< ((*it)->isInSightRange() ? "v" : "u") << ") ";
 			}
 			std::clog << std::endl;
 		}

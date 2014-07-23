@@ -22,14 +22,15 @@
 #define PFIELDS_HPP_
 
 #include "geometry.hpp"
+#include <vector>
 
 namespace Geometry {
 
 template <class U, class V>
-class PField {
+class PFields {
 public:
-	PField(U u, V v);
-	~PField();
+	PFields(U u, V v);
+	~PFields();
 	Vector2D computePotential(Point position, std::vector<Point> obstacles, Point goal);
 private:
 	U u;
@@ -37,18 +38,18 @@ private:
 };
 
 template <class U, class V>
-PField<U, V>::PField(U u, V v) {
+PFields<U, V>::PFields(U u, V v) {
 	this->u = u;
 	this->v = v;
 }
 
 template <class U, class V>
-PField<U, V>::~PField() {
+PFields<U, V>::~PFields() {
 
 }
 
 template <class U, class V>
-Vector2D PField<U, V>::computePotential(Point position, std::vector<Point> obstacles, Point goal) {
+Vector2D PFields<U, V>::computePotential(Point position, std::vector<Point> obstacles, Point goal) {
 	Vector2D potential;
 	for (std::vector<Point>::iterator it = obstacles.begin(); it != obstacles.end(); ++it) {
 		double d = sqrt(pow(position.x - it->x, 2.0) + pow(position.y - it->y, 2.0));
