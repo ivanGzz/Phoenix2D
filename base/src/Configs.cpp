@@ -52,6 +52,7 @@ bool Configs::LOGGING = false;
 bool Configs::TRAINER_LOGGING = false;
 bool Configs::VERBOSE = false;
 std::string Configs::LOCALIZATION = "lowpassfilter";
+std::string Configs::TRACKING = "qualifier";
 bool Configs::SAVE_SEE = false;
 bool Configs::SAVE_HEAR = false;
 bool Configs::SAVE_FULLSTATE = false;
@@ -107,6 +108,7 @@ void Configs::loadConfigs(std::string filename) {
 			Configs::COMMANDS_MAX_HISTORY = pt.get("configs.commands.buffer", 4);
 			Configs::COMMAND_PRECISION    = pt.get("configs.commands.precision", 4);
 			Configs::LOG_NAME             = pt.get("configs.logging.logname", "");
+			Configs::TRACKING			  = pt.get("configs.self.tracking", "qualifier");
 			Configs::LOCALIZATION         = pt.get("configs.self.localization", "lowpassfilter");
 			Configs::TRACKING_THRESHOLD   = pt.get("configs.world.threshold", 0.25);
 			file.close();

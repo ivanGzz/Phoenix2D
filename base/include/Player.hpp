@@ -181,6 +181,8 @@ private:
 	int ttl;						///< Time to live in memory for this player
 	bool tracked;					///< True if this object has been matched with a new Player object
 	double match;					///< Match value
+	int real_uniform_number;		///< Real uniform number when checking with full state sensor
+	std::string real_team;			///< Real team when checking with full state sensor
 };
 
 } // End namespace Phoenix
