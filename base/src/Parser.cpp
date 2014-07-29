@@ -373,16 +373,16 @@ Parser::Parser(Self* self, World* world, Messages* messages_p) {
 	std::string prefix;
 	std::getline(ss, prefix);
 	if (Configs::SAVE_SEE) {
-		see_stream.open(prefix + "see.log");
+		see_stream.open((prefix + "see.log").c_str());
 	}
 	if (Configs::SAVE_FULLSTATE) {
-		fs_stream.open(prefix + "fullstate.log");
+		fs_stream.open((prefix + "fullstate.log").c_str());
 	}
 	if (Configs::SAVE_SENSE_BODY) {
-		body_stream.open(prefix + "sense_body.log");
+		body_stream.open((prefix + "sense_body.log").c_str());
 	}
 	if (Configs::SAVE_HEAR) {
-		hear_stream.open(prefix + "hear.log");
+		hear_stream.open((prefix + "hear.log").c_str());
 	}
 }
 

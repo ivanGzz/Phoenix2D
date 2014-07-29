@@ -1,3 +1,8 @@
+2914.07-24 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (Parser) fixed stream open in linux
+	* (Commands) fixed stream open in linux
+
 2014-07-23 Nelson Gonzalez <nigm2005@gmail.com>
 
 	* (PField) Added vector header to class.

@@ -42,6 +42,9 @@ namespace Phoenix {
  */
 class WorldModel {
 public:
+	int real_matches;
+	int method_matches;
+	int correct_matches;
 	/*!
 	 * @brief Constructor deprecated
 	 * @param players List of current players received in the see sensor

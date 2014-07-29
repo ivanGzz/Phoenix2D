@@ -49,7 +49,7 @@ Commands::Commands(Connect *connect) {
 		ss << Self::TEAM_NAME << "_" << Self::UNIFORM_NUMBER << "_" << std::endl;
 		std::string prefix;
 		std::getline(ss, prefix);
-		comm_stream.open(prefix + "commands.log");
+		comm_stream.open((prefix + "commands.log").c_str());
 	}
 }
 
