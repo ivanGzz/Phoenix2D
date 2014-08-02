@@ -1,7 +1,7 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_PREREQ([2.69])
+AC_PREREQ([2.68])
 AC_INIT([Phoenix], [1.0], [nigm2005@gmail.com])
 AC_CONFIG_SRCDIR([main.cpp])
 AC_CONFIG_HEADERS([config.h])
@@ -30,7 +30,8 @@ AC_TYPE_SIZE_T
 AC_FUNC_ERROR_AT_LINE
 AC_CHECK_FUNCS([bzero gethostbyname inet_ntoa pow socket sqrt])
 
-AC_CONFIG_FILES([base/Makefile
+AC_CONFIG_FILES([utils/Makefile
+				 base/Makefile
                  tests/Makefile
                  ai/Makefile
                  Makefile])

@@ -26,5 +26,8 @@
  *     A Course in Fuzzy Systems and Control
  *     Li-Xin Wang
  */
+#include "FVariable.hpp"
+#include "FRule.hpp"
+#include "FEngine.hpp"
 
 #endif /* FUZZY_HPP_ */

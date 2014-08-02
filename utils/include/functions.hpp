@@ -22,17 +22,29 @@
 #define FUNCTIONS_HPP_
 
 #include <vector>
+#include <cmath>
+#include "constants.hpp"
 
 namespace Math {
 
 /*
+ * Base struct
+ */
+struct Function {
+	Function() {};
+	virtual ~Function() {};
+	virtual double evaluate(double x) = 0;
+};
+
+/*
  * f(x) = (1 / (stdv * sqrt(2 * PI))) * exp(-0.5 * pow(((x - mu) / stdv), 2.0))
  */
-struct Gaussian {
+struct Gaussian : public Function {
 	double mu;
 	double stdv;
-	Gaussian() : mu(0.0), stdv(1.0) {};
-	Gaussian(double mu, double stdv) : mu(mu), stdv(stdv) {};
+	Gaussian() : Function(), mu(0.0), stdv(1.0) {};
+	Gaussian(double mu, double stdv) : Function(), mu(mu), stdv(stdv) {};
+	~Gaussian() {};
 	double evaluate(double x) {
 		if (stdv > 0.0) {
 			return (1.0 / (stdv * sqrt(2.0 * PI))) * exp(-0.5 * pow(((x - mu) / stdv), 2.0));
@@ -46,11 +58,12 @@ struct Gaussian {
 /*
  * f(x) = exp(-0.5 * pow(((x - mu) / stdv), 2.0))
  */
-struct UGaussian {
+struct UGaussian : public Function {
 	double mu;
 	double stdv;
-	UGaussian() : mu(0.0), stdv(1.0) {};
-	UGaussian(double mu, double stdv) : mu(mu), stdv(stdv) {};
+	UGaussian() : Function(), mu(0.0), stdv(1.0) {};
+	UGaussian(double mu, double stdv) : Function(), mu(mu), stdv(stdv) {};
+	~UGaussian() {};
 	double evaluate(double x) {
 		if (stdv > 0.0) {
 			return exp(-0.5 * pow(((x - mu) / stdv), 2.0));
@@ -69,12 +82,13 @@ struct UGaussian {
  * 0____/      \________
  *     a   b   c
  */
-struct Triangular {
+struct Triangular : public Function {
 	double a;
 	double b;
 	double c;
-	Triangular() : a(-1.0), b(0.0), c(1.0) {};
-	Triangular(double a, double b, double c) : a(a), b(b), c(c) {};
+	Triangular() : Function(), a(-1.0), b(0.0), c(1.0) {};
+	Triangular(double a, double b, double c) : Function(), a(a), b(b), c(c) {};
+	~Triangular() {};
 	double evaluate(double x) {
 		if (x > a && x < b) {
 			return (x - a) / (b - a);
@@ -99,13 +113,14 @@ struct Triangular {
  * 0____/           \________
  *     a   b     c   d
  */
-struct Trapezoidal {
+struct Trapezoidal : public Function {
 	double a;
 	double b;
 	double c;
 	double d;
-	Trapezoidal() : a(-2.0), b(-1.0), c(1.0), d(2.0) {};
-	Trapezoidal(double a, double b, double c, double d) : a(a), b(b), c(c), d(d) {};
+	Trapezoidal() : Function(), a(-2.0), b(-1.0), c(1.0), d(2.0) {};
+	Trapezoidal(double a, double b, double c, double d) : Function(), a(a), b(b), c(c), d(d) {};
+	~Trapezoidal() {};
 	double evaluate(double x) {
 		if (x > a && x < b) {
 			return (x - a) / (b - a);
@@ -130,11 +145,12 @@ struct Trapezoidal {
  * 0_________|       |_________
  *           a       b
  */
-struct Uniform {
+struct Uniform : public Function {
 	double a;
 	double b;
-	Uniform() : a(-1.0), b(1.0) {};
-	Uniform(double a, double b) : a(a), b(b) {};
+	Uniform() : Function(), a(-1.0), b(1.0) {};
+	Uniform(double a, double b) : Function(), a(a), b(b) {};
+	~Uniform() {};
 	double evaluate(double x) {
 		if (x > a && x < b) {
 			return 1.0 / (b - a);
@@ -153,11 +169,12 @@ struct Uniform {
  * 0_____/
  *       a   b
  */
-struct RampAsc {
+struct RampAsc : public Function {
 	double a;
 	double b;
-	RampAsc() : a(-1.0), b(1.0) {};
-	RampAsc(double a, double b) : a(a), b(b) {};
+	RampAsc() : Function(), a(-1.0), b(1.0) {};
+	RampAsc(double a, double b) : Function(), a(a), b(b) {};
+	~RampAsc() {};
 	double evaluate(double x) {
 		if (x < a) {
 			return 0.0;
@@ -179,11 +196,12 @@ struct RampAsc {
  * 0       \________
  *      a  b
  */
-struct RampDesc {
+struct RampDesc : public Function {
 	double a;
 	double b;
-	RampDesc() : a(-1.0), b(1.0) {};
-	RampDesc(double a, double b) : a(a), b(b) {};
+	RampDesc() : Function(), a(-1.0), b(1.0) {};
+	RampDesc(double a, double b) : Function(), a(a), b(b) {};
+	~RampDesc() {};
 	double evaluate(double x) {
 		if (x < a) {
 			return 1.0;
@@ -200,26 +218,44 @@ struct RampDesc {
 /*
  * f(x) = mx + b
  */
-struct Linear {
+struct Linear : public Function {
 	double m;
 	double b;
-	Linear() : m(1.0), b(0.0) {};
-	Linear(double m, double b) : m(m), b(b) {};
+	Linear() : Function(), m(1.0), b(0.0) {};
+	Linear(double m, double b) : Function(), m(m), b(b) {};
+	~Linear() {};
 	double evaluate(double x) {
 		return m * x + b;
 	};
 };
 
 /*
- * f(x) = a / (x - b)
+ * f(x) = a / (x - b) + c
  */
-struct Inverse {
+struct Inverse : public Function {
 	double a;
 	double b;
-	Inverse() : a(1.0), b(0.0) {};
-	Inverse(double a, double b) : a(a), b(b) {};
+	double c;
+	Inverse() : Function(), a(1.0), b(0.0), c(0.0) {};
+	Inverse(double a, double b, double c) : Function(), a(a), b(b), c(c) {};
+	~Inverse() {};
 	double evaluate(double x) {
-		return a / (x - b);
+		return a / (x - b) + c;
+	}
+};
+
+/*
+ * f(x) = a * e^(x - b) + c
+ */
+struct Exponential : public Function {
+	double a;
+	double b;
+	double c;
+	Exponential() : Function(), a(1.0), b(0.0), c(0.0) {};
+	Exponential(double a, double b, double c) : Function(), a(a), b(b), c(c) {};
+	~Exponential() {};
+	double evaluate(double x) {
+		return a * exp(x - b) + c;
 	}
 };
 

@@ -18,27 +18,38 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CONSTANTS_HPP_
-#define CONSTANTS_HPP_
+#ifndef FRULE_HPP_
+#define FRULE_HPP_
 
-namespace Filters {
-	const int PARTICLES = 100;
-}
+#include "FVariable.hpp"
+#include <map>
+#include <string>
 
 namespace Fuzzy {
-	const int STEPS = 100;
+
+class FRule {
+friend class FEngine;
+public:
+	FRule(std::string rule);
+	~FRule();
+	void parse();
+	std::string getOutputName();
+	std::string getOutputSet();
+	double getOutput();
+	void evaluate(double first, double second);
+private:
+	std::string rule;
+	std::map<std::string, FVariable*>* variables;
+	std::string firstVariable;
+	std::string firstSet;
+	std::string secondVariable;
+	std::string secondSet;
+	std::string outputVariable;
+	std::string outputSet;
+	double output;
+	bool parsed;
+};
+
 }
 
-namespace Geometry {
-
-}
-
-namespace Learning {
-
-}
-
-namespace Math {
-	const double PI = 3.14159265359;
-}
-
-#endif /* CONSTANTS_HPP_ */
+#endif /* FRULE_HPP_ */

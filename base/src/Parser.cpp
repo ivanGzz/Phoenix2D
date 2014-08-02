@@ -85,7 +85,9 @@ int time = 0;
 bool new_cycle = true;
 static bool localized = false;
 
-int wait = 0;
+static int wait = 0;
+static int see_offset = 10;
+static int current_see_time = 0;
 
 void *timer(void* arg) {
 	usleep(1000 * wait);
@@ -246,6 +248,14 @@ boost::regex see_regex("\\(([^()]+)\\)\\s*([\\d\\.\\-etk\\s]*)");
 std::string see;
 
 void *seeHandler(void* arg) {
+	// Seen in Ubuntu 12: sometimes the see handler gets the lock before the sense body handler, so,
+	// we must wait some time to give the sense body handler some time to get the lock
+	usleep(1000 * see_offset);
+	// This should never happen: but, if the current see time is bigger than the current sense_body time,
+	// we discard the current see sensor
+	if (current_see_time > time) {
+		return 0;
+	}
 	if (pthread_mutex_lock(&sense_body_mutex) != 0) {
 		std::cerr << "Parser::process_sense_body(void*) -> cannot lock sense body mutex" << std::endl;
 		return 0;
@@ -476,6 +486,8 @@ void Parser::parseMessage(std::string message) {
 	if (!new_cycle) return; //we do not accept this messages after the new cycle started
 	if (message_type.compare("see") == 0) {
 		see = message;
+		found = message.find(" ", 5);
+		current_see_time = atoi(message.substr(5, found - 5).c_str());
 		if (pthread_create(&thread_see, &attr, seeHandler, 0) != 0) {
 			std::cerr << "Parser::parseMessage(string) -> error creating see thread" << std::endl;
 		}

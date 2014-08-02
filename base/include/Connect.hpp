@@ -45,7 +45,7 @@ public:
 	 * @param port port to connect, where the server is listening
 	 * The port for players and goalies is 6000, for trainer 6001 and coaches 6002.
 	 */
-	Connect(const char *host, int port);
+	Connect(std::string host, int port);
 	/*!
 	 * @brief Connect default destructor
 	 */

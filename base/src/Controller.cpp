@@ -63,10 +63,10 @@ std::string team_name = "";
 
 char Controller::AGENT_TYPE = 'p';
 
-Controller::Controller(const char *teamName, char agentType, const char *hostname) {
-	this->hostname = std::string(hostname);
+Controller::Controller(std::string teamName, char agentType, std::string hostname) {
+	this->hostname = hostname;
 	Controller::AGENT_TYPE = agentType;
-	team_name = std::string(teamName);
+	team_name = teamName;
 	connected = false;
 }
 
@@ -102,7 +102,7 @@ void Controller::connect() {
 	}
 	boost::regex error("\\(error\\s+([\\w\\_]+)\\)"); //i.e (error no_more_team_or_player_or_goalie)
 	boost::cmatch match;
-	_connect = new Connect(hostname.c_str(), port);
+	_connect = new Connect(hostname, port);
 	_connect->sendMessage(message);
 	message = _connect->receiveMessage();
 	if (boost::regex_match(message.c_str(), match, error)) {
