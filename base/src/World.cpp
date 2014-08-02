@@ -27,6 +27,7 @@
 #include <set>
 #include <string>
 #include <map>
+#include <algorithm>
 #include "World.hpp"
 #include "Game.hpp"
 #include "Configs.hpp"
@@ -44,6 +45,9 @@ static std::vector<Player> fs_players;
 static Ball fs_ball;
 static int next_player_id = 0;
 static std::map<int, Filters::PFilter<4> > filters;
+static int real_matches = 0;
+static int meth_matches = 0;
+static int corr_matches = 0;
 
 struct _cell {
 	int t; // 0: both uniform numbers and teams are equal, 1: teams are equal, 2: other case
@@ -98,6 +102,92 @@ bool compare(_cell* c0, _cell* c1) {
 }
 
 /*
+ * This method attempts to match the players received in the full state sensor with the players received in the see sensor in order
+ * to count the correct match for a given tracking method.  This method also counts the real matches.
+ */
+void World::identifyPlayers(std::vector<Player> &new_players) {
+	std::vector<int> opps;
+	std::vector<int> ours;
+	for (std::vector<Player>::iterator it = new_players.begin(); it != new_players.end(); ++it) {
+		if ((*it).getTeam().compare("opp") == 0 && (*it).getUniformNumber() != 0) {
+			opps.push_back((*it).getUniformNumber());
+		} else if ((*it).getTeam().compare("our") == 0 && (*it).getUniformNumber() != 0) {
+			ours.push_back((*it).getUniformNumber());
+		}
+	}
+	for (std::vector<Player>::iterator it = new_players.begin(); it != new_players.end(); ++it) {
+		double min_d = 1000.0;
+		Player* _nearest = 0;
+		if ((*it).getTeam().compare("opp") == 0 && (*it).getUniformNumber() == 0) {
+			for (std::vector<Player>::iterator it_fs = fs_players.begin(); it_fs != fs_players.end(); ++it_fs) {
+				// If the full state player team is equal to the player team and the full state team is not already added to vector opps, then
+				if ((*it_fs).getTeam().compare("opp") == 0 && std::find(opps.begin(), opps.end(), (*it_fs).getUniformNumber()) == opps.end()) {
+					double d = it->getPosition()->getDistanceTo(it_fs->getPosition());
+					if (d < min_d) {
+						min_d = d;
+						_nearest = &(*it_fs);
+					}
+				}
+			}
+			if (_nearest) {
+				it->uniform_number = _nearest->uniform_number;
+				opps.push_back(_nearest->uniform_number);
+			}
+		}
+		else if ((*it).getTeam().compare("our") == 0 && (*it).getUniformNumber() == 0) {
+			for (std::vector<Player>::iterator it_fs = fs_players.begin(); it_fs != fs_players.end(); ++it_fs) {
+				// If the full state player team is equal to the player team and the full state team is not already added to vector ours, then
+				if ((*it_fs).getTeam().compare("our") == 0 && std::find(ours.begin(), ours.end(), (*it_fs).getUniformNumber()) == ours.end()) {
+					double d = it->getPosition()->getDistanceTo(it_fs->getPosition());
+					if (d < min_d) {
+						min_d = d;
+						_nearest = &(*it_fs);
+					}
+				}
+			}
+			if (_nearest) {
+				it->uniform_number = _nearest->uniform_number;
+				ours.push_back(_nearest->uniform_number);
+			}
+		}
+	}
+	for (std::vector<Player>::iterator it = new_players.begin(); it != new_players.end(); ++it) {
+		if ((*it).getTeam().compare("undefined") == 0 && (*it).getUniformNumber() == 0) {
+			double min_d = 1000.0;
+			Player* _nearest = 0;
+			for (std::vector<Player>::iterator it_fs = fs_players.begin(); it_fs != fs_players.end(); ++it_fs) {
+				int unum = (*it_fs).getUniformNumber();
+				if (std::find(ours.begin(), ours.end(), unum) == ours.end() && std::find(opps.begin(), opps.end(), unum) == opps.end()) {
+					double d = it->getPosition()->getDistanceTo(it_fs->getPosition());
+					if (d < min_d) {
+						min_d = d;
+						_nearest = &(*it_fs);
+					}
+				}
+			}
+			if (_nearest) {
+				it->uniform_number = _nearest->uniform_number;
+				it->team = _nearest->team;
+				if ((*_nearest).getTeam().compare("opp")) {
+					opps.push_back(_nearest->uniform_number);
+				} else {
+					ours.push_back(_nearest->uniform_number);
+				}
+			}
+		}
+	}
+	for (std::vector<Player>::iterator it_p = players.begin(); it_p != players.end(); ++it_p) {
+		for (std::vector<Player>::iterator it_n = new_players.begin(); it_n != new_players.end(); ++it_n) {
+			std::string p_team = it_p->real_team;
+			std::string n_team = it_n->real_team;
+			if (p_team.compare(n_team) == 0 && it_p->real_uniform_number == it_n->real_uniform_number) {
+				real_matches++;
+			}
+		}
+	}
+}
+
+/*
  * Based on:
  * 	Comparison of a New Qualifier Method for Multiple Object Tracking in RoboCup 2D Simulation League
  * 	Nelson Ivan Gonzalez & Leonardo Garrido
@@ -139,7 +229,11 @@ void World::matchPlayers(std::vector<Player> &past_players, std::vector<Player> 
 					hv[row][column].t = 0;
 					hv[row][column].i = 1.0;
 					exact = true;
+				} else {
+					hv[row][column].t = 3;
 				}
+			} else {
+				hv[row][column].t = 3;
 			}
 			Position p_n = n->position;
 			Position p_p = p->position;
@@ -162,7 +256,13 @@ void World::matchPlayers(std::vector<Player> &past_players, std::vector<Player> 
 			// If there is no player with the same id
 			double pi = 1.0 / (2.0 * nt + mt);
 			for (int i = 0; i < new_players.size(); ++i) {
-				hv[row][i].i = (hv[row][i].t == 1) ? (2.0 * pi) : pi;
+				if (hv[row][i].t == 1) {
+					hv[row][i].i = 2.0 * pi;
+				} else if (hv[row][i].t == 2) {
+					hv[row][i].i = pi;
+				} else {
+					hv[row][i].i = 0.0;
+				}
 				hv[row][i].d /= dt;
 				hv[row][i].computeH();
 				hso.insert(&hv[row][i]);
@@ -195,13 +295,13 @@ void World::matchPlayers(std::vector<Player> &past_players, std::vector<Player> 
 				double d = sqrt(dx * dx + dy * dy);
 				if (d > (pp->getDistanceError() + np->getDistanceError()) * Configs::TRACKING_THRESHOLD) {
 					// If the distance between the two players is greater than theirs errors plus the threshold we do not accept the tracking
-					std::cout << Game::GAME_TIME << ": reject match with value " << (*it)->h << std::endl;
+					// std::cout << Game::GAME_TIME << ": reject match with value " << (*it)->h << std::endl;
 					continue;
 				}
 				// We infer physical characteristics
 				if (!np->vel) {
 					Geometry::Vector2D new_vel(dx, dy);
-					if (new_vel.getMagnitude() > Self::PLAYER_SPEED_MAX && new_vel.getMagnitude() > 0.0) {
+					if (new_vel.getMagnitude() > Self::PLAYER_SPEED_MAX) {
 						new_vel.scale(Self::PLAYER_SPEED_MAX / new_vel.getMagnitude());
 					}
 					np->velocity = new_vel;
@@ -226,6 +326,10 @@ void World::matchPlayers(std::vector<Player> &past_players, std::vector<Player> 
 					hv[i][(*it)->column].dominated = true;
 				}
 				np->match = (*it)->h;
+				meth_matches++;
+				if (np->real_team.compare(pp->real_team) == 0 && np->real_uniform_number == pp->real_uniform_number) {
+					corr_matches++;
+				}
 				counter++;
 			}
 		} else {
@@ -281,8 +385,8 @@ void World::matchPlayersPF(std::vector<Player> &new_players) {
 			pfilter.predict(predictForWorld);
 			pfilter.update(updateForWorld);
 			pfilter.resample();
+			hv[row][column].h = pfilter.getFit() / dash;
 			hv[row][column].filter = pfilter;
-			hv[row][column].h = pfilter.getFit();
 			hso.insert(&hv[row][column]);
 			column++;
 		}
@@ -307,14 +411,14 @@ void World::matchPlayersPF(std::vector<Player> &new_players) {
 					double dy = np->getPosition()->getY() - pp->getPosition()->getY();
 					double d = sqrt(dx * dx + dy * dy);
 					if (d > (pp->getDistanceError() + np->getDistanceError()) * Configs::TRACKING_THRESHOLD) {
-						// If the distance between the two players is greater than theirs errors plus the threshold we do not accept the tracking
-						std::cout << Game::GAME_TIME << ": reject match with value " << (*it)->h << std::endl;
+						// If the distance between the two players is greater than theirs errors times the threshold we do not accept the tracking
+						// std::cout << Game::GAME_TIME << ": reject match with value " << (*it)->h << std::endl;
 						continue;
 					}
 					// We infer physical characteristics
 					if (!np->vel) {
 						Geometry::Vector2D new_vel(dx, dy);
-						if (new_vel.getMagnitude() > Self::PLAYER_SPEED_MAX && new_vel.getMagnitude() > 0.0) {
+						if (new_vel.getMagnitude() > Self::PLAYER_SPEED_MAX) {
 							new_vel.scale(Self::PLAYER_SPEED_MAX / new_vel.getMagnitude());
 						}
 						np->velocity = new_vel;
@@ -341,6 +445,10 @@ void World::matchPlayersPF(std::vector<Player> &new_players) {
 					np->match = (*it)->h;
 					// Finally, we update the particle filter in the map
 					filters[np->player_id] = (*it)->filter;
+					meth_matches++;
+					if (np->real_team.compare(pp->real_team) == 0 && np->real_uniform_number == pp->real_uniform_number) {
+						corr_matches++;
+					}
 					counter++;
 				}
 			} else {
@@ -388,8 +496,16 @@ void World::updateWorld(std::vector<Player> new_players, Ball new_ball, std::vec
 			else if (Self::VIEW_MODE_WIDTH.compare("normal") == 0) {
 				vision_angle = 120.0;
 			}
+			if (Server::FULLSTATE_L != 0 && Server::FULLSTATE_R != 0) {
+				identifyPlayers(new_players);
+			}
 			if (Configs::PLAYER_TRACKING) {
-				matchPlayers(players, new_players);
+				if (Configs::TRACKING.compare("qualifier") == 0) {
+					matchPlayers(players, new_players);
+				}
+				else if (Configs::TRACKING.compare("pfilters") == 0) {
+					matchPlayersPF(new_players);
+				}
 			}
 			for (std::vector<Player>::iterator it = players.begin(); it != players.end(); ++it) {
 				// If the past player has been already tracked, it must not be included in the new world model
@@ -424,6 +540,7 @@ void World::updateWorld(std::vector<Player> new_players, Ball new_ball, std::vec
 					filters.erase(it->player_id);
 				}
 			}
+//			std::cout << filters.size() << std::endl;
 		}
 	}
 	// If the agent is trainer or coach then it is just needed to copy the players vector and ball
@@ -432,7 +549,11 @@ void World::updateWorld(std::vector<Player> new_players, Ball new_ball, std::vec
 }
 
 WorldModel World::getWorldModel() {
-	return WorldModel(players, ball, fs_players, fs_ball);
+	WorldModel worldModel(players, ball, fs_players, fs_ball);
+	worldModel.real_matches = real_matches;
+	worldModel.method_matches = meth_matches;
+	worldModel.correct_matches = corr_matches;
+	return worldModel;
 }
 
 }

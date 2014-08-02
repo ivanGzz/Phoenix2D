@@ -1,6 +1,6 @@
 AM_CPPFLAGS = -Iinclude -I$(top_builddir)/utils/include
-lib_LTLIBRARIES = libPhoenixBase-1.0.la
-libPhoenixBase_1_0_la_SOURCES = \
+lib_LTLIBRARIES = libPhoenixBase-2.1.la
+libPhoenixBase_2_1_la_SOURCES = \
 	src/Ball.cpp \
 	src/Command.cpp \
 	src/Commands.cpp \

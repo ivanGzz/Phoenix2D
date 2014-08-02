@@ -89,7 +89,7 @@ void Logger::log() {
 	} else {
 		ss << now->tm_sec;
 	}
-	ss << ".log" << std::endl;
+	ss << ".csv" << std::endl;
 	std::string filename;
 	std::getline(ss, filename);
 	buf.open(filename.c_str(), std::ios::out);

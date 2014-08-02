@@ -64,7 +64,7 @@ public:
      * @param agentType see AGENT_TYPE
      * @param hostname ip address or host
      */
-	Controller(const char *teamName, char agentType, const char *hostname);
+	Controller(std::string teamName, char agentType, std::string hostname);
 	/*!
 	 * @brief Controller default Destructor
      */

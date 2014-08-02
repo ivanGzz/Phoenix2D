@@ -16,6 +16,10 @@
      }
      "commands": false
      And they are saved in log files with format name <TEAM_NAME>_<UNIFORM_NUMBER>_<SENSOR|commands>.log
+     
+  *  Now the user can use fuzzy logic using the fuzzy toolkit provided with Phoenix2D.
+  
+  *  Now the user can use genetic algorithms using the genetics algorithm toolkit provided with Phoenix2D
 
 [2.0]
 

@@ -62,6 +62,8 @@ Player::Player() {
 	ttl = 0;
 	tracked = false;
 	match = -1.0;
+	real_uniform_number = 0;
+	real_team = "undefined";
 }
 
 Player::~Player() {
@@ -235,6 +237,8 @@ void Player::setDataForPlayer(std::string name, std::string position) {
 	default:
 		break;
 	}
+	real_team = team;
+	real_uniform_number = uniform_number;
 }
 
 void Player::initForPlayer(const Position* player_position, const Geometry::Vector2D* player_velocity) {

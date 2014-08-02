@@ -40,16 +40,22 @@ boost::uniform_int<> xdist(0, 104);
 boost::uniform_int<> ydist(0, 68);
 Position positionToGo;
 int fails = 0;
+int r_matches = 0;
+int m_matches = 0;
+int c_matches = 0;
+int r_accum_matches = 0;
+int m_accum_matches = 0;
+int c_accum_matches = 0;
+int iteration = -1;
+int cycles = 0;
 
 void onStart() {
-	if (Self::SIDE[0] == 'l') std::cout << "Starting world test" << std::endl;
-	if (Self::SIDE[0] == 'l') {
-		if (Server::FULLSTATE_L != 0) {
-			fullstate = true;
-		}
-		else {
-			std::cerr << "world test needs the fullstate sensor active for the left team" << std::endl;
-		}
+	std::cout << "Starting world test" << std::endl;
+	if (Server::FULLSTATE_L != 0 && Server::FULLSTATE_R != 0) {
+		fullstate = true;
+	}
+	else {
+		std::cerr << "world test needs the fullstate sensor active for the left team" << std::endl;
 	}
 }
 
@@ -61,14 +67,27 @@ void randomPosition() {
 
 void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages, Commands* commands) {
 	if (!setup) {
+		if (iteration > -1) {
+			if (Configs::LOGGING) {
+				int dr = r_matches - r_accum_matches;
+				int dm = m_matches - m_accum_matches;
+				int dc = c_matches - c_accum_matches;
+//				std::clog << Configs::TRACKING_THRESHOLD << ": " << dr << ", " << dm << ", " << dc << ", " << cycles << std::endl;
+				std::clog << dr << "," << dm << "," << dc << std::endl;
+				std::cout << "Iteration " << iteration << std::endl;
+				std::cout << "Matches percentage: " << ((double)dc / (double)dm) << std::endl;
+				std::cout << "Total percentage:   " << ((double)dc / (double)dr) << std::endl;
+			}
+			cycles = 0;
+		}
 		double x = -1.0 * fabs((double)xdist(rng) - 52.0); //we need a negative coordinate in x
 		double y = (double)ydist(rng) - 34.0;
 		commands->move(x, y);
 		setup = true;
 		randomPosition();
-		if (Self::SIDE[0] == 'l') {
-			commands->changeView("narrow");
-		}
+		commands->changeView("narrow");
+		iteration++;
+//		Configs::TRACKING_THRESHOLD = (double)Self::UNIFORM_NUMBER + ((Self::SIDE[0] == 'l') ? -1.0 : 4.0) + 0.1 * (iteration / 10);
 	} else {
 		const Position* p = Self::getPosition();
 		Position zero(0.0, 0.0);
@@ -76,6 +95,9 @@ void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages, 
 			commands->turn(p->getDirectionTo(&zero));
 		}
 	}
+	r_accum_matches = worldModel.real_matches;
+	m_accum_matches = worldModel.method_matches;
+	c_accum_matches = worldModel.correct_matches;
 }
 
 void executePlayOn(WorldModel worldModel, std::vector<Message> messages, Commands* commands) {
@@ -91,27 +113,20 @@ void executePlayOn(WorldModel worldModel, std::vector<Message> messages, Command
 	} else {
 		randomPosition();
 	}
-	if (Self::SIDE[0] == 'l') {
-		int total = -1;
-		int size = worldModel.getPlayers().size();
-		if (fullstate) {
-			total = worldModel.getAllExactPlayers().size();
-		}
-		if (total > -1 && size > total - 1) {
-			std::cout << Game::GAME_TIME << " bad: " << size << " out " << (total - 1) << std::endl;
-			fails++;
-		}
-		if (Configs::LOGGING) {
-			std::vector<Player*> players = worldModel.getPlayers();
-			std::clog << Game::GAME_TIME << ": (" << p->getX() << ", " << p->getY() << ", " << p->getDirection() << ") "<< (total - 1) << " ";
-			for (std::vector<Player*>::iterator it = players.begin(); it != players.end(); ++it) {
-				Position* pp = (*it)->getPosition();
-				std::clog << "(" << pp->getX() << ", " << pp->getY() << ", " << (*it)->getPlayerId() << ", " << (*it)->getMatchValue() << ", "
-						<< ((*it)->isInSightRange() ? "v" : "u") << ") ";
-			}
-			std::clog << std::endl;
-		}
+	int total = -1;
+	int size = worldModel.getPlayers().size();
+	if (fullstate) {
+		total = worldModel.getAllExactPlayers().size();
 	}
+	if (total > -1 && size > total - 1) {
+		std::cout << Game::GAME_TIME << " bad: " << size << " out " << (total - 1) << std::endl;
+		fails++;
+	}
+	r_matches = worldModel.real_matches;
+	m_matches = worldModel.method_matches;
+	c_matches = worldModel.correct_matches;
+	cycles++;
+	setup = false;
 }
 
 void onFinish() {

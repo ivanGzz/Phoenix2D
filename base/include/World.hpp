@@ -75,6 +75,11 @@ private:
 	 * @param new_players List of players received in the current cycle
 	 */
 	void matchPlayersPF(std::vector<Player> &new_players);
+	/*!
+	 * @brief Includes the real team and uniform number for this player when using full state sensor
+	 * @param new_players List of players received in the current cycle
+	 */
+	void identifyPlayers(std::vector<Player> &new_players);
 };
 
 } // End namespace Phoenix

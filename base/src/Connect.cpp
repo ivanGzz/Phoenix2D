@@ -40,13 +40,13 @@ struct Socket {
 
 Socket sock;
 
-void connectToServer(const char *host, int port) {
+void connectToServer(std::string host, int port) {
 	int sockfd;
 	struct sockaddr_in server_addr;
 	struct hostent *host_0;
 	struct in_addr *addr_ptr;
-	if (inet_addr(host) == INADDR_NONE) {
-		host_0 = (struct hostent *)gethostbyname(host);
+	if (inet_addr(host.c_str()) == INADDR_NONE) {
+		host_0 = (struct hostent *)gethostbyname(host.c_str());
 		if (host_0 == 0) {
 			std::cerr << "Connect::connectToServer(const char *, int) -> can not get host" << std::endl; //Error: can not get host
 			return;
@@ -72,10 +72,10 @@ void connectToServer(const char *host, int port) {
 	bzero(&sock.server, sizeof(sock.server));
 	sock.server.sin_family = AF_INET;
 	sock.server.sin_port = htons(port);
-	sock.server.sin_addr.s_addr = inet_addr(host);
+	sock.server.sin_addr.s_addr = inet_addr(host.c_str());
 }
 
-Connect::Connect(const char *host, int port) {
+Connect::Connect(std::string host, int port) {
 	connectToServer(host, port);
 }
 

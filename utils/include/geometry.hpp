@@ -66,6 +66,14 @@ struct Vector2D {
 	double operator *(Vector2D vector) {
 		return (dx * vector.dx + dy * vector.dy);
 	}
+	Vector2D getUnitVector() {
+		double m = sqrt(dx * dx + dy * dy);
+		if (m > 0.0) {
+			return Vector2D(dx / m, dy / m);
+		} else {
+			return Vector2D();
+		}
+	}
 };
 
 struct Point {

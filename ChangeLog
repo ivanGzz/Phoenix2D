@@ -1,3 +1,28 @@
+2014-08-02 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (GAlgorithm) added support library for genetic
+	algorithms
+	
+	* (main) removed warnings
+
+2014-07-30 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (Parser) added an offset to the see handler
+	
+	* (Fuzzy) added support libraries for fuzzy logic
+
+2014-07-29 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (Math) added base structure Function to Math namespace.
+	All the math function inherits from Function.
+	* (Inverse) now the Inverse function accepts a y offset
+	denoted by c
+
+2014-07-24 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (Parser) fixed stream open in linux
+	* (Commands) fixed stream open in linux
+
 2014-07-23 Nelson Gonzalez <nigm2005@gmail.com>
 
 	* (PField) Added vector header to class.

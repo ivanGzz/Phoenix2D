@@ -18,27 +18,31 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CONSTANTS_HPP_
-#define CONSTANTS_HPP_
+#ifndef FUZZYVARIABLE_HPP_
+#define FUZZYVARIABLE_HPP_
 
-namespace Filters {
-	const int PARTICLES = 100;
-}
+#include <map>
+#include <string>
+#include "functions.hpp"
 
 namespace Fuzzy {
-	const int STEPS = 100;
+
+class FVariable {
+friend class FRule;
+friend class FEngine;
+public:
+	FVariable(std::string name, double min, double max);
+	~FVariable();
+	void addMembershipFunction(std::string set, Math::Function* f);
+	double getMembershipFor(std::string set, double value);
+	std::string getName();
+	double defuzzify(std::map<std::string, double> memberships);
+private:
+	double min;
+	double max;
+	std::string name;
+	std::map<std::string, Math::Function*> mfuncs;
+};
+
 }
-
-namespace Geometry {
-
-}
-
-namespace Learning {
-
-}
-
-namespace Math {
-	const double PI = 3.14159265359;
-}
-
-#endif /* CONSTANTS_HPP_ */
+#endif /* FUZZYVARIABLE_HPP_ */
