@@ -109,7 +109,7 @@ void Configs::loadConfigs(std::string filename) {
 			Configs::COMMAND_PRECISION    = pt.get("configs.commands.precision", 4);
 			Configs::LOG_NAME             = pt.get("configs.logging.logname", "");
 			Configs::TRACKING			  = pt.get("configs.self.tracking", "qualifier");
-			std::cout << "Using " << Configs::TRACKING << std::endl;
+//			std::cout << "Using " << Configs::TRACKING << std::endl;
 			Configs::LOCALIZATION         = pt.get("configs.self.localization", "lowpassfilter");
 			Configs::TRACKING_THRESHOLD   = pt.get("configs.world.threshold", 1.50);
 			file.close();

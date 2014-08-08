@@ -251,7 +251,7 @@ void *seeHandler(void* arg) {
 	// Seen in Ubuntu 12: sometimes the see handler gets the lock before the sense body handler, so,
 	// we must wait some time to give the sense body handler some time to get the lock
 	usleep(1000 * see_offset);
-	// This should never happen: but, if the current see time is bigger than the current sense_body time,
+	// This should never happen: but, if the current see time is bigger than the current sense_body time
 	// we discard the current see sensor
 	if (current_see_time > time) {
 		return 0;
@@ -288,13 +288,15 @@ void *seeHandler(void* arg) {
 			flags.push_back(Flag(name, data, simulation_time));
 			break;
 		}
-		case 'p': {
+		case 'p':
+		case 'P': {
 			Player p;
 			p.setDataForPlayer(name, data);
 			players.push_back(p);
 			break;
 		}
-		case 'b': {
+		case 'b':
+		case 'B': {
 //			ball.initForPlayer(data, player_position, player_velocity);
 			raw_ball = data;
 			break;

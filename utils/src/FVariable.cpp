@@ -35,6 +35,9 @@ FVariable::~FVariable() {
 }
 
 void FVariable::addMembershipFunction(std::string set, Math::Function* f) {
+	if (mfuncs.count(set) > 0) {
+		delete mfuncs[set];
+	}
 	mfuncs[set] = f;
 }
 

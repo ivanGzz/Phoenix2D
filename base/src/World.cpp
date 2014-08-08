@@ -515,7 +515,7 @@ void World::updateWorld(std::vector<Player> new_players, Ball new_ball, std::vec
 				it->position = Position(new_position);
 				it->velocity.scale(Server::PLAYER_DECAY);
 				// If the player is out of the sight range, we could add the last position of the object
-				if (fabs(Self::getPosition()->getDirectionTo(it->getPosition())) > vision_angle / 2.0) {
+				if (fabs(Self::getPosition()->getDirectionTo(it->getPosition()) + Self::HEAD_ANGLE) > vision_angle / 2.0) {
 					// But first we must check if the object is a "resonance" of another player
 					bool add = true;
 					for (std::vector<Player>::iterator it_c = new_players.begin(); it_c != new_players.end(); ++it_c) {

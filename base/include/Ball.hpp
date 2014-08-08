@@ -41,6 +41,7 @@ namespace Phoenix {
  * seen in the current cycle.
  */
 class Ball {
+friend class World;
 public:
 	/*!
 	 * @brief Ball default constructor

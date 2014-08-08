@@ -1,3 +1,19 @@
+2014-08-08 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (GAlgorithm) added new method to the genetic
+	algorithms toolkit to load populations from a text
+	file.
+	* (GAlgorithm) fixed the generations of ones mask in
+	variables
+	
+	* (Makefile) changed libraries order links in order to
+	support linux
+
+2014-08-04 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (World) fixed memory when the player is using a
+	head angle different to 0
+
 2014-08-02 Nelson Gonzalez <nigm2005@gmail.com>
 
 	* (GAlgorithm) added support library for genetic

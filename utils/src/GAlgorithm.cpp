@@ -21,6 +21,9 @@
 #include "GAlgorithm.hpp"
 #include <boost/random.hpp>
 #include <ctime>
+#include <fstream>
+#include <sstream>
+#include <cstdlib>
 
 namespace Genetics {
 
@@ -43,8 +46,8 @@ void GAlgorithm::addVariable(int bits) {
 	var.bits = bits;
 	int ones = 0;
 	for (int i = 0; i < bits; ++i) {
-		ones = ones | 1;
 		ones = ones << 1;
+		ones = ones | 1;
 	}
 	var.ones = ones;
 	variables.push_back(var);
@@ -66,6 +69,43 @@ void GAlgorithm::generatePopulation(int size) {
 		}
 		individual.fit = 0.0;
 		generation.push_back(individual);
+	}
+	generations++;
+}
+
+void GAlgorithm::loadPopulation(std::string filename) {
+	std::ifstream population(filename.c_str(), std::ifstream::in);
+	if (population) {
+		std::string line;
+		int line_count = 1;
+		int loaded = 0;
+		while (std::getline(population, line)) {
+			std::stringstream ss(line);
+			std::string token;
+			Individual individual;
+			int var_count = 0;
+			while (std::getline(ss, token, ',')) {
+				int var = atoi(token.c_str());
+				if (var > variables[var_count].ones) {
+					std::cerr << "Variable " << var << " in line " << line_count <<
+							" is greater than the maximum possible, truncating to " << variables[var_count].ones << std::endl;
+					var = variables[var_count].ones;
+				}
+				individual.variables.push_back(var);
+				var_count++;
+			}
+			if (individual.variables.size() < variables.size()) {
+				std::cerr << "Individual in line " << line_count << " does not match the variables size" << std::endl;
+			} else {
+				generation.push_back(individual);
+				loaded++;
+			}
+			line_count++;
+		}
+		population.close();
+		std::cout << "Loaded " << loaded << " individuals" << std::endl;
+	} else {
+		std::cerr << "File " << filename << " does not exist" << std::endl;
 	}
 }
 
@@ -151,6 +191,10 @@ std::vector<Individual>::iterator GAlgorithm::begin() {
 
 std::vector<Individual>::iterator GAlgorithm::end() {
 	return generation.end();
+}
+
+int GAlgorithm::getGenerations() {
+	return generations;
 }
 
 int GAlgorithm::cross(int var_a, int var_b, int index, int bit) {
