@@ -52,13 +52,20 @@ public:
 	double getMean(int n);
 	double getVariance(int n);
 	double getFit();
+	void computeParameters();
 private:
 	Particle<N> particles[Filters::PARTICLES];
 	double means[N];
 	double variances[N];
+	double w_slow;
+	double w_fast;
+	double a_slow;
+	double a_fast;
+	double w_avg;
+	double mu[N];
+	double dev[N];
 	double total_w;
 	double fit;
-	void computeParameters();
 };
 
 template <unsigned int N>
@@ -69,6 +76,11 @@ PFilter<N>::PFilter() {
 	}
 	total_w = 1.0;
 	fit = 1.0;
+	w_slow = 0.0;
+	w_fast = 0.0;
+	a_slow = 0.1;
+	a_fast = 2.0;
+	w_avg = 0.0;
 }
 
 template <unsigned int N>
@@ -78,11 +90,15 @@ PFilter<N>::~PFilter() {
 
 template <unsigned int N>
 void PFilter<N>::initWithBelief(double mu[N], double dev[N]) {
+	for (int i = 0; i < N; ++i) {
+		this->mu[i] = mu[i];
+		this->dev[i] = dev[i];
+	}
 	boost::mt19937 rng(time(0));
 	for (int i = 0; i < N; ++i) {
-		boost::uniform_int<> dist(0, 200 * dev[i]);
+		boost::uniform_real<> p_dist(0.0, 2.0 * dev[i]);
 		for (int j = 0; j < PARTICLES; ++j) {
-			particles[j].dimension[i] = mu[i] - dev[i] + (double)dist(rng) / 100.0;
+			particles[j].dimension[i] = mu[i] - dev[i] + p_dist(rng);
 		}
 	}
 	for (int i = 0; i < PARTICLES; ++i) {
@@ -92,19 +108,31 @@ void PFilter<N>::initWithBelief(double mu[N], double dev[N]) {
 
 template <unsigned int N>
 void PFilter<N>::resample() {
+	w_slow = w_slow + a_slow * (w_avg - w_slow);
+	w_fast = w_fast + a_fast * (w_avg - w_fast);
 	Particle<N> new_particles[PARTICLES];
 	boost::mt19937 rng(time(0));
-	boost::uniform_int<> rdist(0, 1000);
-	double r = (1.0 / PARTICLES) * ((double)rdist(rng)) / 1000.0;
+	boost::uniform_real<> rdist(0.0, 1.0);
+	double r = (1.0 / PARTICLES) * rdist(rng);
 	double c = particles[0].weight;
 	int i = 1;
 	for (int j = 0; j < PARTICLES; ++j) {
-		double u = r + ((double)j) * (1.0 / PARTICLES);
-		while (u > c) {
-			i = (i + 1) % PARTICLES;
-			c += particles[i].weight;
+		if (w_slow != 0.0 && (rdist(rng) < 1.0 - w_fast / w_slow)) {
+			std::cout << "Filling" << std::endl;
+			boost::uniform_real<> dist(0, 2.0 * dev[i]);
+			Particle<N> p;
+			for (int k = 0; k < N; ++k) {
+				p.dimension[k] = means[k] - dev[k] + dist(rng);
+			}
+			new_particles[j] = p;
+		} else {
+			double u = r + ((double)j) * (1.0 / PARTICLES);
+			while (u > c) {
+				i = (i + 1) % PARTICLES;
+				c += particles[i].weight;
+			}
+			new_particles[j] = particles[i];
 		}
-		new_particles[j] = particles[i];
 	}
 	total_w = 0.0;
 	for (i = 0; i < PARTICLES; ++i) {
@@ -141,6 +169,7 @@ void PFilter<N>::update(void(* update)(Particle<N> &p)) {
 	for (int i = 0; i < PARTICLES; ++i) {
 		particles[i].weight /= total_w;
 		total_w_bu += particles[i].weight;
+		w_avg += particles[i].weight / PARTICLES;
 	}
 	total_w = total_w_bu;
 }

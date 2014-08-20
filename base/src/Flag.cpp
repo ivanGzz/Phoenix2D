@@ -63,6 +63,9 @@ Flag::Flag(std::string name, std::string position, int simulation_time) {
 		maxDistance = distance;
 	}
 	error = (maxDistance - minDistance) / 2.0;
+	if (error == 0.0) {
+		error = 0.1;
+	}
 	std::getline(ss, token, ' ');
 	direction = atof(token.c_str());
 	maxDirection = direction;
@@ -83,6 +86,9 @@ Flag::Flag(std::string name, std::string position, int simulation_time) {
 		}
 	}
 	derror = (maxDirection - minDirection) / 2.0;
+	if (derror == 0.0) {
+		derror = 0.1;
+	}
 	x = FIELD[name].x;
 	y = FIELD[name].y;
 }

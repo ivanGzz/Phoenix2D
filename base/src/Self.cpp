@@ -29,6 +29,9 @@
 #include <iostream>
 #include <boost/regex.hpp>
 #include <boost/circular_buffer.hpp>
+#include <ctime>
+#include <boost/random.hpp>
+#include <limits>
 #include "constants.hpp"
 #include "Command.hpp"
 #include "Configs.hpp"
@@ -56,6 +59,7 @@ double *kick_power_rate;
 double *foul_detect_probability;
 double *catchable_area_l_stretch;
 Filters::PFilter<4> pfilter;
+double d_min = std::numeric_limits<double>::min();
 
 double u[3] = {0.0, 0.0, 0.0}; //{dash_power, dash_direction, turn_moment}
 
@@ -278,7 +282,7 @@ Self::Self(std::string player_params, std::string team_name, int unum, std::stri
 	kick_power_rate = new double[Self::PLAYER_TYPES];
 	foul_detect_probability = new double[Self::PLAYER_TYPES];
 	catchable_area_l_stretch = new double[Self::PLAYER_TYPES];
-	if (side.compare("r")) {
+	if (side.compare("r") == 0) {
 		body = 180.0;
 	}
 	Flag::initializeField();
@@ -449,11 +453,15 @@ void Self::processSenseBody(std::string sense_body) {
 				position = Position(x, y, body);
 //				pfilter.initWithBelief(x, y, theta, 5.0, 5.0, 10.0);
 				if (Configs::LOCALIZATION.compare("particlefilter") == 0) {
+					std::cout << "Initializing pfilter" << std::endl;
 					double mus[4];
 					mus[0] = x;
 					mus[1] = y;
-					mus[2] = cos(body * Math::PI / 180.0);
-					mus[3] = sin(body * Math::PI / 180.0);
+					double dir_x = cos(body * Math::PI / 180.0);
+					double dir_y = sin(body * Math::PI / 180.0);
+					std::cout << x << " " << y << " " << dir_x << " " << dir_y << std::endl;
+					mus[2] = dir_x;
+					mus[3] = dir_y;
 					double devs[] = {5.0, 5.0, 0.2, 0.2};
 					pfilter.initWithBelief(mus, devs);
 				}
@@ -623,12 +631,21 @@ double velc = 0.0;
 double dire = 0.0;
 double turn = 0.0;
 std::vector<Flag> current_flags;
+boost::mt19937 rngc(time(0));
+boost::uniform_real<> distc(0.0, 2.0);
 
 void predict(Filters::Particle<4> &particle) {
+	double rdp = u[0] * (1.0 + Server::PLAYER_RAND * (-1.0 + distc(rngc)));
+	double rtm = u[2] * (1.0 + Server::PLAYER_RAND * (-1.0 + distc(rngc)));
+	double p_velc = Self::getAmountOfSpeedAtTime(1) + Self::getEffortAtTime(1) * Self::DASH_POWER_RATE * rdp;
+	if (p_velc > Self::PLAYER_SPEED_MAX) {
+		p_velc = Self::PLAYER_SPEED_MAX;
+	}
+	double p_turn = rtm / (1.0 + Server::INERTIA_MOMENT * p_velc);
 	double direction = 180.0 * atan2(particle.dimension[3], particle.dimension[2]) / Math::PI;
-	particle.dimension[0] += velc * cos(Math::PI * direction / 180.0);
-	particle.dimension[1] += velc * sin(Math::PI * direction / 180.0);
-	direction += turn;
+	particle.dimension[0] += p_velc * cos(Math::PI * direction / 180.0);
+	particle.dimension[1] += p_velc * sin(Math::PI * direction / 180.0);
+	direction += p_turn;
 	if (direction > 180.0) {
 		direction -= 360.0;
 	} else if (direction < -180.0) {
@@ -639,14 +656,30 @@ void predict(Filters::Particle<4> &particle) {
 }
 
 void update(Filters::Particle<4> &particle) {
+	double pd = 180.0 * atan2(particle.dimension[3], particle.dimension[2]) / Math::PI;
 	particle.weight = 1.0;
 	for (std::vector<Flag>::iterator it = current_flags.begin(); it != current_flags.end(); ++it) {
 		double x = sqrt(pow(particle.dimension[0] - it->getX(), 2.0) + pow(particle.dimension[1] - it->getY(), 2.0));
-		double a = it->getDistance() - 2.0 * it->getDistanceError();
-		double b = it->getDistance() + it->getDistanceError();
-		Math::Uniform u(a, b);
-		particle.weight *= u.evaluate(x); //Math::uniform(u, x);
+		double fd = 180.0 * atan2(it->getY() - particle.dimension[1], it->getX() - particle.dimension[0]) / Math::PI;
+		double dir = fd - pd;
+		if (dir > 180.0) {
+			dir -= 360.0;
+		} else if (dir < -180.0) {
+			dir += 360.0;
+		}
+		double a = (it->getMaxDistance() + it->getMinDistance()) / 2.0;
+		double b = 4.0 * it->getDistanceError();
+		Math::UGaussian n(a, b);
+		a = (it->getMaxDirection() + it->getMinDirection()) / 2.0;
+		b = 4.0 * it->getDirectionError();
+		Math::UGaussian nd(a, b);
+		particle.weight *= n.evaluate(x) * nd.evaluate(dir); //Math::uniform(u, x);
 	}
+	if (particle.weight == 0.0) {
+		particle.weight = d_min;
+	}
+	//std::cout << particle.dimension[0] << " " << particle.dimension[1] << " " << pd << ": ";
+	//std::cout << particle.weight << std::endl;
 }
 
 void triangulation(std::vector<Flag> flags) {
@@ -728,11 +761,13 @@ void particlefilter(std::vector<Flag> flags) {
 	if (flags.size() > 0) {
 		current_flags = flags;
 		pfilter.update(update);
+		//std::cout << pfilter.getFit() << std::endl;
 	}
 	pfilter.resample();
+	pfilter.computeParameters();
 	x = pfilter.getMean(0);
 	y = pfilter.getMean(1);
-	body = 180.0 * atan2(pfilter.getMean(3), pfilter.getMean(4)) / Math::PI;
+	body = 180.0 * atan2(pfilter.getMean(3), pfilter.getMean(2)) / Math::PI - Self::HEAD_ANGLE;
 }
 
 void Self::localize(std::vector<Flag> flags) {
