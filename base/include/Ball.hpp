@@ -97,6 +97,7 @@ private:
 	Position position;				///< computed ball absolute position using x and y
 	Geometry::Vector2D velocity;	///< computed ball absolute velocity using vx and vy
 	bool in_sight_range;			///< boolean indicating if the ball is in the vision sensor
+	bool vel;					    ///< Flag for velocity information received
 };
 
 } // End namespace Phoenix

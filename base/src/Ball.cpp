@@ -42,6 +42,7 @@ Ball::Ball() {
 	vx = 0.0;
 	vy = 0.0;
 	in_sight_range = false;
+	vel = false;
 }
 
 void Ball::initForCoach(std::string position) {
@@ -73,7 +74,6 @@ void Ball::initForPlayer(std::string position, const Position* player_position, 
 	while (std::getline(ss_position, token, ' ')) {
 		tokens.push_back(token);
 	}
-	bool vel = false;
 	switch (tokens.size()) {
 	case 4:
 		distance = atof(tokens[0].c_str());
@@ -94,7 +94,7 @@ void Ball::initForPlayer(std::string position, const Position* player_position, 
 	default:
 		break;
 	}
-	double source_direction = player_position->body + player_position->neck - direction;
+	double source_direction = player_position->body + player_position->neck + direction;
 	if (source_direction > 180.0) {
 		source_direction -= 360.0;
 	} else if (source_direction <= 180.0) {
@@ -124,6 +124,8 @@ void Ball::initForFullstate(double x, double y, double vx, double vy) {
 	this->y = y;
 	this->vx = vx;
 	this->vy = vy;
+	this->position = Position(x, y);
+	velocity = Geometry::Vector2D(vx, vy);
 }
 
 Ball::~Ball() {

@@ -668,11 +668,11 @@ void update(Filters::Particle<4> &particle) {
 			dir += 360.0;
 		}
 		double a = (it->getMaxDistance() + it->getMinDistance()) / 2.0;
-		double b = 4.0 * it->getDistanceError();
-		Math::UGaussian n(a, b);
+		double b = 2.0 * it->getDistanceError();
+		Math::Gaussian n(a, b);
 		a = (it->getMaxDirection() + it->getMinDirection()) / 2.0;
 		b = 4.0 * it->getDirectionError();
-		Math::UGaussian nd(a, b);
+		Math::Gaussian nd(a, b);
 		particle.weight *= n.evaluate(x) * nd.evaluate(dir); //Math::uniform(u, x);
 	}
 	if (particle.weight == 0.0) {

@@ -1,3 +1,9 @@
+2014-09-08 Nelson Gonzalez <nigm2005@gmail.com>
+
+	* (World) ball tracking was implemented
+
+	* (WorldModel) full state ball fixed
+
 2014-08-19 Nelson Gonzalez <nigm2005@gmail.com>
 
 	* (PFilter) Added augmented particle filter

@@ -489,6 +489,7 @@ void World::updateWorld(std::vector<Player> new_players, Ball new_ball, std::vec
 		fs_players = new_fs_players;
 		fs_ball = new_fs_ball;
 		if (Configs::PLAYER_HISTORY) {
+			//TODO: we must look for the ball
 			double vision_angle = 180.0;
 			if (Self::VIEW_MODE_WIDTH.compare("narrow") == 0) {
 				vision_angle = 60.0;
@@ -498,6 +499,29 @@ void World::updateWorld(std::vector<Player> new_players, Ball new_ball, std::vec
 			}
 			if (Server::FULLSTATE_L != 0 && Server::FULLSTATE_R != 0) {
 				identifyPlayers(new_players);
+			}
+			if (Configs::BALL_TRACKING) {
+				// the ball is no longer in the sight range, its position is inferred from the last known position
+				if (new_ball.isInSightRange()) {
+					if (!new_ball.vel) { //we received no information about the ball velocity
+						if (ball.vel) {
+							new_ball.velocity = ball.velocity;
+						} else {
+							double dx = new_ball.x - ball.x;
+							double dy = new_ball.y - ball.y;
+							Geometry::Vector2D new_vel(dx, dy);
+							if (new_vel.getMagnitude() > Server::BALL_SPEED_MAX) {
+								new_vel.scale(Server::BALL_SPEED_MAX / new_vel.getMagnitude());
+							}
+							new_ball.velocity = new_vel;
+						}
+					}
+				} else {
+					ball.velocity.scale(Server::BALL_DECAY);
+					Geometry::Point new_position = ball.getPosition()->getPoint() + ball.velocity;
+					new_ball.position = Position(new_position);
+					new_ball.velocity = ball.velocity;
+				}
 			}
 			if (Configs::PLAYER_TRACKING) {
 				if (Configs::TRACKING.compare("qualifier") == 0) {

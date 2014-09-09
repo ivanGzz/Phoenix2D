@@ -21,6 +21,8 @@
   
   *  Now the user can use genetic algorithms using the genetics algorithm toolkit provided with Phoenix2D
 
+  *  Dribble test fixed
+
 [2.0]
 
   *  Geometrical primitives were added and included into the base code.  This primitives are included in

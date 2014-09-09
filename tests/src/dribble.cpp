@@ -91,27 +91,27 @@ void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages, 
 void executePlayOn(WorldModel worldModel, std::vector<Message> messages, Commands* commands) {
 	Ball* b = worldModel.getBall();
 	const Position* p = Self::getPosition();
-	if (fullstate) {
+	/*if (fullstate) {
 		Ball* e_b = worldModel.getExactBall();
-		std::clog << Game::GAME_TIME << ": (" << b->getPosition()->x << ", " << b->getPosition()->y << ")"
+		std::clog << Game::GAME_TIME << (b->isInSightRange() ? "seen" : "not seen") <<
+					": (" << b->getPosition()->x << ", " << b->getPosition()->y << ")"
 				                     << ", (" << e_b->getPosition()->x << ", " << e_b->getPosition()->y << ")"
 				                     << std::endl;
+	}*/
+	if (b->getPosition()->getDistanceTo(&positionToGo) <= 2.0) {
+		randomPosition();
 	}
-	if (b->isInSightRange()) {
-		double ed = p->getDistanceTo(b->getPosition()) - Server::PLAYER_SIZE - Server::BALL_SIZE;
-		if (ed < Self::KICKABLE_MARGIN) {
-			double dir = p->getDirectionTo(&positionToGo);
-			commands->kick(10.0, dir);
-		} else {
-			double dir = p->getDirectionTo(b->getPosition());
-			if (fabs(dir) > 20.0) {
-				commands->turn(dir);
-			} else {
-				commands->dash(50.0, 0.0);
-			}
-		}
+	double ed = p->getDistanceTo(b->getPosition()) - Server::PLAYER_SIZE - Server::BALL_SIZE;
+	if (ed < Self::KICKABLE_MARGIN) {
+		double dir = p->getDirectionTo(&positionToGo);
+		commands->kick(10.0, dir);
 	} else {
-		commands->turn(60.0);
+		double dir = p->getDirectionTo(b->getPosition());
+		if (fabs(dir) > 10.0) {
+			commands->turn(dir);
+		} else {
+			commands->dash(50.0, 0.0);
+		}
 	}
 }
 

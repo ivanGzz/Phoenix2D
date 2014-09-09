@@ -68,6 +68,7 @@ public:
 	static std::string LOG_NAME;				///< Log name to be used if LOGGING is enabled
 	static bool PLAYER_HISTORY;					///< If true the agent will use the player buffers to access data from previous cycles
 	static bool PLAYER_TRACKING;				///< If true the agent will construct the path for each player in the field
+	static bool BALL_TRACKING;					///< If true the agent will construct the path for the ball
 	static double TRACKING_THRESHOLD;			///< When the match for two players is below this value the player will not be tracked
 	static std::string TRACKING;				///< Indicates which tracking method will be used for the player tracking
 	static std::string LOCALIZATION;			///< Indicates which localization method will be used for the player and goalie agents

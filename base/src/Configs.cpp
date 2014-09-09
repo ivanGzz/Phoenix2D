@@ -48,6 +48,7 @@ double ys[] = {0.0, 0.0, -10.0, 10.0, 0.0, -11.0, 11.0, -5.0, 5.0, -10.0, 10.0};
 Position Configs::POSITION;
 bool Configs::PLAYER_HISTORY = false;
 bool Configs::PLAYER_TRACKING = false;
+bool Configs::BALL_TRACKING = true;
 bool Configs::LOGGING = false;
 bool Configs::TRAINER_LOGGING = false;
 bool Configs::VERBOSE = false;
@@ -178,6 +179,7 @@ void Configs::loadTeam(std::string filename) {
 			Configs::VERBOSE  			= pt.get(path + "verbose", false);
 			Configs::PLAYER_HISTORY 	= pt.get(path + "world.history", false);
 			Configs::PLAYER_TRACKING	= pt.get(path + "world.tracking", false);
+			Configs::BALL_TRACKING      = pt.get(path + "world.ball", true);
 			Configs::SAVE_FULLSTATE 	= pt.get(path + "sensors.fullstate", false);
 			Configs::SAVE_SEE 			= pt.get(path + "sensors.see", false);
 			Configs::SAVE_SENSE_BODY 	= pt.get(path + "sensors.body", false);

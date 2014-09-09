@@ -76,7 +76,7 @@ void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages, 
 		if (iteration > -1) {
 			double mean = error_accum / cycles;
 			std::cout << "Iteration: " << iteration << ", error mean: " << mean << ", direction error mean: ";
-			std::clog << mean << ", ";
+			std::clog << mean << ",";
 			error_means.push_back(mean);
 			mean = dir_accum / cycles;
 			std::cout << mean << std::endl;
@@ -102,7 +102,7 @@ void executePlayOn(WorldModel worldModel, std::vector<Message> messages, Command
 	if (fullstate) {
 		Player* pl = worldModel.getOurExactPlayer(Self::UNIFORM_NUMBER);
 		Position* e_p = pl->getPosition();
-//		std::clog << Game::GAME_TIME << ": (" << p->x << ", " << p->y << ", " << p->body << ")"
+//		std::cout << Game::GAME_TIME << ": (" << p->x << ", " << p->y << ", " << p->body << ")"
 //				                     << ", (" << e_p->x << ", " << e_p->y << ", " << e_p->body << ")"
 //				                     << std::endl;
 		error_accum += sqrt(pow(p->x - e_p->x, 2.0) + pow(p->y - e_p->y, 2.0));
@@ -123,6 +123,7 @@ void executePlayOn(WorldModel worldModel, std::vector<Message> messages, Command
 			commands->dash(50.0, 0.0);
 		}
 	} else {
+		std::cout << p->x << " " << p->y << " " << p->body << std::endl;
 		randomPosition();
 	}
 	cycles++;

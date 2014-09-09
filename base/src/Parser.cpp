@@ -172,6 +172,8 @@ void *fullstateHandler(void* arg) {
 		double vx = atof((std::string() + match[3]).c_str());
 		double vy = atof((std::string() + match[4]).c_str());
 		fs_ball.initForFullstate(x, y, vx, vy);
+	} else {
+		std::cerr << "Ball not found in fullstate" << std::endl;
 	}
 	if (Configs::SAVE_FULLSTATE) {
 		fs_stream << fullstate << std::endl;
