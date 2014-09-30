@@ -28,11 +28,20 @@
 #include <fstream>
 #include <iostream>
 #include <cstdlib>
+#include <boost/regex.hpp>
 #include "Trainer.hpp"
 #include "Commands.hpp"
 #include "Game.hpp"
 
 namespace Phoenix {
+
+boost::regex recover("recover\\(\\)"); // recover()
+boost::regex play_mode("changeTo\\(\\s*([\\w\\_]+)\\s*\\)"); // changeTo( before_kick_off )
+boost::regex waitCycle("waitCycles\\(\\s*(\\d+)\\s*\\)"); // waitCycles( 100 )
+boost::regex waitMsg0("waitMessage\\(\\)"); // waitMessage()
+boost::regex waitMsg1("waitMessage\\(\\s*(\\w+)\\s*\\)"); // waitMessage( END )
+boost::regex waitMsg2("waitMessage\\(\\s*(\\w+)\\s*,\\s*(l|r)\\s*\\)"); // waitMessage( END, l)
+boost::regex waitMsg3("waitMessage\\(\\s*(\\w+)\\s*,\\s*(l|r)\\s*,\\s*(\\d+)\\s*\\)"); // waitMsg( END, l, 2)
 
 std::vector<std::string> code;
 
