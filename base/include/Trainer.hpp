@@ -46,9 +46,9 @@ class Trainer {
 public:
 	/*!
 	 * @brief Trainer default constructor
-	 * @param commands Pointer to Commands object
+	 * @param ptr_commands Pointer to Commands object
 	 */
-	Trainer(Commands *commands);
+	Trainer(Commands *ptr_commands);
 	/*!
 	 * @brief Trainer default destructor
 	 */
@@ -68,9 +68,6 @@ public:
 	 * @brief Returns true if the execution must continue or false if the simulation must end
 	 */
 	bool continueExecution();
-private:
-	Commands *commands;	///< Pointer to Commands object
-	bool newExecution;	///< If true the execution must continue, false otherwise
 };
 
 } // End namespace Phoenix

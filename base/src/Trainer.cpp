@@ -38,8 +38,6 @@
 #include "Commands.hpp"
 #include "Game.hpp"
 
-namespace Phoenix {
-
 #define _IF_       0x02
 #define _ELSE_     0x03
 #define _WHILE_    0x04
@@ -69,15 +67,6 @@ namespace Phoenix {
 
 #define _DO_ 	   0x40
 #define _SLEEP_    0x41
-
-namespace qi = boost::spirit::qi;
-namespace ascii = boost::spirit::ascii;
-
-pthread_t thread_trainer = 0;
-static bool cycle_flag = false;
-static pthread_cond_t cycle_cond = PTHREAD_COND_INITIALIZER;
-static pthread_mutex_t cycle_mutex = PTHREAD_MUTEX_INITIALIZER;
-static bool running = false;
 
 /***********
  * Structs *
@@ -130,6 +119,19 @@ BOOST_FUSION_ADAPT_STRUCT(
 	(int, type)
 	(phx::expression, expr)
 )
+
+namespace Phoenix {
+
+namespace qi = boost::spirit::qi;
+namespace ascii = boost::spirit::ascii;
+
+pthread_t thread_trainer = 0;
+static bool cycle_flag = false;
+static pthread_cond_t cycle_cond = PTHREAD_COND_INITIALIZER;
+static pthread_mutex_t cycle_mutex = PTHREAD_MUTEX_INITIALIZER;
+static bool running = false;
+static bool newExecution = true;
+static Commands* commands;
 
 /***********
  * Parsers *
@@ -242,6 +244,7 @@ double getVarValue(std::string varstr) {
 
 void onSleep(int cycles) {
 	cycle_flag = false;
+	std::cout << "Sleeping for " << cycles << std::endl;
 	for (int i = 0; i < cycles; ++i) {
 		int success = pthread_mutex_lock(&cycle_mutex);
 		if (success) {
@@ -262,8 +265,8 @@ void onSleep(int cycles) {
 }
 
 void onPrint(std::string arg) {
-	if (args[0] == '$') {
-		double val = getVarValue(args[0]);
+	if (arg[0] == '$') {
+		double val = getVarValue(arg);
 		std::cout << val << std::endl;
 	} else {
 		std::cout << arg << std::endl;
@@ -272,6 +275,10 @@ void onPrint(std::string arg) {
 
 void onPlayMode(std::string play_mode) {
 	commands->changeMode(play_mode);
+}
+
+void onSend() {
+	commands->sendCommands();
 }
 
 /***********
@@ -435,7 +442,7 @@ int evaluateExpression(phx::expression expression) {
 				} else {
 					val = atof(expression.root.c_str());
 				}
-				if (val > evaluateExpressionNode(first.node, queue)) {
+				if (val != evaluateExpressionNode(first.node, queue)) {
 					return_value = 1;
 				} else {
 					return_value = 0;
@@ -465,6 +472,12 @@ void executeBranch(std::vector<address>* branch) {
 					if (args.size() > 0) {
 						onSleep(atoi(args[0].c_str()));
 					}
+				} else if (functions[it->pointer].name.compare("playmode") == 0) {
+					if (args.size() > 0) {
+						onPlayMode(args[0]);
+					}
+				} else if (functions[it->pointer].name.compare("send") == 0) {
+					onSend();
 				}
 				break;
 			}
@@ -499,8 +512,10 @@ void executeBranch(std::vector<address>* branch) {
 }
 
 void *executeCode(void* arg) {
+	std::cout << "Launched trainer" << std::endl;
 	executeBranch(&branchs[0]);
 	newExecution = false;
+	std::cout << "Finished trainer" << std::endl;
 	return 0;
 }
 
@@ -601,12 +616,6 @@ bool loadCode(std::string trainer) {
 				}
 				continue;
 			}
-			int macro;
-			macro_parser<std::string::iterator> macro_parser;
-			r = phrase_parse(line.begin(), line.end(), macro_parser, macro);
-			if (r) {
-
-			}
 			std::cerr << "Line not parsed " << line << std::endl;
 		}
 		branchs_stack.pop();
@@ -620,9 +629,8 @@ bool loadCode(std::string trainer) {
 	return true;
 }
 
-Trainer::Trainer(Commands *commands) {
-	this->commands = commands;
-	newExecution = false;
+Trainer::Trainer(Commands *ptr_commands) {
+	commands = ptr_commands;
 }
 
 Trainer::~Trainer() {
@@ -637,8 +645,8 @@ bool Trainer::load(std::string trainer) {
 void Trainer::execute(WorldModel world, std::vector<Message> messages) {
 	// We update all the variables
 	Ball* ball = world.getBall();
-	vars["$ball.x"] = ball.getX();
-	vars["$ball.y"] = ball.getY();
+	vars["$ball.x"] = ball->getPosition()->getX();
+	vars["$ball.y"] = ball->getPosition()->getY();
 	// We launch the thread or update the new cycles
 	if (running) {
 		int success = pthread_mutex_lock(&cycle_mutex);
@@ -657,9 +665,9 @@ void Trainer::execute(WorldModel world, std::vector<Message> messages) {
 		}
 	} else {
 		if (pthread_create(&thread_trainer, 0, executeCode, 0) != 0) {
-			running = true;
-		} else {
 			std::cerr << "Could not create trainer thread" << std::endl;
+		} else {
+			running = true;	
 		}
 	}
 }
