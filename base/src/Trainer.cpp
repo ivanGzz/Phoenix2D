@@ -281,6 +281,10 @@ void onSend() {
 	commands->sendCommands();
 }
 
+void onBall(double x, double y) {
+	commands->moveObject("(b)", x, y);
+}
+
 /***********
  * Runtime *
  ***********/
@@ -478,6 +482,10 @@ void executeBranch(std::vector<address>* branch) {
 					}
 				} else if (functions[it->pointer].name.compare("send") == 0) {
 					onSend();
+				} else if (functions[it->pointer].name.compare("ball") == 0) {
+					if (args.size() > 1) {
+						onBall(atof(args[0].c_str()), args[1].c_str());
+					}
 				}
 				break;
 			}
@@ -520,9 +528,9 @@ void *executeCode(void* arg) {
 }
 
 void onMacro(phx::function macro) {
-	if (macro.name.compare("_sleep") == 0) {
-
-	} else if (macro.name.compare("_do") == 0) {
+	if (macro.name.compare("_do") == 0) {
+		// To be implemented
+	} else if (macro.name.compare("_waitfor") == 0) {
 		// To be implemented
 	}
 }

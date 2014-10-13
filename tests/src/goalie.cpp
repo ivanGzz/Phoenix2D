@@ -22,12 +22,23 @@
 
 namespace goalie {
 
+bool setup = false;
+
 void onStart() {
 
 }
 
 void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages, Commands* commands) {
-
+	if (!setup) {
+		if (Controller.AGENT_TYPE == 'g') {
+			commands->move(-50.0, 0.0);
+		} else {
+			commands->move(-10.0, 0.0);
+		}
+		setup = true;
+	} else {
+		
+	}
 }
 
 void executePlayOn(WorldModel worldModel, std::vector<Message> messages, Commands* commands) {
