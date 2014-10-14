@@ -184,6 +184,7 @@ void *fullstateHandler(void* arg) {
 /* hear handler */
 
 boost::regex hear_referee_regex("\\(hear\\s+(\\d+)\\s+referee\\s+([\\\"\\w\\s]*)\\)");
+boost::regex hear_refereet_regex("\\(hear\\s+referee\\s+(\\d+)\\s+([\\\"\\w\\s]*)\\)"); // from referee to trainer
 boost::regex hear_coach_regex("\\(hear\\s+(\\d+)\\s+(online_coach_left|online_coach_right)\\s+\"([\\w\\s]*)\"\\)"); //coach free form
 //boost::regex hear_clang_regex(""); //for coach language, soon
 boost::regex hear_trainer_regex("\\(hear\\s+(\\d+)\\s+coach\\s+([\\\"\\w\\s]*)\\)");
@@ -195,9 +196,12 @@ std::vector<std::string> hears;
 void *hearHandler(void* arg) {
 	std::string hear = *((std::string *)arg);
 	boost::cmatch match;
-	if (boost::regex_match(hear.c_str(), match, hear_referee_regex)) { //from referee to player/trainer
+	if (boost::regex_match(hear.c_str(), match, hear_referee_regex)) { //from referee to player
 		game_ptr->updatePlayMode(std::string() + match[2]);
-	} 
+	}
+	else if (boost::regex_match(hear.c_str(), match, hear_refereet_regex)) {
+		game_ptr->updatePlayMode(std::string() + match[2]);
+	}
 	else if (boost::regex_match(hear.c_str(), match, hear_player_regex)) { //from player to player (same team)
 		double direction = atof((std::string() + match[2]).c_str());
 		int unum = atoi((std::string() + match[3]).c_str());

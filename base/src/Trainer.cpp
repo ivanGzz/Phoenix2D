@@ -42,7 +42,7 @@
 #define _ELSE_     0x03
 #define _WHILE_    0x04
 
-#define _LEAF_     0x10
+#define _ASSTXT_   0x10
 #define _EQUAL_    0x12
 #define _PLUS_     0x13
 #define _MINUS_    0x14
@@ -54,6 +54,8 @@
 #define _GEQ_      0x1A
 #define _ASSGMNT_  0x1B
 #define _NEQUAL_   0x1C
+#define _CMP_	   0x1D
+
 
 #define _FUNC_     0x20
 #define _CONTROL_  0x21
@@ -66,7 +68,7 @@
 #define _ENDWHILE_ 0x33
 
 #define _DO_ 	   0x40
-#define _SLEEP_    0x41
+#define _WAIT_	   0x41
 
 /***********
  * Structs *
@@ -161,11 +163,13 @@ struct expression_parser : qi::grammar<Iterator, phx::expression(), ascii::space
 		start %= var >> +node >> ';';
 		node %= op >> var;
 		op = lit("=") [_val = _ASSGMNT_] |
+			 lit(":") [_val = _ASSTXT_]  |
 		     lit(">") [_val = _GREATER_] |
 		     lit("<") [_val = _LESS_]    |
 		     lit(">=")[_val = _GEQ_]     |
 		     lit("<=")[_val = _LEQ_]     |
 		     lit("==")[_val = _EQUAL_]   |
+		     lit("<>")[_val = _CMP_]     |
 		     lit("!=")[_val = _NEQUAL_]  |
 		     lit("+") [_val = _PLUS_]    |
 		     lit("-") [_val = _MINUS_]   |
@@ -192,11 +196,13 @@ struct control_parser : qi::grammar<Iterator, phx::control(), ascii::space_type>
 		expr %= var >> +node;
 		node %= op >> var;
 		op = lit("=") [_val = _ASSGMNT_] |
+			 lit(":") [_val = _ASSTXT_]  |
 		     lit(">") [_val = _GREATER_] |
 		     lit("<") [_val = _LESS_]    |
 		     lit(">=")[_val = _GEQ_]     |
 		     lit("<=")[_val = _LEQ_]     |
 		     lit("==")[_val = _EQUAL_]   |
+		     lit("<>")[_val = _CMP_]     |
 		     lit("!=")[_val = _NEQUAL_]  |
 		     lit("+") [_val = _PLUS_]    |
 		     lit("-") [_val = _MINUS_]   |
@@ -217,7 +223,7 @@ struct close_parser : qi::grammar<Iterator, int(), ascii::space_type> {
 	close_parser() : close_parser::base_type(start) {
 		using qi::lit;
 		using qi::_val;
-		start = lit("enddo")   [_val = _ENDDO_]    |
+		start = lit("_enddo")  [_val = _ENDDO_]    |
 			    lit("endif")   [_val = _ENDIF_]    |
 			    lit("endwhile")[_val = _ENDWHILE_] |
 			    lit("else")    [_val = _ELSE_];
@@ -230,6 +236,7 @@ struct close_parser : qi::grammar<Iterator, int(), ascii::space_type> {
  ***********************/
 
 std::map<std::string, double> vars;
+std::map<std::string, std::string> texts;
 
 double getVarValue(std::string varstr) {
 	double val = 0.0;
@@ -240,6 +247,17 @@ double getVarValue(std::string varstr) {
 		std::cerr << "Variable " << varstr << " has not been defined" << std::endl;
 	}
 	return val;
+}
+
+std::string getTextValue(std::string varstr) {
+	std::string str("");
+	std::map<std::string, std::string>::iterator var = texts.find(varstr);
+	if (var != texts.end()) {
+		str = var->second;
+	} else {
+		std::cerr << "Text " << varstr << " has not been defined" << std::endl;
+	}
+	return str;
 }
 
 void onSleep(int cycles) {
@@ -283,6 +301,10 @@ void onSend() {
 
 void onBall(double x, double y) {
 	commands->moveObject("(b)", x, y);
+}
+
+void onRecover() {
+	commands->recover();
 }
 
 /***********
@@ -453,6 +475,10 @@ int evaluateExpression(phx::expression expression) {
 				}
 				break;
 			}
+		case _CMP_:
+			{
+				break;
+			}
 		default:
 			{
 				break;
@@ -471,21 +497,31 @@ void executeBranch(std::vector<address>* branch) {
 				if (functions[it->pointer].name.compare("print") == 0) {
 					if (args.size() > 0) {
 						onPrint(args[0]);
+					} else {
+						std::cerr << "print function was expecting an argument" << std::endl;
 					}
 				} else if (functions[it->pointer].name.compare("sleep") == 0) {
 					if (args.size() > 0) {
 						onSleep(atoi(args[0].c_str()));
+					} else {
+						std::cerr << "sleep function was expecting an argument" << std::endl;
 					}
 				} else if (functions[it->pointer].name.compare("playmode") == 0) {
 					if (args.size() > 0) {
 						onPlayMode(args[0]);
+					} else {
+						std::cerr << "playmode function was expecting an argument" << std::endl;
 					}
 				} else if (functions[it->pointer].name.compare("send") == 0) {
 					onSend();
 				} else if (functions[it->pointer].name.compare("ball") == 0) {
 					if (args.size() > 1) {
-						onBall(atof(args[0].c_str()), args[1].c_str());
+						onBall(atof(args[0].c_str()), atof(args[1].c_str()));
+					} else {
+						std::cerr << "ball function was expecting two arguments" << std::endl;
 					}
+				} else if (functions[it->pointer].name.compare("recover") == 0) {
+					onRecover();
 				}
 				break;
 			}
@@ -655,6 +691,7 @@ void Trainer::execute(WorldModel world, std::vector<Message> messages) {
 	Ball* ball = world.getBall();
 	vars["$ball.x"] = ball->getPosition()->getX();
 	vars["$ball.y"] = ball->getPosition()->getY();
+	texts["$playmode"] = Game::PLAY_MODE;
 	// We launch the thread or update the new cycles
 	if (running) {
 		int success = pthread_mutex_lock(&cycle_mutex);

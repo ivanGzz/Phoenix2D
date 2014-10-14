@@ -1,8 +1,16 @@
-wait 10
-do 30
-change_to play_on
-wait 2000
-change_to before_kick_off
-recover
-wait 10
-end_do
+sleep(10);
+$i = 0;
+while ($i < 30)
+	playmode(play_on);
+	send();
+	sleep(2000);
+	playmode(before_kick_off);
+	send();
+	sleep(1);
+	recover();
+	send();
+	sleep(10);
+	$i = $i + 1;
+endwhile
+playmode(time_over);
+send();
