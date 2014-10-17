@@ -1,0 +1,15 @@
+sleep(10);
+$i = 0;
+while ($i < 2)
+	playmode(play_on);
+	send();
+	while ($playmode <> goal_l)
+		sleep(1);
+	endwhile
+	playmode(before_kick_off);
+	send();
+	sleep(10);
+	$i = $i + 1;
+endwhile
+playmode(time_over);
+send();

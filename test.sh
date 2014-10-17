@@ -17,6 +17,10 @@ then
 	./agent test world Nemesis & sleep 1
 	./agent test world Nemesis & sleep 1
 	./agent trainer trainer/world.phx
+elif [ "$1" == "goalie" ]
+then
+	./agent test goalie Phoenix & sleep 1
+	./agent trainer trainer/ball.phx
 else
 	echo "Phoenix2D - 2014"
 	echo "Available tests:"

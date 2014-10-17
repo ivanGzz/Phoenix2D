@@ -235,6 +235,7 @@ struct close_parser : qi::grammar<Iterator, int(), ascii::space_type> {
  * Pre-built functions *
  ***********************/
 
+std::map<std::string, char> varsmap;
 std::map<std::string, double> vars;
 std::map<std::string, std::string> texts;
 
@@ -475,8 +476,29 @@ int evaluateExpression(phx::expression expression) {
 				}
 				break;
 			}
+		case _ASSTXT_:
+			{
+				texts[expression.root] = first.node;
+				break;
+			}
 		case _CMP_:
 			{
+				std::string left, right;
+				if (expression.root[0] == '$') {
+					left = texts[expression.root];
+				} else {
+					left = expression.root;
+				}
+				if (first.node[0] == '$') {
+					right = texts[first.node];
+				} else {
+					right = first.node;
+				}
+				if (left.compare(right) == 0) {
+					return_value = 0;
+				} else {
+					return_value = 1;
+				}
 				break;
 			}
 		default:
@@ -563,12 +585,106 @@ void *executeCode(void* arg) {
 	return 0;
 }
 
+void parseLine(std::string line);
+
 void onMacro(phx::function macro) {
 	if (macro.name.compare("_do") == 0) {
 		// To be implemented
 	} else if (macro.name.compare("_waitfor") == 0) {
-		// To be implemented
+		srd::vector<std::string> args = macro.tokens;
+		if (args.size() > 1 && args[0].compare("play_mode") == 0) {
+			std::string line = "while ($playmode <> " + args[1] + ")";
+			parseLine(line);
+			line = "sleep(1);";
+			parseLine(line);
+			line = "endwhile";
+			parseLine(line);
+		}
 	}
+}
+
+void parseLine(std::string line) {
+	phx::function phx_function;
+	function_parser<std::string::iterator> parser_function;
+	bool r = phrase_parse(line.begin(), line.end(), parser_function, space, phx_function);
+	if (r) {
+		if (phx_function.name[0] == '_') {
+			onMacro(phx_function);
+			return;
+		}
+		functions.push_back(phx_function);
+		address a;
+		a.type = _FUNC_;
+		a.pointer = functions.size() - 1;
+		branchs[branchs_stack.top()].push_back(a);
+		return;
+	}
+	phx::expression phx_expression;
+	expression_parser<std::string::iterator> parser_expression;
+	r = phrase_parse(line.begin(), line.end(), parser_expression, space, phx_expression);
+	if (r) {
+		expressions.push_back(phx_expression);
+		address a;
+		a.type = _EXPRS_;
+		a.pointer = expressions.size() - 1;
+		branchs[branchs_stack.top()].push_back(a);
+		return;
+	}
+	phx::control phx_control;
+	control_parser<std::string::iterator> parser_control;
+	r = phrase_parse(line.begin(), line.end(), parser_control, space, phx_control);
+	if (r) {
+		controls.push_back(phx_control);
+		std::vector<address> new_branch;
+		branchs.push_back(new_branch);
+		address a;
+		a.type = phx_control.type;
+		a.pointer = controls.size() - 1;
+		a.left_branch = branchs.size() - 1;
+		branchs[branchs_stack.top()].push_back(a);
+		branchs_stack.push(branchs.size() - 1);
+		return;
+	}
+	int close;
+	close_parser<std::string::iterator> parser_close;
+	r = phrase_parse(line.begin(), line.end(), parser_close, space, close);
+	if (r) {
+		branchs_stack.pop();
+		switch (close) {
+		case _ELSE_:
+			{
+				if (branchs[branchs_stack.top()].back().type == _IF_) {
+					std::vector<address> new_branch;
+					branchs.push_back(new_branch);
+					branchs[branchs_stack.top()].back().right_branch = branchs.size() - 1;
+					branchs_stack.push(branchs.size() - 1);
+				} else {
+					std::cerr << "IF-control not found" << std::endl;
+				}
+				break;
+			}
+		case _ENDIF_:
+			{
+				if (branchs[branchs_stack.top()].back().type != _IF_) {
+					std::cerr << "IF-control not found" << std::endl;
+				}
+				break;
+			}
+		case _ENDWHILE_:
+			{
+				if (branchs[branchs_stack.top()].back().type != _WHILE_) {
+					std::cerr << "WHILE-control not found" << std::endl;
+				}
+				break;
+			}
+		default:
+			{
+				break;
+			}
+		}
+		return;
+	}
+	std::cerr << "Line not parsed " << line << std::endl;
 }
 
 bool loadCode(std::string trainer) {
@@ -580,87 +696,7 @@ bool loadCode(std::string trainer) {
 	if (file) {
 		std::string line;
 		while (std::getline(file, line)) {
-			phx::function phx_function;
-			function_parser<std::string::iterator> parser_function;
-			bool r = phrase_parse(line.begin(), line.end(), parser_function, space, phx_function);
-			if (r) {
-				if (phx_function.name[0] == '_') {
-					//macro
-					continue;
-				}
-				functions.push_back(phx_function);
-				address a;
-				a.type = _FUNC_;
-				a.pointer = functions.size() - 1;
-				branchs[branchs_stack.top()].push_back(a);
-				continue;
-			}
-			phx::expression phx_expression;
-			expression_parser<std::string::iterator> parser_expression;
-			r = phrase_parse(line.begin(), line.end(), parser_expression, space, phx_expression);
-			if (r) {
-				expressions.push_back(phx_expression);
-				address a;
-				a.type = _EXPRS_;
-				a.pointer = expressions.size() - 1;
-				branchs[branchs_stack.top()].push_back(a);
-				continue;
-			}
-			phx::control phx_control;
-			control_parser<std::string::iterator> parser_control;
-			r = phrase_parse(line.begin(), line.end(), parser_control, space, phx_control);
-			if (r) {
-				controls.push_back(phx_control);
-				std::vector<address> new_branch;
-				branchs.push_back(new_branch);
-				address a;
-				a.type = phx_control.type;
-				a.pointer = controls.size() - 1;
-				a.left_branch = branchs.size() - 1;
-				branchs[branchs_stack.top()].push_back(a);
-				branchs_stack.push(branchs.size() - 1);
-				continue;
-			}
-			int close;
-			close_parser<std::string::iterator> parser_close;
-			r = phrase_parse(line.begin(), line.end(), parser_close, space, close);
-			if (r) {
-				branchs_stack.pop();
-				switch (close) {
-				case _ELSE_:
-				{
-					if (branchs[branchs_stack.top()].back().type == _IF_) {
-						std::vector<address> new_branch;
-						branchs.push_back(new_branch);
-						branchs[branchs_stack.top()].back().right_branch = branchs.size() - 1;
-						branchs_stack.push(branchs.size() - 1);
-					} else {
-						std::cerr << "IF-control not found" << std::endl;
-					}
-					break;
-				}
-				case _ENDIF_:
-				{
-					if (branchs[branchs_stack.top()].back().type != _IF_) {
-						std::cerr << "IF-control not found" << std::endl;
-					}
-					break;
-				}
-				case _ENDWHILE_:
-				{
-					if (branchs[branchs_stack.top()].back().type != _WHILE_) {
-						std::cerr << "WHILE-control not found" << std::endl;
-					}
-					break;
-				}
-				default:
-				{
-					break;
-				}
-				}
-				continue;
-			}
-			std::cerr << "Line not parsed " << line << std::endl;
+			parseLine(line);
 		}
 		branchs_stack.pop();
 		if (branchs_stack.size() > 0) {
