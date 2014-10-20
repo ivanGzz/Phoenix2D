@@ -28,10 +28,12 @@
 
 using namespace Phoenix;
 
-namespace goalie {
+namespace goal {
 
 void onStart();
 void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages, Commands* commands);
+void executeKickOffL(WorldModel worldModel, std::vector<Message> messages, Commands* commands);
+void executeKickOffR(WorldModel worldModel, std::vector<Message> messages, Commands* commands);
 void executePlayOn(WorldModel worldModel, std::vector<Message> messages, Commands* commands);
 void onFinish();
 

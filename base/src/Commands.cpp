@@ -185,6 +185,7 @@ void Commands::moveObject(std::string object, double x, double y) {
 	ss << "(move " << object << " " << std::setprecision(4) << x << " " << y << ")" << std::endl;
 	std::string command;
 	std::getline(ss, command);
+	std::cout << command << std::endl;
 	commands_history.push_back(Command(command, 1, MOVE_OBJECT));
 	commands_to_send.push_back(&commands_history.back());
 }

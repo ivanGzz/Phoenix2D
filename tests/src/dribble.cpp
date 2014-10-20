@@ -91,13 +91,6 @@ void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages, 
 void executePlayOn(WorldModel worldModel, std::vector<Message> messages, Commands* commands) {
 	Ball* b = worldModel.getBall();
 	const Position* p = Self::getPosition();
-	/*if (fullstate) {
-		Ball* e_b = worldModel.getExactBall();
-		std::clog << Game::GAME_TIME << (b->isInSightRange() ? "seen" : "not seen") <<
-					": (" << b->getPosition()->x << ", " << b->getPosition()->y << ")"
-				                     << ", (" << e_b->getPosition()->x << ", " << e_b->getPosition()->y << ")"
-				                     << std::endl;
-	}*/
 	if (b->getPosition()->getDistanceTo(&positionToGo) <= 2.0) {
 		randomPosition();
 	}

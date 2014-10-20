@@ -63,6 +63,21 @@ void loadTest(std::string test, Phoenix::Controller &controller) {
 		controller.registerPlayerFunction("before_kick_off", worldtest::executeBeforeKickOff);
 		controller.registerPlayerFunction("play_on", worldtest::executePlayOn);
 		controller.registerFinishFunction(worldtest::onFinish);
+	} else if (test.compare("goalie") == 0) {
+		std::cout << "Loading goalie test" << std::endl;
+		controller.registerSetupFunction(goal::onStart);
+		if (Controller::AGENT_TYPE == 'p') {
+			controller.registerPlayerFunction("before_kick_off", goal::executeBeforeKickOff);
+			controller.registerPlayerFunction("kick_off_l", goal::executeKickOffL);
+			controller.registerPlayerFunction("kick_off_r", goal::executeKickOffR);
+			controller.registerPlayerFunction("play_on", goal::executePlayOn);
+		} else if (Controller::AGENT_TYPE == 'g') {
+			controller.registerGoalieFunction("before_kick_off", goal::executeBeforeKickOff);
+			controller.registerGoalieFunction("kick_off_l", goal::executeKickOffL);
+			controller.registerGoalieFunction("kick_off_r", goal::executeKickOffR);
+			controller.registerGoalieFunction("play_on", goal::executePlayOn);
+		}
+		controller.registerFinishFunction(goal::onFinish);
 	}
 }
 

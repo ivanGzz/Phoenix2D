@@ -19,10 +19,17 @@
  */
 
 #include "goalie.hpp"
+#include "Controller.hpp"
+#include "Ball.hpp"
+#include "Position.hpp"
+#include "Self.hpp"
+#include "Server.hpp"
+#include <iostream>
 
-namespace goalie {
+namespace goal {
 
 bool setup = false;
+Position positionToGo(53.0, 0.0);
 
 void onStart() {
 
@@ -30,19 +37,72 @@ void onStart() {
 
 void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages, Commands* commands) {
 	if (!setup) {
-		if (Controller.AGENT_TYPE == 'g') {
+		if (Controller::AGENT_TYPE == 'g') {
 			commands->move(-50.0, 0.0);
 		} else {
 			commands->move(-10.0, 0.0);
 		}
 		setup = true;
 	} else {
-		
+
+	}
+}
+
+void executeKickOffL(WorldModel worldModel, std::vector<Message> messages, Commands* commands) {
+	if (Self::SIDE[0] == 'l') {
+		Ball* b = worldModel.getBall();
+		const Position* p = Self::getPosition();
+		double ed = p->getDistanceTo(b->getPosition()) - Server::PLAYER_SIZE - Server::BALL_SIZE;
+		if (ed < Self::KICKABLE_MARGIN) {
+			double dir = p->getDirectionTo(&positionToGo);
+			commands->kick(10.0, dir);
+		} else {
+			double dir = p->getDirectionTo(b->getPosition());
+			if (fabs(dir) > 10.0) {
+				commands->turn(dir);
+			} else {
+				commands->dash(50.0, 0.0);
+			}
+		}
+	}
+}
+
+void executeKickOffR(WorldModel worldModel, std::vector<Message> messages, Commands* commands) {
+	if (Self::SIDE[0] == 'r') {
+		Ball* b = worldModel.getBall();
+		const Position* p = Self::getPosition();
+		double ed = p->getDistanceTo(b->getPosition()) - Server::PLAYER_SIZE - Server::BALL_SIZE;
+		if (ed < Self::KICKABLE_MARGIN) {
+			double dir = p->getDirectionTo(&positionToGo);
+			commands->kick(10.0, dir);
+		} else {
+			double dir = p->getDirectionTo(b->getPosition());
+			if (fabs(dir) > 10.0) {
+				commands->turn(dir);
+			} else {
+				commands->dash(50.0, 0.0);
+			}
+		}
 	}
 }
 
 void executePlayOn(WorldModel worldModel, std::vector<Message> messages, Commands* commands) {
-
+	if (Controller::AGENT_TYPE == 'p') {
+		Ball* b = worldModel.getBall();
+		const Position* p = Self::getPosition();
+		double ed = p->getDistanceTo(b->getPosition()) - Server::PLAYER_SIZE - Server::BALL_SIZE;
+		if (ed < Self::KICKABLE_MARGIN) {
+			double dir = p->getDirectionTo(&positionToGo);
+			commands->kick(10.0, dir);
+		} else {
+			double dir = p->getDirectionTo(b->getPosition());
+			if (fabs(dir) > 10.0) {
+				commands->turn(dir);
+			} else {
+				commands->dash(50.0, 0.0);
+			}
+		}
+	}
 }
 
 void onFinish() {

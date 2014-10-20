@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013 Ivan Gonzalez
+ * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -16,14 +16,32 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @file motqm.cpp
+ *
+ * @author Nelson Ivan Gonzalez
  */
 
-#ifndef TESTS_HPP_
-#define TESTS_HPP_
+#include "motqm.hpp"
 
-#include "dribble.hpp"
-#include "goalie.hpp"
-#include "localization.hpp"
-#include "worldtest.hpp"
+namespace motqm {
 
-#endif /* TESTS_HPP_ */
+void onStart() {
+
+}
+
+void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages, Commands* commands) {
+
+}
+
+void executePlayOn(WorldModel worldModel, std::vector<Message> messages, Commands* commands) {
+
+}
+
+void onFinish() {
+
+}
+
+}
+
+

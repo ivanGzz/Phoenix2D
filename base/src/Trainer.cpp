@@ -197,18 +197,18 @@ struct control_parser : qi::grammar<Iterator, phx::control(), ascii::space_type>
 		node %= op >> var;
 		op = lit("=") [_val = _ASSGMNT_] |
 			 lit(":") [_val = _ASSTXT_]  |
+		     lit("<>")[_val = _CMP_]     |
 		     lit(">") [_val = _GREATER_] |
 		     lit("<") [_val = _LESS_]    |
 		     lit(">=")[_val = _GEQ_]     |
 		     lit("<=")[_val = _LEQ_]     |
 		     lit("==")[_val = _EQUAL_]   |
-		     lit("<>")[_val = _CMP_]     |
 		     lit("!=")[_val = _NEQUAL_]  |
 		     lit("+") [_val = _PLUS_]    |
 		     lit("-") [_val = _MINUS_]   |
 		     lit("*") [_val = _TIMES_]   |
 		     lit("/") [_val = _DIVIDE_];
-		var %= lexeme[+char_("$a-zA-Z0-9")];
+		var %= lexeme[+char_("$_a-zA-Z0-9")];
 	}
 	qi::rule<Iterator, phx::control(), ascii::space_type> start;
 	qi::rule<Iterator, int(), ascii::space_type> type;
@@ -300,12 +300,19 @@ void onSend() {
 	commands->sendCommands();
 }
 
+/*
+ * The server only recognizes (ball) although (b), (Ball) and (B) are also defined
+ */
 void onBall(double x, double y) {
-	commands->moveObject("(b)", x, y);
+	commands->moveObject("(ball)", x, y);
 }
 
 void onRecover() {
 	commands->recover();
+}
+
+void onStart() {
+	commands->start();
 }
 
 /***********
@@ -494,6 +501,7 @@ int evaluateExpression(phx::expression expression) {
 				} else {
 					right = first.node;
 				}
+				std::cout << "Comparing " << left << " and " << right << std::endl;
 				if (left.compare(right) == 0) {
 					return_value = 0;
 				} else {
@@ -544,6 +552,8 @@ void executeBranch(std::vector<address>* branch) {
 					}
 				} else if (functions[it->pointer].name.compare("recover") == 0) {
 					onRecover();
+				} else if (functions[it->pointer].name.compare("start") == 0) {
+					onStart();
 				}
 				break;
 			}
@@ -578,10 +588,8 @@ void executeBranch(std::vector<address>* branch) {
 }
 
 void *executeCode(void* arg) {
-	std::cout << "Launched trainer" << std::endl;
 	executeBranch(&branchs[0]);
 	newExecution = false;
-	std::cout << "Finished trainer" << std::endl;
 	return 0;
 }
 
@@ -591,7 +599,7 @@ void onMacro(phx::function macro) {
 	if (macro.name.compare("_do") == 0) {
 		// To be implemented
 	} else if (macro.name.compare("_waitfor") == 0) {
-		srd::vector<std::string> args = macro.tokens;
+		std::vector<std::string> args = macro.tokens;
 		if (args.size() > 1 && args[0].compare("play_mode") == 0) {
 			std::string line = "while ($playmode <> " + args[1] + ")";
 			parseLine(line);
@@ -604,6 +612,7 @@ void onMacro(phx::function macro) {
 }
 
 void parseLine(std::string line) {
+	using boost::spirit::ascii::space;
 	phx::function phx_function;
 	function_parser<std::string::iterator> parser_function;
 	bool r = phrase_parse(line.begin(), line.end(), parser_function, space, phx_function);
@@ -688,7 +697,6 @@ void parseLine(std::string line) {
 }
 
 bool loadCode(std::string trainer) {
-	using boost::spirit::ascii::space;
 	std::ifstream file(trainer.c_str(), std::ifstream::in);
 	std::vector<address> main_branch;
 	branchs.push_back(main_branch);

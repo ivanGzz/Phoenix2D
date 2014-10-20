@@ -20,6 +20,7 @@ then
 elif [ "$1" == "goalie" ]
 then
 	./agent test goalie Phoenix & sleep 1
+	./agent test goalie Nemesis g & sleep 1
 	./agent trainer trainer/ball.phx
 else
 	echo "Phoenix2D - 2014"
