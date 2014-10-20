@@ -733,8 +733,16 @@ bool Trainer::load(std::string trainer) {
 void Trainer::execute(WorldModel world, std::vector<Message> messages) {
 	// We update all the variables
 	Ball* ball = world.getBall();
-	vars["$ball.x"] = ball->getPosition()->getX();
-	vars["$ball.y"] = ball->getPosition()->getY();
+	double bx = ball->getPosition()->getX();
+	double by = ball->getPosition()->getY();
+	vars["$ball.x"] = bx;
+	vars["$ball.y"] = by;
+	// It seems we must update the play mode automatically
+	if (bx > 52.5 && (by < 7.0 && by > -7.0)) { // left goal
+		Game::PLAY_MODE = "goal_l";
+	} else if (bx < -52.5 && (by < 7.0 && by > -7.0)) { // right goal
+		Game::PLAY_MODE = "goal_r";
+	}
 	texts["$playmode"] = Game::PLAY_MODE;
 	// We launch the thread or update the new cycles
 	if (running) {
