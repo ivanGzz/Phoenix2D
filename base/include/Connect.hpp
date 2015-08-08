@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
+ * Copyright (c) 2013 - 2015 Nelson I. Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -19,7 +19,7 @@
  *
  * @file Connect.hpp
  *
- * @author Nelson Ivan Gonzalez
+ * @author Nelson I. Gonzalez
  */
 
 #ifndef CONNECT_HPP_
@@ -37,19 +37,15 @@ namespace Phoenix {
 * The Configs object is in charge of send and receives UDP packages to and from
 * the server.
 */
-class Connect {
-public:
+namespace Connect {
+
 	/*!
 	 * @brief Connect default constructor
 	 * @param host hostname to connect, where the server is running
 	 * @param port port to connect, where the server is listening
 	 * The port for players and goalies is 6000, for trainer 6001 and coaches 6002.
 	 */
-	Connect(std::string host, int port);
-	/*!
-	 * @brief Connect default destructor
-	 */
-	~Connect();
+	bool connect(std::string host, int port);
 	/*!
 	 * @brief Stops and shuts down the connection with the server
 	 */
@@ -64,7 +60,8 @@ public:
 	 * It is a blocking method: returns until there is a new message in the buffer.
 	 */
 	std::string receiveMessage();
-};
+
+}
 
 } // End namespace Phoenix
 /*! @} */

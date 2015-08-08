@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
+ * Copyright (c) 2013 - 2015 Nelson I. Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -19,7 +19,7 @@
  *
  * @file Position.hpp
  *
- * @author Nelson Ivan Gonzalez
+ * @author Nelson I. Gonzalez
  */
 
 #ifndef POSITION_HPP_
@@ -40,19 +40,24 @@ namespace Phoenix {
  * head direction for player objects.
  */
 class Position {
+protected:
+	double _x;		///< Absolute position in x
+	double _y;		///< Absolute position in y
+	double _body;	///< Absolute body direction for players
+	double _head;	///< Relative head direction for players
 public:
-	double x;		///< Absolute position in x
-	double y;		///< Absolute position in y
-	double body;	///< Absolute body direction for players
-	double neck;	///< Relative head direction for players
+	/*!
+	 *
+	 */
+	Position();
 	/*!
 	 * @brief Position constructor with x, y, body direction and head direction as arguments
 	 * @param x Absolute coordinate in x
 	 * @param y Absolute coordinate in y
 	 * @param body Absolute body direction for players
-	 * @param neck Relative head direction for players
+	 * @param head Relative head direction for players
 	 */
-	Position(double x = 0.0, double y = 0.0, double body = 0.0, double neck = 0.0);
+	Position(double x = 0.0, double y = 0.0, double body = 0.0, double head = 0.0);
 	/*!
 	 * @brief Position constructor with Point argument
 	 * @param point Absolute point
@@ -67,7 +72,7 @@ public:
 	 * @param position Position to compute the distance
 	 * @return Distance to the given position
 	 */
-	double getDistanceTo(Position* position) const;
+	double distanceTo(Position* position);
 	/*!
 	 * @brief Returns the relative direction from this position to the provided position
 	 * @param position Position to compute the direction
@@ -76,31 +81,52 @@ public:
 	 * method should not be used with Ball objects.  Disclaimer: this method always
 	 * returns the direction relative to the body, never to the head.
 	 */
-	double getDirectionTo(Position* position) const;
+	double directionTo(Position* position);
 	/*!
 	 * @brief Returns point primitive created with the absolute positions
 	 * @return Absolute point structure for this position
 	 */
-	Geometry::Point getPoint() const;
-	/*!
-	 * @brief Multiply by -1 the absolute position in x and y
-	 */
-	void mirror();
+	Geometry::Point point();
 	/*!
 	 * @brief Returns the absolute position in x
 	 * @return Absolute position in x
 	 */
-	double getX() const;
+	double x();
 	/*!
 	 * @brief Returns the absolute position in y
 	 * @return Absolute position in y
 	 */
-	double getY() const;
+	double y();
+	/*!
+	 * @brief Sets the absolute position in x
+	 * @param x absolute position in x
+	 */
+	void setX(double x);
+	/*!
+	 * @brief Sets the absolute position in y
+	 * @param y absolute position in y
+	 */
+	void setY(double y);
 	/*!
 	 * @brief Returns the absolute direction for player objects
 	 * @return Absolute direction
 	 */
-	double getDirection() const;
+	double body();
+	/*!
+	 * @brief Sets the absolute direction for player objects
+	 * @param direction Body direction to be set
+	 */
+	void setBody(double direction);
+	/*!
+	 * @brief Returns the current head angle for player objects
+	 * @return Current head angle
+	 */
+	double head();
+	/*!
+	 * @brief Sets the current head angle for player objects
+	 * @param head Head direction to be set
+	 */
+	void setHead(double head);
 };
 
 } // End namespace Phoenix

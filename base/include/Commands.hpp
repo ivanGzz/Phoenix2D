@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
+ * Copyright (c) 2013 - 2015 Nelson I. Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -19,7 +19,7 @@
  *
  * @file Commands.cpp
  *
- * @author Nelson Ivan Gonzalez
+ * @author Nelson I. Gonzalez
  */
 
 #ifndef COMMANDS_HPP_
@@ -32,7 +32,7 @@
  */
 namespace Phoenix {
 
-class Connect;
+class Command;
  
  /*!
  * @brief <STRONG> Commands <BR> </STRONG>
@@ -40,19 +40,10 @@ class Connect;
  * the current cycle.  It also is in charge of creating the actual string sent to the
  * server using the string commands stored.
  */
-class Commands {
-public:
+namespace Commands {
+
 	/*!
-	 * @brief Commands default constructor
-	 * @param connect pointer to a connect object in charge of send and receives messages from the server
-	 */
-	Commands(Connect *connect);
-	/*!
-	 * @brief Commands default destructor
-	 */
-	~Commands();
-	/*!
-	 * @brief Removes commands sent stored in memory
+	 * @brief Removes sent commands stored in memory
 	 */
 	void flush();
 	/*!
@@ -61,60 +52,60 @@ public:
 	 * @param y absolute position in y for the move command
 	 * This command can only be used in play modes before_kick_off and goal_<SIDE>
 	 */
-	void move(double x, double y);
+	Command* move(double x, double y);
 	/*!
 	 * @brief Put in queue a turn command
 	 * @param moment angle to turn for the turn command
 	 * This command cannot be appended along with a dash, kick or catch command
 	 */
-	void turn(double moment);
+	Command* turn(double moment);
 	/*!
 	 * @brief Put in queue a turn neck command
 	 * @param moment angle to turn the neck for the turn neck command
 	 */
-	void turnNeck(double moment);
+	Command* turnNeck(double moment);
 	/*!
 	 * @brief Put in queue a dash command
 	 * @param power dash power for the dash command
 	 * @param direction dash direction for the dash command
 	 * This command cannot be appended along with a turn, kick or catch command
 	 */
-	void dash(double power, double direction);
+	Command* dash(double power, double direction);
 	/*!
 	 * @brief Put in queue a say command
 	 * @param message message to broadcast in the say command
 	 */
-	void say(std::string message);
+	Command* say(std::string message);
 	/*!
 	 * @brief Put in queue a catch command
 	 * @param direction catch direction for the command command
 	 * This command can only be issued by a goalie agent
 	 */
-	void catchBall(double direction);
+	Command* catchBall(double direction);
 	/*!
 	 * @brief Put in queue a kick command
 	 * @param power kick power for the kick command
 	 * @param direction kick direction for the kick command
 	 * This command cannot be appended along with a dash, turn or catch command
 	 */
-	void kick(double power, double direction = 0.0);
+	Command* kick(double power, double direction = 0.0);
 	/*!
 	 * @brief Put in queue a tackle command
 	 * @param power tackle power for the tackle command
 	 * @param willToFoul boolean indicating the player is will to foul the ball owner
 	 */
-	void tackle(double power, bool willToFoul = false);
+	Command* tackle(double power, bool willToFoul = false);
 	/*!
 	 * @brief Put in queue a point to command
 	 * @param distance relative distance of the point to point for the point to command
 	 * @param direction relative direction of the point to point for the point to command
 	 */
-	void pointTo(double distance, double direction);
+	Command* pointTo(double distance, double direction);
 	/*!
 	 * @brief Put in queue a change view command
 	 * @param width new width for the vision sensor to be used in the next cycle
 	 */
-	void changeView(std::string width);
+	Command* changeView(std::string width);
 	/*!
 	 * @brief Put in queue a move object command
 	 * @param object descriptor string for the object to move
@@ -122,31 +113,33 @@ public:
 	 * @param y absolute position in y for the object
 	 * This command can only be issued by a trainer agent
 	 */
-	void moveObject(std::string object, double x, double y);
+	Command* moveObject(std::string object, double x, double y);
 	/*!
 	 * @brief Put in queue a change mode command
 	 * @param mode new mode to be used in the next cycle
 	 * This command can only be issued by a trainer agent.  The mode means the new play mode
 	 * to be executed since the beginning of the next cycle
 	 */
-	void changeMode(std::string mode);
+	Command* changeMode(std::string mode);
 	/*!
 	 * @brief Put in queue a start command
 	 * This command can only be issued by a trainer agent. Equivalent to changeMode("kick_off_<SIDE>")
 	 */
-	void start();
+	Command* start();
 	/*!
 	 * @brief Put in queue a recover command
 	 * This command can only be issued by a trainer agent.  The next cycle all the players stamina will
 	 * be replenished.
 	 */
-	void recover();
+	Command* recover();
 	/*!
 	 * @brief Sent the commands in queue in the order that the commands were received until the accumulated
-	 * weight changes from 1 to 2.  Returns amount of commands sent.
+	 * weight changes from 1 to 2.  
+	 * @return amount of sent commands.
 	 */
 	int sendCommands();
-};
+	
+}
 
 } // End namespace Phoenix
 /*! @} */

@@ -35,24 +35,13 @@
  */
 namespace Phoenix {
 
-class Commands;
-
  /*!
  * @brief <STRONG> Trainer <BR> </STRONG>
  * The Trainer object is used to automate the trainer loading a script file.  The script file
  * is converted to action to be performed every simulation cycle until the simulation end.
  */
-class Trainer {
-public:
-	/*!
-	 * @brief Trainer default constructor
-	 * @param ptr_commands Pointer to Commands object
-	 */
-	Trainer(Commands *ptr_commands);
-	/*!
-	 * @brief Trainer default destructor
-	 */
-	~Trainer();
+namespace Trainer {
+
 	/*!
 	 * @brief Load script file
 	 * @param trainer Path for the script file
@@ -68,7 +57,8 @@ public:
 	 * @brief Returns true if the execution must continue or false if the simulation must end
 	 */
 	bool continueExecution();
-};
+
+}
 
 } // End namespace Phoenix
 /*! @} */

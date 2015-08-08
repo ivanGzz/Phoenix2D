@@ -33,22 +33,12 @@
 
 namespace Phoenix {
 
+namespace Logger {
+
 std::filebuf buf;
 std::streambuf* oldbuf;
 
-Logger::Logger() {
-	logging = false;
-}
-
-Logger::~Logger() {
-	if (logging) {
-		std::clog.rdbuf(oldbuf);
-		buf.close();
-	}
-}
-
-void Logger::log() {
-	logging = true;
+void startLoggers() {
 	std::stringstream ss;
 	time_t t = time(0);   // get time now
 	struct tm* now = localtime(&t);
@@ -61,39 +51,90 @@ void Logger::log() {
 		ss << "Trainer.";
 		break;
 	}
-	if (Configs::LOG_NAME.length() > 0) {
-		ss << Configs::LOG_NAME << ".";
+	ss << (1900 + now->tm_year);
+	if (now->tm_mon < 9) {
+		ss << "0" << (now->tm_mon + 1);
+	} else {
+		ss << (now->tm_mon + 1);
 	}
 	if (now->tm_mday < 10) {
-		ss << "0" << now->tm_mday << ".";
+		ss << "0" << now->tm_mday;
 	} else {
-		ss << now->tm_mday << ".";
+		ss << now->tm_mday;
 	}
-	if (now->tm_mon < 10) {
-		ss << "0" << now->tm_mon << "-";
-	} else {
-		ss << now->tm_mon << "-";
-	}
+	ss << "-";
 	if (now->tm_hour < 10) {
-		ss << "0" << now->tm_hour << ".";
+		ss << "0" << now->tm_hour;
 	} else {
-		ss << now->tm_hour << ".";
+		ss << now->tm_hour;
 	}
 	if (now->tm_min < 10) {
-		ss << "0" << now->tm_min << ".";
+		ss << "0" << now->tm_min;
 	} else {
-		ss << now->tm_min << ".";
+		ss << now->tm_min;
 	}
 	if (now->tm_sec < 10) {
 		ss << "0" << now->tm_sec;
 	} else {
 		ss << now->tm_sec;
 	}
-	ss << ".csv" << std::endl;
-	std::string filename;
-	std::getline(ss, filename);
-	buf.open(filename.c_str(), std::ios::out);
-	oldbuf = std::clog.rdbuf(&buf);
+	std::string prefix;
+	std::getline(ss, prefix);
+	if (Configs::LOGGING) {
+		std::string filename = prefix;
+		if (Configs::LOG_NAME.length() > 0) {
+			filename += "." + Configs::LOG_NAME;
+		} else {
+			filename += ".log";
+		}
+		filename += "." + Configs::LOG_EXTENSION;
+		buf.open(filename.c_str(), std::ios::out);
+		oldbuf = std::clog.rdbuf(&buf);
+	}
+	if (Configs::SAVE_COMMANDS) {
+		std::string filename = prefix + ".commands.log";
+		commands.open(filename.c_str());
+	}
+	if (Configs::SAVE_SENSE_BODY) {
+		std::string filename = prefix + ".body.log";
+		body.open(filename.c_str());
+	}
+	if (Configs::SAVE_SEE) {
+		std::string filename = prefix + ".see.log";
+		see.open(filename.c_str());
+	}
+	if (Configs::SAVE_HEAR) {
+		std::string filename = prefix + ".hear.log";
+		hear.open(filename.c_str());
+	}
+	if (Configs::SAVE_FULLSTATE) {
+		std::string filename = prefix + ".fullstate.log";
+		fullstate.open(filename.c_str());
+	}
+}
+
+void endLoggers() {
+	if (Configs::LOGGING) {
+		std::clog.rdbuf(oldbuf);
+		buf.close();
+	}
+	if (Configs::SAVE_COMMANDS) {
+		commands.close();
+	}
+	if (Configs::SAVE_SENSE_BODY) {
+		body.close();
+	}
+	if (Configs::SAVE_SEE) {
+		see.close();
+	}
+	if (Configs::SAVE_HEAR) {
+		hear.close();
+	}
+	if (Configs::SAVE_FULLSTATE) {
+		fullstate.close();
+	}
+}
+
 }
 
 }

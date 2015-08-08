@@ -1,6 +1,6 @@
  /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
+ * Copyright (c) 2013 - 2015 Nelson I. Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -19,7 +19,7 @@
  *
  * @file Player.hpp
  *
- * @author Nelson Ivan Gonzalez
+ * @author Nelson I. Gonzalez
  */
 
 #ifndef PLAYER_HPP_
@@ -29,6 +29,7 @@
 #include <vector>
 #include "Position.hpp"
 #include "geometry.hpp"
+#define FAR '('
 
 /*! @addtogroup phoenix_base
  * @{
@@ -42,8 +43,7 @@ namespace Phoenix {
  * is enabled then the player can be in sight range or not, you can check this property with the
  * isInSightRange method.
  */
-class Player {
-friend class World;
+class Player : public Object {
 public:
 	/*!
 	 * @brief Player default constructor
@@ -66,7 +66,7 @@ public:
 	 * @param player_position current agent position used to compute the absolute position for the ball
 	 * @param player_velocity current agent velocity used to compute the absolute velocity for the ball
 	 */
-	void initForPlayer(const Position* player_position, const Geometry::Vector2D* player_velocity);
+	void initForPlayer(Position player_position, Geometry::Vector2D player_velocity);
 	/*!
 	 * @brief Init method for agent type coach
 	 * @param name Name string received from the server in the see_global sensor
@@ -86,103 +86,117 @@ public:
 	 */
 	void initForFullstate(std::string team, int unum, double x, double y, double vx, double vy, double b, double n);
 	/*!
-	 * @brief Returns the current player absolute position in a Position pointer
-	 * @return Pointer to player position
+	 * @brief Decode a position used in the world model communication protocol
+	 * @param from Position zero for the encoding position
+	 * @param position Relative position of the player
+	 * @param our True if the player is from the same team, false otherwise
 	 */
-	Position* getPosition();
+	void decode(Position from, char position, bool our);
+	/*!
+	 * @brief Encode the relative position for use in the world model communication protocol
+	 * @return A char representing the relative position
+	 */
+	char encode();
 	/*!
 	 * @brief Returns the team name of the player if available, returns "undefined" otherwise
 	 * @return Player team name
 	 */
-	std::string getTeam();
+	std::string team();
+	/*!
+	 * @brief Sets the team
+	 * @param team The team can be our or opp
+	 */
+	void setTeam(std::string team);
+	/*!
+	 * @brief Returns the real team name of the player when the player is initialized with the full-state sensor
+	 * @return Player team name
+	 */
+	std::string realTeam();
+	/*!
+	 * @brief
+	 */
+	void setRealTeam(std::string real_team);
 	/*!
 	 * @brief Returns the uniform number of the player if available, return 0 otherwise
 	 * @return Player uniform number
 	 */
-	int getUniformNumber();
+	int uniformNumber();
 	/*!
-	 * @brief Return the current ball absolute velocity in a Vector2D pointer
-	 * @return Pointer to player velocity
+	 * @brief
 	 */
-	Geometry::Vector2D* getVelocity();
+	void setUniformNumber();
 	/*!
-	 * @brief Returns true if the seen player is a goalie
+	 * @brief Returns the real uniform number of the player when the player is initialized with the full-state sensor
+	 * @return Player uniform number
+	 */
+	int realUniformNumber();
+	/*!
+	 * @brief
+	 */
+	void setRealUniformNumber(int real_unum);
+	/*!
+	 * @brief Returns true if the player is a goalie
 	 * @return True if the player is goalie and false otherwise
 	 */
-	bool isGoalie();
+	bool goalie();
 	/*!
 	 * @brief Returns true if the player is pointing in the current cycle
 	 * @return True if the player is pointing and false otherwise
 	 */
-	bool isPointing();
+	bool pointing();
 	/*!
 	 * @brief Returns the relative direction of the arm when the player is pointing
 	 * @return Relative direction the player is pointing to
 	 */
-	double getPointingDirection();
+	double pointingDirection();
 	/*!
 	 * @brief Returns true if the player is kicking in the current cycle
 	 * @return True if the player is kicking and false otherwise
 	 */
-	bool isKicking();
+	bool kicking();
 	/*!
 	 * @brief Returns true if the player is tackling in the current cycle
 	 * @return True if the playee is tackling and false otherwise
 	 */
-	bool isTackling();
+	bool tackling();
 	/*!
 	 * @brief Returns the players id
 	 * @return Player id
 	 */
-	int getPlayerId();
+	int playerId();
 	/*!
-	 * @brief Toggle the property is_in_sight_range from false to true or from true to false
+	 * @brief Sets the players id
+	 * @param id Player id
 	 */
-	void toggleSightRange();
-	/*!
-	 * @brief Returns true if the player is in the vision sensor
-	 * @return True if the player is in the vision range and false otherwise
-	 */
-	bool isInSightRange();
+	void setPlayerId(int id);
 	/*!
 	 * @brief Returns the player distance error
 	 * @return Player distance error
 	 */
-	double getDistanceError();
-	double getMatchValue();
-private:
-	double distance;				///< Player relative distance in the see sensor
-	double direction;				///< Player relative direction in the see sensor
-	double distChange;				///< Player relative distance change
-	double dirChange;				///< Player relative direction change
-	double bodyDirection;			///< Player relative body direction
-	double headDirection;			///< Player relative head direction
-	double pointDir;				///< Player relative pointing direction
-	double x;						///< Player absolute position in x
-	double y;						///< Player absolute position in y
-	double body;					///< Player absolute body direction
-	double head;					///< Player relative head direction
-	double vx;						///< Player absolute velocity in x
-	double vy;						///< Player absolute velocity in y
+	double distanceError();
+	double distance;				///< raw player relative distance in the see sensor
+	double direction;				///< raw player relative direction in the see sensor
+	double dist_change;				///< raw player relative distance change
+	double dir_change;				///< raw player relative direction change
+	double body_direction;			///< raw player relative body direction
+	double head_direction;			///< raw player relative head direction
+	double point_dir;				///< raw player relative pointing direction
 	bool has_body;					///< True if the see sensor returned a body direction value
 	bool has_head;					///< True if the see sensor returned a head direction value
-	bool pointing;					///< True if the see sensor returned a pointing direction value
-	bool kicking;					///< True if the see sensor returned a kicking value
-	bool tackling;					///< True if the see sensor returned a tackling value
-	std::string team;				///< Team name of the player, "undefined" if not available
-	int uniform_number;				///< Uniform number of the player, 0 if not available
-	bool goalie;					///< True if the player is a goalie
-	int player_id;					///< Player id
-	bool is_in_sight_range;			///< True if the player is in the current visual sensor
-	Position position;				///< Current player absolute position
-	Geometry::Vector2D velocity;	///< Current player absolute velocity
-	double error;					///< Player distance error
-	bool vel;						///< Flag for velocity information received
 	int ttl;						///< Time to live in memory for this player
 	bool tracked;					///< True if this object has been matched with a new Player object
 	double match;					///< Match value
-	int real_uniform_number;		///< Real uniform number when checking with full state sensor
-	std::string real_team;			///< Real team when checking with full state sensor
+private:
+	bool _is_pointing;				///< True if the see sensor returned a pointing direction value
+	bool _is_kicking;				///< True if the see sensor returned a kicking value
+	bool _is_tackling;				///< True if the see sensor returned a tackling value
+	bool _is_goalie;				///< True if the player is a goalie
+	std::string _team;				///< Team name of the player, "undefined" if not available
+	int _uniform_number;			///< Uniform number of the player, 0 if not available
+	int _player_id;					///< Player id
+	double _error;					///< Player distance error
+	int _real_uniform_number;		///< Real uniform number when checking with full state sensor
+	std::string _real_team;			///< Real team when checking with full state sensor
 };
 
 } // End namespace Phoenix

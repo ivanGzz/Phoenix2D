@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013 Ivan Gonzalez
+ * Copyright (c) 2013 - 2015 Nelson I. Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -16,6 +16,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @file goalie.hpp
+ *
+ * @author Nelson I. Gonzalez
  */
 
 #ifndef GOALIE_HPP_
@@ -31,10 +35,10 @@ using namespace Phoenix;
 namespace goal {
 
 void onStart();
-void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages, Commands* commands);
-void executeKickOffL(WorldModel worldModel, std::vector<Message> messages, Commands* commands);
-void executeKickOffR(WorldModel worldModel, std::vector<Message> messages, Commands* commands);
-void executePlayOn(WorldModel worldModel, std::vector<Message> messages, Commands* commands);
+void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages);
+void executeKickOffL(WorldModel worldModel, std::vector<Message> messages);
+void executeKickOffR(WorldModel worldModel, std::vector<Message> messages);
+void executePlayOn(WorldModel worldModel, std::vector<Message> messages);
 void onFinish();
 
 }

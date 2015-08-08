@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
+ * Copyright (c) 2013 - 2015 Nelson I. Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -19,13 +19,13 @@
  *
  * @file World.hpp
  *
- * @author Nelson Ivan Gonzalez
+ * @author Nelson I. Gonzalez
  */
 
 #ifndef WORLD_HPP_
 #define WORLD_HPP_
 
-#include <vector>
+#include <list>
 #include "Player.hpp"
 #include "Ball.hpp"
 #include "WorldModel.hpp"
@@ -40,16 +40,8 @@ namespace Phoenix {
  * The World object stores the information about the current state of the world.  It also
  * includes routines to perform object track and object linking.
  */
-class World {
-public:
-	/*!
-	 * @brief World default constructor
-	 */
-	World();
-	/*!
-	 * @brief World default destructor
-	 */
-	~World();
+namespace World {
+
 	/*!
 	 * @brief Update the world model with the new information received in the see sensor
 	 * @param players List of current players received in the see sensor
@@ -57,30 +49,22 @@ public:
 	 * @param fs_players List of players received in the full state sensor
 	 * @param fs_ball ball object received in the full state sensor
 	 */
-	void updateWorld(std::vector<Player> players, Ball ball, std::vector<Player> fs_players, Ball fs_ball);
+	void updateWorld(std::list<Player> players, Ball ball, std::list<Player> fs_players, Ball fs_ball, bool on_see);
 	/*!
 	 * @brief Returns the current world model
 	 * @return Current world model
 	 */
-	WorldModel getWorldModel();
-private:
+	WorldModel worldModel();
 	/*!
-	 * @brief Performs the tracking for the players
-	 * @param past_players List of players in the immediately previous cycle
-	 * @param new_players List of players received in the current cycle
+	 * @brief 
 	 */
-	void matchPlayers(std::vector<Player> &past_players, std::vector<Player> &new_players);
+	void decode(std::string message);
 	/*!
-	 * @brief Performs the tracking for tha players using particle filters
-	 * @param new_players List of players received in the current cycle
+	 * @brief
 	 */
-	void matchPlayersPF(std::vector<Player> &new_players);
-	/*!
-	 * @brief Includes the real team and uniform number for this player when using full state sensor
-	 * @param new_players List of players received in the current cycle
-	 */
-	void identifyPlayers(std::vector<Player> &new_players);
-};
+	std::string encode();
+	
+}
 
 } // End namespace Phoenix
 /*! @} */

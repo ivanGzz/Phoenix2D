@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
+ * Copyright (c) 2013 - 2015 Nelson I. Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -19,7 +19,7 @@
  *
  * @file Message.cpp
  *
- * @author Nelson Ivan Gonzalez
+ * @author Nelson I. Gonzalez
  */
 
 #include "Message.hpp"
@@ -27,37 +27,37 @@
 namespace Phoenix {
 
 Message::Message(double d, std::string team, std::string message) {
-	direction = d;
-	this->team = team;
-	unum = 0;
-	this->message = message;
+	_direction = d;
+	_team = team;
+	_unum = 0;
+	_message = message;
 }
 
 Message::Message(double d, std::string team, int unum, std::string message) {
-	direction = d;
-	this->team = team;
-	this->unum = unum;
-	this->message = message;
+	_direction = d;
+	_team = team;
+	_unum = unum;
+	_message = message;
 }
 
 Message::~Message() {
 
 }
 
-std::string Message::getMessage() {
-	return message;
+std::string Message::message() {
+	return _message;
 }
 
-std::string Message::getTeam() {
-	return team;
+std::string Message::team() {
+	return _team;
 }
 
-int Message::getUniformNumber() {
-	return unum;
+int Message::uniformNumber() {
+	return _unum;
 }
 
-double Message::getDirection() {
-	return direction;
+double Message::direction() {
+	return _direction;
 }
 
 }

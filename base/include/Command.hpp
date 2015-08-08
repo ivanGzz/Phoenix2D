@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
+ * Copyright (c) 2013 - 2015 Nelson I. Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -19,7 +19,7 @@
  *
  * @file Command.cpp
  *
- * @author Nelson Ivan Gonzalez
+ * @author Nelson I. Gonzalez
  */
 
 #ifndef COMMAND_HPP_
@@ -32,7 +32,7 @@
  */
 namespace Phoenix {
 
- /*!
+/*!
  * @brief <STRONG> COMMAND_STATUS <BR> </STRONG>
  * The Command Status means the current status of the command.  All the commands are created in CREATED
  * status and this status is changed once the command is sent to SENT.  In the new cycle the command is
@@ -47,7 +47,7 @@ enum COMMAND_STATUS {
 	ERROR			///< Command error status
 };
 
- /*!
+/*!
  * @brief <STRONG> COMMAND_TYPE <BR> </STRONG>
  * The Command Type is used to store the related information about the command.  For example, for a DASH
  * command type, the given information is stored as power and direction and can be accessed using the
@@ -72,7 +72,7 @@ enum COMMAND_TYPE {
 	CHANGE_PLAYER_TYPE	///< Used by trainer and/or coach
 };
 
- /*!
+/*!
  * @brief <STRONG> Command <BR> </STRONG>
  * The Command object store information about the basic commands understood by the server.  It stores the
  * command in string format ready to be sent to the server, along with the primitive value of the arguments
@@ -96,117 +96,136 @@ public:
 	 */
 	Command(std::string command, int weight, COMMAND_TYPE type);
 	/*!
+	 * @brief Command constructor given the arguments
+	 * @param command command string ready to be sent to the server
+	 * @param weight command weight, it is 1 or 0
+	 * @param type command type
+	 */
+	Command(std::string command, int weight, COMMAND_TYPE type, double arg0);
+	/*!
+	 * @brief Command constructor given the arguments
+	 * @param command command string ready to be sent to the server
+	 * @param weight command weight, it is 1 or 0
+	 * @param type command type
+	 */
+	Command(std::string command, int weight, COMMAND_TYPE type, double arg0, double arg1);
+	/*!
+	 * @brief Command constructor given the arguments
+	 * @param command command string ready to be sent to the server
+	 * @param weight command weight, it is 1 or 0
+	 * @param type command type
+	 */
+	Command(std::string command, int weight, COMMAND_TYPE type, std::string arg0);
+	/*!
+	 * @brief Command constructor given the arguments
+	 * @param command command string ready to be sent to the server
+	 * @param weight command weight, it is 1 or 0
+	 * @param type command type
+	 */
+	Command(std::string command, int weight, COMMAND_TYPE type, double arg0, bool arg1);
+	/*!
 	 * @brief Command default destructor
 	 */
 	~Command();
 	/*!
-	 * @brief Method to add the arguments of the command
-	 * @param arg0 first parameter
-	 * @param arg1 second parameter
-	 * @param arg2 third parameter
-	 * Given the current command type, the Command object transforms the given arguments to double, string or
-	 * boolean.
-	 */
-	void setArgs(void* arg0, void* arg1 = 0, void* arg2 = 0);
-	/*!
 	 * @brief Returns the command string to be sent to the server
 	 */
-	std::string getCommand();
+	std::string command();
 	/*!
 	 * @brief Returns the current command weight
 	 */
-	int getWeight();
+	int weight();
 	/*!
 	 * @brief Returns the current command type
 	 */
-	COMMAND_TYPE getCommandType();
+	COMMAND_TYPE commandType();
 	/*!
 	 * @brief Returns the current command status
 	 */
-	COMMAND_STATUS getCommandStatus();
+	COMMAND_STATUS status();
 	/*!
 	 * @brief Returns the dash power for a DASH command
 	 */
-	double getDashPower();
+	double dashPower();
 	/*!
 	 * @brief Returns the dash direction for a DASH command
 	 */
-	double getDashDirection();
+	double dashDirection();
 	/*!
 	 * @brief Returns the turn moment for a TURN command
 	 */
-	double getTurnMoment();
+	double turnMoment();
 	/*!
 	 * @brief Returns the absolute x position for a MOVE command
 	 */
-	double getMoveX();
+	double moveX();
 	/*!
 	 * @brief Returns the absolute y position for a MOVE command
 	 */
-	double getMoveY();
+	double moveY();
 	/*!
 	 * @brief Returns the message broadcasted for a SAY command
 	 */
-	std::string getSayMessage();
+	std::string sayMessage();
 	/*!
 	 * @brief Returns the catch direction for a CATCH direction (only valid for a coach agent)
 	 */
-	double getCatchDirection();
+	double catchDirection();
 	/*!
 	 * @brief Returns the kick power for a KICK command
 	 */
-	double getKickPower();
+	double kickPower();
 	/*!
 	 * @brief Returns the kick direction for a KICK command
 	 */
-	double getKickDirection();
+	double kickDirection();
 	/*!
 	 * @brief Returns the tackle power for a TACKLE command
 	 */
-	double getTacklePower();
+	double tacklePower();
 	/*!
 	 * @brief Returns the will to tackle for a TACKLE command
 	 * According to the rcssserver manual, if the will to tackle is true the kick applied to
 	 * the ball is 10x higher, however, it is highly probably to be marked as fault
 	 */
-	bool getTackleWillToFoul();
+	bool tackleWillToFoul();
 	/*!
 	 * @brief Returns the turn neck moment for a TURN_NECK command
 	 */
-	double getTurnNeckMoment();
+	double turnNeckMoment();
 	/*!
 	 * @brief Returns the point relative distance for a POINT command
 	 */
-	double getPointDistance();
+	double pointDistance();
 	/*!
 	 * @brief Returns the point relative direction for a POINT command
 	 */
-	double getPointDirection();
+	double pointDirection();
 	/*!
 	 * @brief Returns the new width to be changed in a CHANGE_VIEW command
 	 */
-	std::string getChangeViewWidth();
+	std::string changeViewWidth();
 	/*!
 	 * @brief Change the command current status to the given status
 	 * @param status new command status for the object
 	 */
-	void changeStatusTo(COMMAND_STATUS status);
+	void setStatus(COMMAND_STATUS status);
 	/*!
 	 * @brief Returns the simulation time the command was created
 	 */
 	int createdAt();
 private:
-	std::string command;		///< current command string to be sent to the server
-	int weight;					///< current command weight
-	COMMAND_TYPE type;			///< current command type
-	COMMAND_STATUS status;		///< current comman status
-	double double_arg_0;		///< first double argument for a given command type
-	double double_arg_1;		///< second double argument for a given command type
-	std::string string_arg_0;	///< first string argument for a given command type
-	std::string string_arg_1;	///< second string argument for a given command type
-	bool bool_arg_0;			///< first boolean argument for a given command type
-	bool bool_arg_1;			///< second boolean argument for a given command type
-	int simulation_time;		///< simulation time the command was created
+	int _weight;				///< current command weight
+	int _simulation_time;		///< simulation time the command was created
+	double _double_arg_0;		///< first double argument for a given command type
+	double _double_arg_1;		///< second double argument for a given command type
+	bool _bool_arg_0;			///< first boolean argument for a given command type
+	bool _bool_arg_1;			///< second boolean argument for a given command type
+	std::string _string_arg_0;	///< first string argument for a given command type
+	std::string _string_arg_1;	///< second string argument for a given command type
+	std::string _command;		///< current command string to be sent to the server
+	COMMAND_TYPE _type;			///< current command type
+	COMMAND_STATUS _status;		///< current comman status
 };
 
 } // End namespace Phoenix

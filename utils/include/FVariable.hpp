@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013 Ivan Gonzalez
+ * Copyright (c) 2013 - 2015 Nelson I. Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -16,6 +16,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @file FVariable.hpp
+ *
+ * @author Nelson I. Gonzalez
  */
 
 #ifndef FUZZYVARIABLE_HPP_
@@ -27,21 +31,42 @@
 
 namespace Fuzzy {
 
+/*!
+ *
+ */
 class FVariable {
-friend class FRule;
-friend class FEngine;
+friend class FRule;		///< Need to remove this
+friend class FEngine;	///< Need to remove this
 public:
+	/*!
+	 *
+	 */
 	FVariable(std::string name, double min, double max);
+	/*!
+	 *
+	 */
 	~FVariable();
+	/*!
+	 *
+	 */
 	void addMembershipFunction(std::string set, Math::Function* f);
+	/*!
+	 *
+	 */
 	double getMembershipFor(std::string set, double value);
+	/*!
+	 *
+	 */
 	std::string getName();
+	/*!
+	 *
+	 */
 	double defuzzify(std::map<std::string, double> memberships);
 private:
-	double min;
-	double max;
-	std::string name;
-	std::map<std::string, Math::Function*> mfuncs;
+	double min;										///<
+	double max;										///<
+	std::string name;								///<
+	std::map<std::string, Math::Function*> mfuncs;	///<
 };
 
 }

@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
+ * Copyright (c) 2013 - 2015 Nelson I. Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -19,7 +19,7 @@
  *
  * @file Game.hpp
  *
- * @author Nelson Ivan Gonzalez
+ * @author Nelson I. Gonzalez
  */
 
 #ifndef GAME_HPP_
@@ -38,38 +38,35 @@ namespace Phoenix {
  * also synchronize the main thread with the server through the Game::nextCycle()
  * method.
  */
-class Game {
-public:
-	static unsigned int SIMULATION_TIME;	///< Current simulation time
-	static unsigned int GAME_TIME;			///< Current game time, it does not run in before_kick_off play mode
-	static unsigned int GOALS;				///< Current goals scored
-	static unsigned int GOALS_AGAINST;		///< Current goals against
-	static std::string PLAY_MODE;			///< Current play mode
+namespace Game {
+
+	unsigned int SIMULATION_TIME;	///< Current simulation time
+	unsigned int GAME_TIME;			///< Current game time, it does not run in before_kick_off play mode
+	unsigned int GOALS;				///< Current goals scored
+	unsigned int GOALS_AGAINST;		///< Current goals against
+	std::string PLAY_MODE;			///< Current play mode
 	/*!
 	 * @brief returns true if there is a new cycle and false otherwise
 	 * This method is blocking and it is used by the method Controller::run()
 	 * to start a new cycle.
 	 */
-	static bool nextCycle();
+	bool nextCycle();
 	/*!
-	 * @brief Game default constructor
-	 */
-	Game();
-	/*!
-	 * @brief Game default destructor
-	 */
-	~Game();
-	/*!
-	 * @brief Update the game time along with the simulation time.  It also unlock the Game::nextCycle() method
+	 * @brief Update the game time and the simulation time
 	 * @param game_time current game time sent by the server
 	 */
 	void updateTime(int game_time);
+	/*!
+	 * @brief It unlocks the Game::nextCycle() method
+	 */
+	void onNextCycle(); // int game_time);
 	/*!
 	 * @brief Update the current play mode
 	 * @param play_mode new play mode sent by the server
 	 */
 	void updatePlayMode(std::string play_mode);
-};
+
+}
 
 } // End namespace Phoenix
 /*! @} */

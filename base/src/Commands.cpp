@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
+ * Copyright (c) 2013 - 2015 Nelson I. Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -19,13 +19,9 @@
  *
  * @file Commands.cpp
  *
- * @author Nelson Ivan Gonzalez
+ * @author Nelson I. Gonzalez
  */
 
-#include <iostream>
-#include <sstream>
-#include <iomanip>
-#include <list>
 #include "Commands.hpp"
 #include "Command.hpp"
 #include "Connect.hpp"
@@ -33,50 +29,35 @@
 #include "Server.hpp"
 #include "Configs.hpp"
 #include "Game.hpp"
-#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <iomanip>
+#include <list>
 
 namespace Phoenix {
 
-Connect* commands_connect_ptr = 0;
+namespace Commands {
+
 std::list<Command> commands_history;
 std::list<Command*> commands_to_send;
-std::ofstream comm_stream;
 
-Commands::Commands(Connect *connect) {
-	commands_connect_ptr = connect;
-	if (Configs::SAVE_COMMANDS) {
-		std::stringstream ss;
-		ss << Self::TEAM_NAME << "_" << Self::UNIFORM_NUMBER << "_" << std::endl;
-		std::string prefix;
-		std::getline(ss, prefix);
-		comm_stream.open((prefix + "commands.log").c_str());
-	}
-}
-
-Commands::~Commands() {
-	if (Configs::VERBOSE) std::cout << "Commands out" << std::endl;
-	if (Configs::SAVE_COMMANDS) {
-		comm_stream.close();
-	}
-}
-
-void Commands::flush() {
+void flush() {
 	while (commands_history.size() > 0 && Game::SIMULATION_TIME - commands_history.front().createdAt() > Configs::COMMANDS_MAX_HISTORY) {
 		commands_history.pop_front();
 	}
 }
 
-void Commands::move(double x, double y) {
+Command* move(double x, double y) {
 	std::stringstream ss;
 	ss << "(move " << std::setprecision(4) << x << " " << y << ")" << std::endl;
 	std::string command;
 	std::getline(ss, command);
-	commands_history.push_back(Command(command, 1, MOVE));
-	commands_history.back().setArgs((void *)&x, (void *)&y);
+	commands_history.push_back(Command(command, 1, MOVE, x, y));
 	commands_to_send.push_back(&commands_history.back());
+	return &commands_history.back();
 }
 
-void Commands::turn(double moment) {
+Command* turn(double moment) {
 	if (moment < Server::MINMOMENT) {
 		moment = Server::MINMOMENT;
 	} else if (moment > Server::MAXMOMENT) {
@@ -86,12 +67,12 @@ void Commands::turn(double moment) {
 	ss << "(turn " << std::setprecision(4) << moment << ")" << std::endl;
 	std::string command;
 	std::getline(ss, command);
-	commands_history.push_back(Command(command, 1, TURN));
-	commands_history.back().setArgs((void *)&moment);
+	commands_history.push_back(Command(command, 1, TURN, moment));
 	commands_to_send.push_back(&commands_history.back());
+	return &commands_history.back();
 }
 
-void Commands::turnNeck(double moment) {
+Command* turnNeck(double moment) {
 	if (moment < Server::MINMOMENT) {
 		moment = Server::MINMOMENT;
 	} else if (moment > Server::MAXMOMENT) {
@@ -101,12 +82,12 @@ void Commands::turnNeck(double moment) {
 	ss << "(turn_neck " << std::setprecision(4) << moment << ")" << std::endl;
 	std::string command;
 	std::getline(ss, command);
-	commands_history.push_back(Command(command, 0, TURN_NECK));
-	commands_history.back().setArgs((void *)&moment);
+	commands_history.push_back(Command(command, 0, TURN_NECK, moment));
 	commands_to_send.push_back(&commands_history.back());
+	return &commands_history.back();
 }
 
-void Commands::dash(double power, double direction) {
+Command* dash(double power, double direction) {
 	if (power > Server::MAXPOWER) {
 		power = Server::MAXPOWER;
 	} else if (power < Server::MINPOWER) {
@@ -121,66 +102,66 @@ void Commands::dash(double power, double direction) {
 	ss << "(dash " << std::setprecision(4) << power << " " << direction << ")" << std::endl;
 	std::string command;
 	std::getline(ss, command);
-	commands_history.push_back(Command(command, 1, DASH));
-	commands_history.back().setArgs((void *)&power, (void *)&direction);
+	commands_history.push_back(Command(command, 1, DASH, power, direction));
 	commands_to_send.push_back(&commands_history.back());
+	return &commands_history.back();
 }
 
-void Commands::say(std::string message) {
+Command* say(std::string message) {
 	std::string command = "(say \"" + message + "\")";
-	commands_history.push_back(Command(command, 0, SAY));
-	commands_history.back().setArgs((void *)&message);
+	commands_history.push_back(Command(command, 0, SAY, message));
 	commands_to_send.push_back(&commands_history.back());
+	return &commands_history.back();
 }
 
-void Commands::catchBall(double direction) {
+Command* catchBall(double direction) {
 	std::stringstream ss;
 	ss << "(catch " << std::setprecision(4) << direction << ")" << std::endl;
 	std::string command;
 	std::getline(ss, command);
-	commands_history.push_back(Command(command, 1, CATCH));
-	commands_history.back().setArgs((void *)&direction);
+	commands_history.push_back(Command(command, 1, CATCH, direction));
 	commands_to_send.push_back(&commands_history.back());
+	return &commands_history.back();
 }
 
-void Commands::kick(double power, double direction) {
+Command* kick(double power, double direction) {
 	std::stringstream ss;
 	ss << "(kick " << std::setprecision(4) << power << " " << direction << ")" << std::endl;
 	std::string command;
 	std::getline(ss, command);
-	commands_history.push_back(Command(command, 1, KICK));
-	commands_history.back().setArgs((void *)&power, (void *)&direction);
+	commands_history.push_back(Command(command, 1, KICK, power, direction));
 	commands_to_send.push_back(&commands_history.back());
+	return &commands_history.back();
 }
 
-void Commands::tackle(double power, bool willToFoul) {
+Command* tackle(double power, bool willToFoul) {
 	std::stringstream ss;
 	ss << "(tackle " << std::setprecision(4) << power << (willToFoul ? " true" : " false") << std::endl;
 	std::string command;
 	std::getline(ss, command);
-	commands_history.push_back(Command(command, 1, TACKLE));
-	commands_history.back().setArgs((void *)&power, (void *)&willToFoul);
+	commands_history.push_back(Command(command, 1, TACKLE, power, willToFoul));
 	commands_to_send.push_back(&commands_history.back());
+	return &commands_history.back();
 }
 
-void Commands::pointTo(double distance, double direction) {
+Command* pointTo(double distance, double direction) {
 	std::stringstream ss;
 	ss << "(pointto " << std::setprecision(4) << distance << " " << direction << ")" << std::endl;
 	std::string command;
 	std::getline(ss, command);
-	commands_history.push_back(Command(command, 1, POINT));
-	commands_history.back().setArgs((void *)&distance, (void *)&direction);
+	commands_history.push_back(Command(command, 1, POINT, distance, direction));
 	commands_to_send.push_back(&commands_history.back());
+	return &commands_history.back();
 }
 
-void Commands::changeView(std::string width) {
+Command* changeView(std::string width) {
 	std::string command = "(change_view " + width + ")";
-	commands_history.push_back(Command(command, 0, CHANGE_VIEW));
-	commands_history.back().setArgs((void *)&width);
+	commands_history.push_back(Command(command, 0, CHANGE_VIEW, width));
 	commands_to_send.push_back(&commands_history.back());
+	return &commands_history.back();
 }
 
-void Commands::moveObject(std::string object, double x, double y) {
+Command* moveObject(std::string object, double x, double y) {
 	std::stringstream ss;
 	ss << "(move " << object << " " << std::setprecision(4) << x << " " << y << ")" << std::endl;
 	std::string command;
@@ -188,31 +169,37 @@ void Commands::moveObject(std::string object, double x, double y) {
 	std::cout << command << std::endl;
 	commands_history.push_back(Command(command, 1, MOVE_OBJECT));
 	commands_to_send.push_back(&commands_history.back());
+	return &commands_history.back();
 }
 
-void Commands::changeMode(std::string mode) {
+Command* changeMode(std::string mode) {
 	std::string command = "(change_mode " + mode + ")";
 	commands_history.push_back(Command(command, 1, CHANGE_MODE));
 	commands_history.back().setArgs((void *)&mode);
 	commands_to_send.push_back(&commands_history.back());
+	return &commands_history.back();
 }
 
-void Commands::start() {
+Command* start() {
 	std::string command = "(start)";
 	commands_history.push_back(Command(command, 1, START));
 	commands_to_send.push_back(&commands_history.back());
+	return &commands_history.back();
 }
 
-void Commands::recover() {
+Command* recover() {
 	std::string command = "(recover)";
 	commands_history.push_back(Command(command, 1, RECOVER));
 	commands_to_send.push_back(&commands_history.back());
+	return &commands_history.back();
 }
 
-int Commands::sendCommands() {
+int sendCommands() {
 	int commands_sent_counter = 0;
 	std::list<Command*> commands_sent;
-	if (Configs::SAVE_COMMANDS) comm_stream << Game::GAME_TIME << ": ";
+	if (Configs::SAVE_COMMANDS) {
+		Logger::commands << Game::GAME_TIME << ": ";
+	}
 	if (commands_to_send.size() > 0) {
 		std::string message = "";
 		int weight = 0;
@@ -227,13 +214,19 @@ int Commands::sendCommands() {
 				commands_sent_counter++;
 			}
 		} while (weight < 2 && commands_to_send.size() > 0);
-		if (Configs::SAVE_COMMANDS) comm_stream << message;
-		commands_connect_ptr->sendMessage(message);
+		if (Configs::SAVE_COMMANDS) {
+			Logger::commands << message;
+		}
+		Connect::sendMessage(message);
 	}
 	commands_to_send.clear(); //we clear the commands to send queue
 	Self::setLastCommandsSet(commands_sent);
-	if (Configs::SAVE_COMMANDS) comm_stream << std::endl;
+	if (Configs::SAVE_COMMANDS) {
+		Logger::commands << std::endl;
+	}
 	return commands_sent_counter;
+}
+
 }
 
 }

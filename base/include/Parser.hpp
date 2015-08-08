@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
+ * Copyright (c) 2013 - 2015 Nelson I. Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -19,7 +19,7 @@
  *
  * @file Parser.hpp
  *
- * @author Nelson Ivan Gonzalez
+ * @author Nelson I. Gonzalez
  */
 
 #ifndef PARSER_HPP_
@@ -32,29 +32,18 @@
  */
 namespace Phoenix {
 
-class Self;
-class World;
-class Messages;
-
  /*!
  * @brief <STRONG> Parser <BR> </STRONG>
  * The Parser object is in charge of convert the messages recieved by the server to
  * useful information to be used by the Phoenix2D framework.  It stores pointers to
  * Self, World and Messages objectos to send them their respective data structures.
  */
-class Parser {
-public:
+namespace Parser {
+
 	/*!
-	 * @brief Parser default constructor
-	 * @param self Pointer to Self object
-	 * @param world Pointer to World object
-	 * @param messages Pointer to Messages object
+	 *
 	 */
-	Parser(Self *self, World *world, Messages* messages);
-	/*!
-	 * @brief Parser default destructor
-	 */
-	~Parser();
+	void init();
 	/*!
 	 * @brief Parse the received messages from the server
 	 * @param message Message received from the server

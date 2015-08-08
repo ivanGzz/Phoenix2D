@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
+ * Copyright (c) 2013 - 2015 Nelson I. Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -19,7 +19,7 @@
  *
  * @file Reader.hpp
  *
- * @author Nelson Ivan Gonzalez
+ * @author Nelson I. Gonzalez
  */
 
 #ifndef READER_HPP_
@@ -30,43 +30,27 @@
  */
 namespace Phoenix {
 
-class Connect;
-class Parser;
-
 /*!
  * @brief <STRONG> Reader <BR> </STRONG>
  * The Reader is in charge of read the incoming messages from the Connect object
  * and feed the Parser object with them.
  */
-class Reader {
-public:
-	/*!
-	 * @brief Reader default constructor
-	 * @param connect Pointer to Connect object
-	 * @param parser Pointer to Parser object
-	 */
-	Reader(Connect *connect, Parser *parser);
-	/*!
-	 * @brief Reader default destructor
-	 */
-	~Reader();
+namespace Reader {
+
 	/*!
 	 * @brief Return true if the reader thread is running, false otherwise
 	 */
-	bool isRunning();
+	bool running();
 	/*!
 	 * @brief Starts the reader thread
 	 */
 	void start();
 	/*!
-	 * @brief Function to be executed in the reader thread
-	 */
-	void execute();
-	/*!
 	 * @brief Stops the reader thread
 	 */
 	void stop();
-};
+
+}
 
 } // End namespace Phoenix
 /*! @} */

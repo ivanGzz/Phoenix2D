@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013 Ivan Gonzalez
+ * Copyright (c) 2013 - 2015 Nelson I. Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -16,6 +16,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @file FEngine.cpp
+ *
+ * @author Nelson I. Gonzalez
  */
 
 #include "FEngine.hpp"

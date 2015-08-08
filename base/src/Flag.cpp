@@ -49,55 +49,55 @@ _coordinate makeCoordinate(double x, double y) {
 }
 
 Flag::Flag(std::string name, std::string position, int simulation_time) {
-	this->name = name;
-	this->simulation_time = simulation_time;
+	_name = name;
+	_simulation_time = simulation_time;
 	std::stringstream ss(position);
 	std::string token;
 	std::getline(ss, token, ' ');
-	distance = atof(token.c_str());
-	if (distance > 0.1) {
-		maxDistance = distance;
-		minDistance = exp(log(distance - 0.1) - Server::QUANTIZE_STEP_L);
+	_distance = atof(token.c_str());
+	if (_distance > 0.1) {
+		max_distance = _distance;
+		min_distance = exp(log(_distance - 0.1) - Server::QUANTIZE_STEP_L);
 	} else {
-		minDistance = distance;
-		maxDistance = distance;
+		min_distance = _distance;
+		max_distance = _distance;
 	}
-	error = (maxDistance - minDistance) / 2.0;
-	if (error == 0.0) {
-		error = 0.1;
+	_distance_error = (max_distance - min_distance) / 2.0;
+	if (_distance_error == 0.0) {
+		_distance_error = 0.1;
 	}
 	std::getline(ss, token, ' ');
-	direction = atof(token.c_str());
-	maxDirection = direction;
-	minDirection = direction;
-	if (direction > 0.1) {
-		minDirection = exp(log(direction - 0.1) - Server::QUANTIZE_STEP_L);
-		if (minDirection > 180.0) {
-			minDirection -= 360.0;
-		} else if (minDirection < -180.0){
-			minDirection += 360.0;
+	_direction = atof(token.c_str());
+	max_direction = _direction;
+	min_direction = _direction;
+	if (_direction > 0.1) {
+		min_direction = exp(log(_direction - 0.1) - Server::QUANTIZE_STEP_L);
+		if (min_direction > 180.0) {
+			min_direction -= 360.0;
+		} else if (min_direction < -180.0){
+			min_direction += 360.0;
 		}
-	} else if (direction < -0.1) {
-		maxDirection = -1.0 * exp(log(-1.0 * direction - 0.1) - Server::QUANTIZE_STEP_L);
-		if (maxDirection > 180.0) {
-			maxDirection -= 360.0;
-		} else if (maxDirection < -180.0) {
+	} else if (_direction < -0.1) {
+		max_direction = -1.0 * exp(log(-1.0 * _direction - 0.1) - Server::QUANTIZE_STEP_L);
+		if (max_direction > 180.0) {
+			max_direction -= 360.0;
+		} else if (max_direction < -180.0) {
 			maxDirection += 360.0;
 		}
 	}
-	derror = (maxDirection - minDirection) / 2.0;
-	if (derror == 0.0) {
-		derror = 0.1;
+	_direction_error = (max_direction - min_direction) / 2.0;
+	if (_direction_error == 0.0) {
+		_direction_error = 0.1;
 	}
-	x = FIELD[name].x;
-	y = FIELD[name].y;
+	_x = FIELD[name].x;
+	_y = FIELD[name].y;
 }
 
 Flag::~Flag() {
 
 }
 
-void Flag::initializeField() {
+void initField() {
 	FIELD.insert(std::map<std::string, _coordinate>::value_type("f t 0"   , makeCoordinate(  0.0, -39.0)));
 	FIELD.insert(std::map<std::string, _coordinate>::value_type("f t r 10", makeCoordinate( 10.0, -39.0)));
 	FIELD.insert(std::map<std::string, _coordinate>::value_type("f t r 20", makeCoordinate( 20.0, -39.0)));
@@ -155,48 +155,24 @@ void Flag::initializeField() {
 	FIELD.insert(std::map<std::string, _coordinate>::value_type("f g r b" , makeCoordinate( 52.5,   7.0)));
 }
 
-std::string Flag::getName() {
-	return name;
+std::string Flag::name() {
+	return _name;
 }
 
-double Flag::getDistance() {
-	return distance;
+double Flag::distance() {
+	return _distance;
 }
 
-double Flag::getDirection() {
-	return direction;
+double Flag::direction() {
+	return _direction;
 }
 
-double Flag::getX() {
-	return x;
+double Flag::distanceError() {
+	return _distance_error;
 }
 
-double Flag::getY() {
-	return y;
-}
-
-double Flag::getMinDistance() {
-	return minDistance;
-}
-
-double Flag::getMaxDistance() {
-	return maxDistance;
-}
-
-double Flag::getDistanceError() {
-	return error;
-}
-
-double Flag::getMinDirection() {
-	return minDirection;
-}
-
-double Flag::getMaxDirection() {
-	return maxDirection;
-}
-
-double Flag::getDirectionError() {
-	return derror;
+double Flag::directionError() {
+	return _direction_error;
 }
 
 }

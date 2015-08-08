@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013 Ivan Gonzalez
+ * Copyright (c) 2013 - 2015 Nelson I. Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -16,25 +16,17 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @file constants.hpp
+ *
+ * @author Nelson I. Gonzalez
  */
 
 #ifndef CONSTANTS_HPP_
 #define CONSTANTS_HPP_
 
-namespace Filters {
-	const int PARTICLES = 100;
-}
-
 namespace Fuzzy {
 	const int STEPS = 100;
-}
-
-namespace Geometry {
-
-}
-
-namespace Learning {
-
 }
 
 namespace Math {

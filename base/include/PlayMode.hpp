@@ -1,6 +1,6 @@
  /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
+ * Copyright (c) 2013 - 2015 Nelson I. Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -19,7 +19,7 @@
  *
  * @file PlayMode.hpp
  *
- * @author Nelson Ivan Gonzalez
+ * @author Nelson I. Gonzalez
  */
 
 #ifndef PLAYMODE_HPP_
@@ -34,23 +34,12 @@
  */
 namespace Phoenix {
 
-class Commands;
-
 /*!
  * @brief <STRONG> PlayMode <BR> </STRONG>
  * The PlayMode object is in charge of execute the given function
  */
-class PlayMode {
-public:
-	/*!
-	 * @brief PlayMode default constructor
-	 * @param commands Pointer to Commands object
-	 */
-	PlayMode(Commands* commands);
-	/*!
-	 * @brief PlayMode default destructor
-	 */
-	~PlayMode();
+namespace PlayMode {
+	
 	/*!
 	 * @brief Executes setup function at the beginning of the simulation
 	 * @param setup function to be executed
@@ -66,7 +55,7 @@ public:
 	 * @param messages Messages received in the current cycle
 	 * @param execute function to be executed
 	 */
-	void onExecute(WorldModel world, std::vector<Message> messages, void(* execute)(WorldModel, std::vector<Message>, Commands*));
+	void onExecute(WorldModel world, std::vector<Message> messages, void(* execute)(WorldModel, std::vector<Message>));
 	/*!
 	 * @brief It is executed at the end of the current cycle, it actually sends the commands
 	 */
@@ -76,9 +65,8 @@ public:
 	 * @param end function to be executed
 	 */
 	void onEnd(void(* end)(void));
-private:
-	Commands* commands;	///< Pointer to Commands object
-};
+
+}
 
 } // End namespace Phoenix
 /*! @} */

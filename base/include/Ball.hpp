@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
+ * Copyright (c) 2013 - 2015 Nelson I. Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -17,17 +17,18 @@
  * You should have received a copy of the GNU General Public License
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @file Ball.cpp
+ * @file Ball.hpp
  *
- * @author Nelson Ivan Gonzalez
+ * @author Nelson I. Gonzalez
  */
 
 #ifndef BALL_HPP_
 #define BALL_HPP_
 
-#include <string>
 #include "Position.hpp"
 #include "geometry.hpp"
+#include "Object.hpp"
+#include <string>
 
 /*! @addtogroup phoenix_base
  * @{
@@ -40,8 +41,7 @@ namespace Phoenix {
  * generated every new cycle and can be empty.  You must check isInSightRange() to know if the ball is
  * seen in the current cycle.
  */
-class Ball {
-friend class World;
+class Ball : public Object {
 public:
 	/*!
 	 * @brief Ball default constructor
@@ -62,7 +62,7 @@ public:
 	 * @param player_position current agent position used to compute the absolute position for the ball
 	 * @param player_velocity current agent velocity used to compute the absolute velocity for the ball
 	 */
-	void initForPlayer(std::string position, const Position* player_position, const Geometry::Vector2D* player_velocity);
+	void initForPlayer(std::string position, Position player_position, Geometry::Vector2D player_velocity);
 	/*!
 	 * @brief Init method for agent type player using fullstate sensor
 	 * @param x ball absolute position in x
@@ -72,32 +72,14 @@ public:
 	 */
 	void initForFullstate(double x, double y, double vx, double vy);
 	/*!
-	 * @brief Returns the current ball absolute position in a Position pointer
+	 * @brief Initialization method for agent type player using a defined position
+	 * @param position defined position
 	 */
-	Position* getPosition();
-	/*!
-	 * @brief Return the current ball absolute velocity in a Vector2D pointer
-	 * @return Pointer to ball velocity
-	 */
-	Geometry::Vector2D* getVelocity();
-	/*!
-	 * @brief Returns true is the ball is in the vision range in the current cycle, and false otherwise
-	 * @return true if the ball is in the vision range, false otherwise
-	 */
-	bool isInSightRange();
-private:
-	double distance;				///< ball relative distance
-	double direction;				///< ball relative direction
-	double distChange;				///< ball relative distance change
-	double dirChange;				///< ball relative direction change
-	double x;						///< computed ball position in x
-	double y;						///< computed ball position in y
-	double vx;						///< computed ball velocity in x
-	double vy;						///< computed ball velocity in y
-	Position position;				///< computed ball absolute position using x and y
-	Geometry::Vector2D velocity;	///< computed ball absolute velocity using vx and vy
-	bool in_sight_range;			///< boolean indicating if the ball is in the vision sensor
-	bool vel;					    ///< Flag for velocity information received
+	void initForPosition(Position position);
+	double distance;				///< raw value of ball relative distance
+	double direction;				///< raw value of ball relative direction
+	double dist_change;				///< raw value of ball relative distance change
+	double dir_change;				///< raw value of ball relative direction change
 };
 
 } // End namespace Phoenix

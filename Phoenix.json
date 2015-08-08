@@ -1,0 +1,18 @@
+{"team":{
+	"1": {
+		"x": -10.0,
+		"y": 0.0,
+		"logging": false,
+		"verbose": false,
+		"world": {
+			"history": true,
+			"tracking": true,
+			"ball": true
+		},
+		"sensors": {
+			"fullstate": false,
+			"see": false
+		}
+	}
+}
+}

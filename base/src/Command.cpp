@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
+ * Copyright (c) 2013 - 2015 Nelson I. Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -19,7 +19,7 @@
  *
  * @file Command.cpp
  *
- * @author Nelson Ivan Gonzalez
+ * @author Nelson I. Gonzalez
  */
 
 #include "Command.hpp"
@@ -29,146 +29,189 @@
 namespace Phoenix {
 
 Command::Command() {
-	command = "(error)";
-	weight = 1;
-	type = EMPTY;
-	double_arg_0 = 0.0;
-	double_arg_1 = 0.0;
-	string_arg_0 = "";
-	string_arg_1 = "";
-	bool_arg_0 = "";
-	bool_arg_1 = "";
-	status = ERROR;
-	simulation_time = 0;
+	_command = "(error)";
+	_weight = 1;
+	_type = EMPTY;
+	_double_arg_0 = 0.0;
+	_double_arg_1 = 0.0;
+	_string_arg_0 = "";
+	_string_arg_1 = "";
+	_bool_arg_0 = "";
+	_bool_arg_1 = "";
+	_status = ERROR;
+	_simulation_time = 0;
 }
 
-Command::Command(std::string command, int weight, COMMAND_TYPE type) { //, void* ... args) {
-	this->command = command;
-	this->weight = weight;
-	this->type = type;
-	double_arg_0 = 0.0;
-	double_arg_1 = 0.0;
-	string_arg_0 = "";
-	string_arg_1 = "";
-	bool_arg_0 = false;
-	bool_arg_1 = false;
-	status = CREATED;
-	simulation_time = Game::SIMULATION_TIME;
+Command::Command(std::string command, int weight, COMMAND_TYPE type) {
+	_command = command;
+	_weight = weight;
+	_type = type;
+	_double_arg_0 = 0.0;
+	_double_arg_1 = 0.0;
+	_string_arg_0 = "";
+	_string_arg_1 = "";
+	_bool_arg_0 = false;
+	_bool_arg_1 = false;
+	_status = CREATED;
+	_simulation_time = Game::SIMULATION_TIME;
+}
+
+Command::Command(std::string command, int weight, COMMAND_TYPE type, double arg0) {
+	_command = command;
+	_weight = weight;
+	_type = type;
+	_double_arg_0 = arg0;
+	_double_arg_1 = 0.0;
+	_string_arg_0 = "";
+	_string_arg_1 = "";
+	_bool_arg_0 = false;
+	_bool_arg_1 = false;
+	_status = CREATED;
+	_simulation_time = Game::SIMULATION_TIME;
+}
+
+Command::Command(std::string command, int weight, COMMAND_TYPE type, double arg0, double arg1) {
+	_command = command;
+	_weight = weight;
+	_type = type;
+	_double_arg_0 = arg0;
+	_double_arg_1 = arg1;
+	_string_arg_0 = "";
+	_string_arg_1 = "";
+	_bool_arg_0 = false;
+	_bool_arg_1 = false;
+	_status = CREATED;
+	_simulation_time = Game::SIMULATION_TIME;
+}
+
+Command::Command(std::string command, int weight, COMMAND_TYPE type, std::string arg0) {
+	_command = command;
+	_weight = weight;
+	_type = type;
+	_double_arg_0 = 0.0;
+	_double_arg_1 = 0.0;
+	_string_arg_0 = arg0;
+	_string_arg_1 = "";
+	_bool_arg_0 = false;
+	_bool_arg_1 = false;
+	_status = CREATED;
+	_simulation_time = Game::SIMULATION_TIME;
+}
+
+Command::Command(std::string command, int weight, COMMAND_TYPE type, std::string arg0) {
+	_command = command;
+	_weight = weight;
+	_type = type;
+	_double_arg_0 = 0.0;
+	_double_arg_1 = 0.0;
+	_string_arg_0 = arg0;
+	_string_arg_1 = "";
+	_bool_arg_0 = false;
+	_bool_arg_1 = false;
+	_status = CREATED;
+	_simulation_time = Game::SIMULATION_TIME;
+}
+
+Command::Command(std::string command, int weight, COMMAND_TYPE type, double arg0, bool arg1) {
+	_command = command;
+	_weight = weight;
+	_type = type;
+	_double_arg_0 = arg0;
+	_double_arg_1 = 0.0;
+	_string_arg_0 = "";
+	_string_arg_1 = "";
+	_bool_arg_0 = arg1;
+	_bool_arg_1 = false;
+	_status = CREATED;
+	_simulation_time = Game::SIMULATION_TIME;
 }
 
 Command::~Command() {
 
 }
 
-void Command::setArgs(void* arg0, void* arg1, void* arg2) {
-	switch(type) {
-	case MOVE:
-	case DASH:
-	case KICK:
-	case POINT:
-		if (arg0) double_arg_0 = *((double *)arg0);
-		if (arg1) double_arg_1 = *((double *)arg1);
-		break;
-	case TURN:
-	case CATCH:
-	case TURN_NECK:
-		if (arg0) double_arg_0 = *((double *)arg0);
-		break;
-	case SAY:
-	case CHANGE_VIEW:
-		if (arg0) string_arg_0 = *((std::string *)arg0);
-		break;
-	case TACKLE:
-		if (arg0) double_arg_0 = *((double *)arg0);
-		if (arg1) bool_arg_1 = *((bool *)arg1);
-		break;
-	default:
-		break;
-	}
+std::string Command::command() {
+	return _command;
 }
 
-std::string Command::getCommand() {
-	return command;
+int Command::weight() {
+	return _weight;
 }
 
-int Command::getWeight() {
-	return weight;
+COMMAND_TYPE Command::commandType() {
+	return _type;
 }
 
-COMMAND_TYPE Command::getCommandType() {
-	return type;
+double Command::dashPower() {
+	return _double_arg_0;
 }
 
-double Command::getDashPower() {
-	return double_arg_0;
+double Command::dashDirection() {
+	return _double_arg_1;
 }
 
-double Command::getDashDirection() {
-	return double_arg_1;
+double Command::turnMoment() {
+	return _double_arg_0;
 }
 
-double Command::getTurnMoment() {
-	return double_arg_0;
+double Command::moveX() {
+	return _double_arg_0;
 }
 
-double Command::getMoveX() {
-	return double_arg_0;
+double Command::moveY() {
+	return _double_arg_1;
 }
 
-double Command::getMoveY() {
-	return double_arg_1;
+std::string Command::sayMessage() {
+	return _string_arg_0;
 }
 
-std::string Command::getSayMessage() {
-	return string_arg_0;
+double Command::catchDirection() {
+	return _double_arg_0;
 }
 
-double Command::getCatchDirection() {
-	return double_arg_0;
+double Command::kickPower() {
+	return _double_arg_0;
 }
 
-double Command::getKickPower() {
-	return double_arg_0;
+double Command::kickDirection() {
+	return _double_arg_1;
 }
 
-double Command::getKickDirection() {
-	return double_arg_1;
+double Command::tacklePower() {
+	return _double_arg_0;
 }
 
-double Command::getTacklePower() {
-	return double_arg_0;
+bool Command::tackleWillToFoul() {
+	return _bool_arg_1;
 }
 
-bool Command::getTackleWillToFoul() {
-	return bool_arg_1;
+double Command::turnNeckMoment() {
+	return _double_arg_0;
 }
 
-double Command::getTurnNeckMoment() {
-	return double_arg_0;
+double Command::pointDistance() {
+	return _double_arg_0;
 }
 
-double Command::getPointDistance() {
-	return double_arg_0;
+double Command::pointDirection() {
+	return _double_arg_1;
 }
 
-double Command::getPointDirection() {
-	return double_arg_1;
+std::string Command::changeViewWidth() {
+	return _string_arg_0;
 }
 
-std::string Command::getChangeViewWidth() {
-	return string_arg_0;
+void Command::setStatus(COMMAND_STATUS status) {
+	_status = status;
 }
 
-void Command::changeStatusTo(COMMAND_STATUS status) {
-	this->status = status;
-}
-
-COMMAND_STATUS Command::getCommandStatus() {
-	return status;
+COMMAND_STATUS Command::status() {
+	return _status;
 }
 
 int Command::createdAt() {
-	return simulation_time;
+	return _simulation_time;
 }
 
 }

@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
+ * Copyright (c) 2013 - 2015 Nelson I. Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -19,7 +19,7 @@
  *
  * @file WorldModel.cpp
  *
- * @author Nelson Ivan Gonzalez
+ * @author Nelson I. Gonzalez
  */
 
 #include "WorldModel.hpp"
@@ -32,141 +32,107 @@ namespace Phoenix {
 Position positionToCompare;
 
 bool compareDistances(Player* player0, Player* player1) {
-	double distance0 = player0->getPosition()->getDistanceTo(&positionToCompare);
-	double distance1 = player1->getPosition()->getDistanceTo(&positionToCompare);
+	double distance0 = player0->distanceTo(&positionToCompare);
+	double distance1 = player1->distanceTo(&positionToCompare);
 	return (distance0 < distance1);
 }
 
-WorldModel::WorldModel(std::vector<Player> players, Ball ball) {
-	this->players = players;
-	this->ball = ball;
-}
-
-WorldModel::WorldModel(std::vector<Player> players, Ball ball, std::vector<Player> fs_players, Ball fs_ball) {
-	this->players = players;
-	this->ball = ball;
+WorldModel::WorldModel(std::list<Player> players, Ball ball, std::list<Player> fs_players, Ball fs_ball, bool current) {
+	_players = players;
+	_ball = ball;
+	for (std::vector<Player>::iterator it = _players.begin(); it != _players.end(); ++it) {
+		_all_players.push_back(&(*it));
+		if (it->team().compare("our") == 0) {
+			_ours.push_back(&(*it));
+		} else if (it->team().compare("opp") == 0) {
+			_opps.push_back(&(*it));
+		} else {
+			_unds.push_back(&(*it));
+		}
+	}
 	if (Controller::AGENT_TYPE == 'p' || Controller::AGENT_TYPE == 'g') {
 		for (int i = 0; i < 12; ++i) {
-			ours[i] = Player();
-			opps[i] = Player();
+			_ours[i] = Player();
+			_opps[i] = Player();
 		}
-		this->fs_players = fs_players;
-		for (std::vector<Player>::iterator it = fs_players.begin(); it != fs_players.end(); ++it) {
+		_fs_players = fs_players;
+		for (std::vector<Player>::iterator it = _fs_players.begin(); it != _fs_players.end(); ++it) {
 			if (it->getTeam().compare("our") == 0) {
-				ours[it->getUniformNumber()] = *it;
+				_ours[it->uniformNumber()] = *it;
 			} else {
-				opps[it->getUniformNumber()] = *it;
+				_opps[it->uniformNumber()] = *it;
 			}
 		}
-		this->fs_ball = fs_ball;
+		_fs_ball = fs_ball;
 	}
+	_current = current;
 }
 
 WorldModel::~WorldModel() {
 
 }
 
-std::vector<Player*> WorldModel::getPlayers() {
-	std::vector<Player*> all_players;
-	for (std::vector<Player>::iterator it = players.begin(); it != players.end(); ++it) {
-		all_players.push_back(&(*it));
-	}
+std::list<Player*> WorldModel::players() {
+	std::list<Player*> all_players(_all_player.begin(), _all_players.end());
 	return all_players;
 }
 
-std::vector<Player*> WorldModel::getPlayersOrderedByDistanceTo(Position position) {
-	std::list<Player*> all_players;
+std::list<Player*> WorldModel::playersOrderedByDistanceTo(Position position) {
+	std::list<Player*> all_players(_all_players.begin(). _all_players.end());
 	positionToCompare = position;
-	for (std::vector<Player>::iterator it = players.begin(); it != players.end(); ++it) {
-		all_players.push_back(&(*it));
-	}
 	all_players.sort(compareDistances);
-	std::vector<Player*> ps(all_players.begin(), all_players.end());
-	return ps;
+	return all_players;
 }
 
-std::vector<Player*> WorldModel::getOurPlayers() {
-	std::vector<Player*> our_players;
-	for (std::vector<Player>::iterator it = players.begin(); it != players.end(); ++it) {
-		if (it->getTeam().compare("our") == 0) {
-			our_players.push_back(&(*it));
-		}
-	}
+std::list<Player*> WorldModel::ourPlayers() {
+	std::vector<Player*> our_players(_ours.begin(), _ours.end());
 	return our_players;
 }
 
-std::vector<Player*> WorldModel::getOurPlayersOrderedByDistanceTo(Position position) {
-	std::list<Player*> our_players;
+std::list<Player*> WorldModel::ourPlayersOrderedByDistanceTo(Position position) {
+	std::list<Player*> our_players(_ours.begin(), _ours.end());
 	positionToCompare = position;
-	for (std::vector<Player>::iterator it = players.begin(); it != players.end(); ++it) {
-		if (it->getTeam().compare("our") == 0) {
-			our_players.push_back(&(*it));
-		}
-	}
 	our_players.sort(compareDistances);
-	std::vector<Player*> ps(our_players.begin(), our_players.end());
-	return ps;
+	return our_players;
 }
 
-std::vector<Player*> WorldModel::getOppPlayers() {
-	std::vector<Player*> opp_players;
-	for (std::vector<Player>::iterator it = players.begin(); it != players.end(); ++it) {
-		if (it->getTeam().compare("opp") == 0) {
-			opp_players.push_back(&(*it));
-		}
-	}
+std::list<Player*> WorldModel::oppPlayers() {
+	std::list<Player*> opp_players(_opps.begin(), _opps.end());
 	return opp_players;
 }
 
-std::vector<Player*> WorldModel::getOppPlayersOrderedByDistanceTo(Position position) {
-	std::list<Player*> opp_players;
+std::list<Player*> WorldModel::oppPlayersOrderedByDistanceTo(Position position) {
+	std::list<Player*> opp_players(_opps.begin(), _opps.end());
 	positionToCompare = position;
-	for (std::vector<Player>::iterator it = players.begin(); it != players.end(); ++it) {
-		if (it->getTeam().compare("opp") == 0) {
-			opp_players.push_back(&(*it));
-		}
-	}
 	opp_players.sort(compareDistances);
-	std::vector<Player*> ps(opp_players.begin(), opp_players.end());
-	return ps;
+	return opp_players;
 }
 
-std::vector<Player*> WorldModel::getUndPlayers() {
-	std::vector<Player*> und_players;
-	for (std::vector<Player>::iterator it = players.begin(); it != players.end(); ++it) {
-		if (it->getTeam().compare("undefined") == 0) {
-			und_players.push_back(&(*it));
-		}
-	}
+std::list<Player*> WorldModel::undPlayers() {
+	std::vector<Player*> und_players(_unds.begin(), _unds.end());
 	return und_players;
 }
 
-std::vector<Player*> WorldModel::getUndPlayersOrderedByDistanceTo(Position position) {
-	std::list<Player*> und_players;
+std::list<Player*> WorldModel::undPlayersOrderedByDistanceTo(Position position) {
+	std::list<Player*> und_players(_unds.begin(), _unds.end());
 	positionToCompare = position;
-	for (std::vector<Player>::iterator it = players.begin(); it != players.end(); ++it) {
-		if (it->getTeam().compare("undefined") == 0) {
-			und_players.push_back(&(*it));
-		}
-	}
 	und_players.sort(compareDistances);
-	std::vector<Player*> ps(und_players.begin(), und_players.end());
-	return ps;
+	return und_players;
 }
 
-std::vector<Player*> WorldModel::getAllExactPlayers() {
-	std::vector<Player*> e_players;
-	for (std::vector<Player>::iterator it = fs_players.begin(); it != fs_players.end(); ++it) {
+std::list<Player*> WorldModel::exactPlayers() {
+	std::list<Player*> e_players;
+	for (std::list<Player>::iterator it = fs_players.begin(); it != fs_players.end(); ++it) {
 		e_players.push_back(&(*it));
 	}
 	return e_players;
 }
 
-Player* WorldModel::getOurExactPlayer(int unum) {
+Player* WorldModel::ourExactPlayer(int unum) {
 	return &ours[unum];
 }
 
-Player* WorldModel::getOppExactPlayer(int unum) {
+Player* WorldModel::oppExactPlayer(int unum) {
 	return &opps[unum];
 }
 

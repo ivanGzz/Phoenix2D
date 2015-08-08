@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
+ * Copyright (c) 2013 - 2015 Nelson I. Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -19,7 +19,7 @@
  *
  * @file Reader.cpp
  *
- * @author Nelson Ivan Gonzalez
+ * @author Nelson I. Gonzalez
  */
 
 #include <string>
@@ -32,54 +32,40 @@
 
 namespace Phoenix {
 
-Connect* connect_ptr = 0;
-Parser* parser_ptr = 0;
-bool running = false;
-pthread_t thread = 0;
+namespace Reader {
+
+bool _running = false;
+pthread_t _thread = 0;
 
 void* run(void* arg) {
-	Reader* reader = (Reader *)arg;
-	reader->execute();
+	while (_running) {
+		Parser::parseMessage(Connect::receiveMessage());
+	}
 	return 0;
 }
 
-Reader::Reader(Connect *connect, Parser *parser) {
-	connect_ptr = connect;
-	parser_ptr = parser;
+bool running() {
+	return _running;
 }
 
-Reader::~Reader() {
-	if (Configs::VERBOSE) std::cout << "Reader out" << std::endl;
-}
-
-void Reader::execute() {
-	while (running) {
-		parser_ptr->parseMessage(connect_ptr->receiveMessage());
-	}
-}
-
-bool Reader::isRunning() {
-	return running;
-}
-
-void Reader::start() {
-	running = true;
-	int success = pthread_create(&thread, 0, run, (void *)this);
-	if (success) {
-		running = false;
+void start() {
+	_running = true;
+	if (pthread_create(&_thread, 0, run, 0) != 0) { //success) {
+		_running = false;
 		std::cerr << "Reader::start() -> error creating thread" << std::endl;
 	}
 }
 
-void Reader::stop() {
+void stop() {
 	void *res;
 	running = false;
-	connect_ptr->sendMessage("(bye)");
-	connect_ptr->disconnect();
-	int success = pthread_join(thread, &res);
-	if (success) {
+	Connect::sendMessage("(bye)");
+	Connect::disconnect();
+	if (pthread_join(thread, &res) != 0) { //success) {
 		std::cerr << "Reader::stop() -> failed to join thread" << std::endl;
 	}
+}
+
 }
 
 }

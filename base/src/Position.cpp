@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
+ * Copyright (c) 2013 - 2015 Nelson I. Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -19,7 +19,7 @@
  *
  * @file Position.cpp
  *
- * @author Nelson Ivan Gonzalez
+ * @author Nelson I. Gonzalez
  */
 
 #include "Position.hpp"
@@ -32,31 +32,38 @@
 
 namespace Phoenix {
 
-Position::Position(double x, double y, double body, double neck) {
-	this->x = x;
-	this->y = y;
-	this->body = body;
-	this->neck = neck;
+Position::Position() {
+	_x = 0.0;
+	_y = 0.0;
+	_body = 0.0;
+	_head = 0.0;
+}
+
+Position::Position(double x, double y, double body, double head) {
+	_x = x;
+	_y = y;
+	_body = body;
+	_head = neck;
 }
 
 Position::Position(Geometry::Point point) {
-	x = point.x;
-	y = point.y;
-	body = 0;
-	neck = 0;
+	_x = point.x;
+	_y = point.y;
+	_body = 0;
+	_head = 0;
 }
 
 Position::~Position() {
 
 }
 
-double Position::getDistanceTo(Position* position) const {
-	double distance = sqrt(pow(position->x - x, 2.0) + pow(position->y - y, 2.0));
+double Position::distanceTo(Position* position) {
+	double distance = sqrt(pow(position->_x - _x, 2.0) + pow(position->_y - _y, 2.0));
 	return distance;
 }
 
-double Position::getDirectionTo(Position* position) const {
-	double direction = 180.0 * (atan2(position->y - y, position->x - x)) / Math::PI - body;
+double Position::directionTo(Position* position) {
+	double direction = 180.0 * (atan2(position->_y - _y, position->_x - _x)) / Math::PI - body;
 	if (direction >= 180.0) {
 		direction -= 360.0;
 	} else if (direction < -180.0) {
@@ -65,25 +72,40 @@ double Position::getDirectionTo(Position* position) const {
 	return direction;
 }
 
-void Position::mirror() {
-	if (x != 0.0) x *= -1.0;
-	if (y != 0.0) y *= -1.0;
+Geometry::Point Position::point() {
+	return Geometry::Point(_x, _y);
 }
 
-Geometry::Point Position::getPoint() const {
-	return Geometry::Point(x, y);
+double Position::x() {
+	return _x;
 }
 
-double Position::getX() const {
-	return x;
+void Position::setX(double x) {
+	_x = x;
 }
 
-double Position::getY() const {
-	return y;
+double Position::y() {
+	return _y;
 }
 
-double Position::getDirection() const {
-	return body;
+void Position::setY(double y) {
+	_y = y;
+}
+
+double Position::body() {
+	return _body;
+}
+
+void Position::setBody(double body) {
+	_body = body;
+}
+
+double Position::head() {
+	return _head;
+}
+
+void Position::setHead(double head) {
+	_head = head;
 }
 
 }

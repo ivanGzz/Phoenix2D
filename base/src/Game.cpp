@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
+ * Copyright (c) 2013 - 2015 Nelson I. Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -19,7 +19,7 @@
  *
  * @file Game.cpp
  *
- * @author Nelson Ivan Gonzalez
+ * @author Nelson I. Gonzalez
  */
 
 #include <iostream>
@@ -31,6 +31,8 @@
 
 namespace Phoenix {
 
+namespace Game {
+
 std::string play_modes = "before_kick_off corner_kick_l corner_kick_r free_kick_l free_kick_r goal_kick_l goal_kick_r kick_in_l kick_in_r kick_off_l kick_off_r play_on";
 std::string events = "drop_ball goal_l goal_r offside_l offside_r";
 boost::regex goal_regex("goal_(l|r)_(\\d+)");
@@ -39,28 +41,23 @@ static bool on_game = true;
 static pthread_cond_t cycle_cond = PTHREAD_COND_INITIALIZER;
 static pthread_mutex_t cycle_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-unsigned int Game::GAME_TIME = 0;
-unsigned int Game::SIMULATION_TIME = 0;
-unsigned int Game::GOALS = 0;
-unsigned int Game::GOALS_AGAINST = 0;
-std::string Game::PLAY_MODE = "before_kick_off";
+unsigned int GAME_TIME = 0;
+unsigned int SIMULATION_TIME = 0;
+unsigned int GOALS = 0;
+unsigned int GOALS_AGAINST = 0;
+std::string PLAY_MODE = "before_kick_off";
 
-Game::Game() {
-
+void updateTime(int game_time) {
+	GAME_TIME = game_time;
+	SIMULATION_TIME++;
 }
 
-Game::~Game() {
-	if (Configs::VERBOSE) std::cout << "Game out" << std::endl;
-}
-
-void Game::updateTime(int game_time) {
+void onNextCycle() { // int game_time) {
 	int success = pthread_mutex_lock(&cycle_mutex);
 	if (success) {
 		std::cerr << "Game::updateTimes(int) -> can not lock mutex" << std::endl;
 		return;
 	}
-	Game::GAME_TIME = game_time;
-	Game::SIMULATION_TIME++;
 	cycle_flag = true;
 	success = pthread_mutex_unlock(&cycle_mutex);
 	if (success) {
@@ -72,29 +69,29 @@ void Game::updateTime(int game_time) {
 	}
 }
 
-void Game::updatePlayMode(std::string play_mode) {
+void updatePlayMode(std::string play_mode) {
 	boost::cmatch match;
 	if (boost::regex_match(play_mode.c_str(), match, goal_regex)) {
 		int goals = atoi((std::string() + match[2]).c_str());
 		if (Self::SIDE.compare(match[1])) {
-			Game::GOALS = goals;
+			GOALS = goals;
 		} else {
-			Game::GOALS_AGAINST = goals;
+			GOALS_AGAINST = goals;
 		}
 		play_mode = std::string() + "goal_" + match[1];
 	}
 	if (play_modes.find(play_mode) != std::string::npos) {
-		Game::PLAY_MODE = play_mode;
+		PLAY_MODE = play_mode;
 	} else if (play_mode.compare("time_over") == 0) {
 		on_game = false;
 	} else if (events.find(play_mode) != std::string::npos) {
-		std::cout << Game::SIMULATION_TIME << ": " << play_mode << std::endl;
+		std::cout << SIMULATION_TIME << ": " << play_mode << std::endl;
 	} else {
 		std::cerr << "Not recognized: " << play_mode;
 	}
 }
 
-bool Game::nextCycle() {
+bool nextCycle() {
 	int success = pthread_mutex_lock(&cycle_mutex);
 	if (success) {
 		std::cerr << "Game::nextCycle() -> can not lock mutex" << std::endl;
@@ -113,6 +110,8 @@ bool Game::nextCycle() {
 		std::cerr << "Game::nextCycle() -> can not unlock mutex" << std::endl;
 	}
 	return on_game;
+}
+
 }
 
 }

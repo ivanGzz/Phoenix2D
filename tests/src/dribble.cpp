@@ -65,45 +65,45 @@ void randomPosition() {
 	std::cout << "New random position: (" << x << ", " << y << ")" << std::endl;
 }
 
-void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages, Commands* commands) {
+void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages) {
 	if (!setup) {
 		double x = -1.0 * fabs((double)xdist(rng) - 52.0); //we need a negative coordinate in x
 		double y = (double)ydist(rng) - 34.0;
 		std::cout << "Moving to: (" << x << ", " << y << ")" << std::endl;
-		commands->move(x, y);
-		commands->changeView("narrow");
+		Commands::move(x, y);
+		Commands::changeView("narrow");
 		setup = true;
 		randomPosition();
 	} else {
-		const Position* p = Self::getPosition();
-		Ball* ball = worldModel.getBall();
-		if (ball->isInSightRange()) {
-			double dir = p->getDirectionTo(ball->getPosition());
+		Position p = Self::getPosition();
+		Ball* ball = worldModel.ball();
+		if (ball->inSightRange()) {
+			double dir = p.directionTo(ball);
 			if (fabs(dir) > 20.0) {
-				commands->turn(dir);
+				Commands::turn(dir);
 			}
 		} else {
-			commands->turn(60.0);
+			Commands::turn(60.0);
 		}
 	}
 }
 
-void executePlayOn(WorldModel worldModel, std::vector<Message> messages, Commands* commands) {
-	Ball* b = worldModel.getBall();
+void executePlayOn(WorldModel worldModel, std::vector<Message> messages) {
+	Ball* ball = worldModel.ball();
 	const Position* p = Self::getPosition();
-	if (b->getPosition()->getDistanceTo(&positionToGo) <= 2.0) {
+	if (ball->distanceTo(&positionToGo) <= 2.0) {
 		randomPosition();
 	}
-	double ed = p->getDistanceTo(b->getPosition()) - Server::PLAYER_SIZE - Server::BALL_SIZE;
+	double ed = p->distanceTo(ball) - Server::PLAYER_SIZE - Server::BALL_SIZE;
 	if (ed < Self::KICKABLE_MARGIN) {
-		double dir = p->getDirectionTo(&positionToGo);
-		commands->kick(10.0, dir);
+		double dir = p->directionTo(&positionToGo);
+		Commands::kick(10.0, dir);
 	} else {
-		double dir = p->getDirectionTo(b->getPosition());
+		double dir = p->directionTo(ball);
 		if (fabs(dir) > 10.0) {
-			commands->turn(dir);
+			Commands::turn(dir);
 		} else {
-			commands->dash(50.0, 0.0);
+			Commands::dash(50.0, 0.0);
 		}
 	}
 }

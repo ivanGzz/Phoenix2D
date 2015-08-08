@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013 Ivan Gonzalez
+ * Copyright (c) 2013 - 2015 Nelson I. Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -16,6 +16,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @file worldtest.cpp
+ *
+ * @author Nelson I. Gonzalez
  */
 
 #include "worldtest.hpp"
@@ -65,7 +69,7 @@ void randomPosition() {
 	positionToGo = Position(x, y);
 }
 
-void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages, Commands* commands) {
+void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages) {
 	if (!setup) {
 		if (iteration > -1) {
 			if (Configs::LOGGING) {
@@ -82,17 +86,17 @@ void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages, 
 		}
 		double x = -1.0 * fabs((double)xdist(rng) - 52.0); //we need a negative coordinate in x
 		double y = (double)ydist(rng) - 34.0;
-		commands->move(x, y);
+		Commands::move(x, y);
 		setup = true;
 		randomPosition();
-		commands->changeView("narrow");
+		Commands::changeView("narrow");
 		iteration++;
 //		Configs::TRACKING_THRESHOLD = (double)Self::UNIFORM_NUMBER + ((Self::SIDE[0] == 'l') ? -1.0 : 4.0) + 0.1 * (iteration / 10);
 	} else {
-		const Position* p = Self::getPosition();
+		Position p = Self::getPosition();
 		Position zero(0.0, 0.0);
-		if (fabs(p->getDirectionTo(&zero)) > 5.0) {
-			commands->turn(p->getDirectionTo(&zero));
+		if (fabs(p.directionTo(&zero)) > 5.0) {
+			Commands::turn(p.directionTo(&zero));
 		}
 	}
 	r_accum_matches = worldModel.real_matches;
@@ -100,23 +104,23 @@ void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages, 
 	c_accum_matches = worldModel.correct_matches;
 }
 
-void executePlayOn(WorldModel worldModel, std::vector<Message> messages, Commands* commands) {
-	const Position* p = Self::getPosition();
-	double d = p->getDistanceTo(&positionToGo);
+void executePlayOn(WorldModel worldModel, std::vector<Message> messages) {
+	Position p = Self::getPosition();
+	double d = p.distanceTo(&positionToGo);
 	if (d > 1.0) {
-		double dir = p->getDirectionTo(&positionToGo);
+		double dir = p.directionTo(&positionToGo);
 		if (fabs(dir) > 10.0) {
-			commands->turn(dir);
+			Commands::turn(dir);
 		} else {
-			commands->dash(50.0, 0.0);
+			Commands::dash(50.0, 0.0);
 		}
 	} else {
 		randomPosition();
 	}
 	int total = -1;
-	int size = worldModel.getPlayers().size();
+	int size = worldModel.players().size();
 	if (fullstate) {
-		total = worldModel.getAllExactPlayers().size();
+		total = worldModel.exactPlayers().size();
 	}
 	if (total > -1 && size > total - 1) {
 		std::cout << Game::GAME_TIME << " bad: " << size << " out " << (total - 1) << std::endl;

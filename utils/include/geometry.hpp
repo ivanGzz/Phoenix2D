@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013 Ivan Gonzalez
+ * Copyright (c) 2013 - 2015 Nelson I. Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -16,6 +16,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @file geometry.hpp
+ *
+ * @author Nelson I. Gonzalez
  */
 
 #ifndef GEOMETRY_HPP_
@@ -24,12 +28,15 @@
 #include <cmath>
 #include "constants.hpp"
 
-/*
+/*!
  * Disclaimer: all this primitives use radians instead of sexagesimal degrees
  *  unless stated otherwise
  */
 namespace Geometry {
 
+/*!
+ *
+ */
 struct Vector2D {
 	double dx;
 	double dy;
@@ -76,6 +83,9 @@ struct Vector2D {
 	}
 };
 
+/*!
+ *
+ */
 struct Point {
 	double x;
 	double y;
@@ -89,6 +99,9 @@ struct Point {
 	}
 };
 
+/*!
+ *
+ */
 inline double toDegrees(double radians) {
 	double degrees = (180.0 * radians / Math::PI);
 	if (degrees > 180.0) {
@@ -99,12 +112,16 @@ inline double toDegrees(double radians) {
 	return degrees;
 }
 
+/*!
+ *
+ */
 inline double toRadians(double degrees) {
 	double radians = (Math::PI * degrees / 180.0);
-	if (radians > 2.0 * Math::PI) {
-		radians -= 2.0 * Math::PI;
-	} else if (radians < -2.0 * Math::PI) {
-		radians += 2.0 * Math::PI;
+	double factor = 2.0 * Math::PI;
+	if (radians > factor) {
+		radians -= factor;
+	} else if (radians < factor) {
+		radians += factor;
 	}
 	return radians;
 }

@@ -28,32 +28,28 @@
 
 namespace Phoenix {
 
-PlayMode::PlayMode(Commands *commands) {
-	this->commands = commands;
-}
+namespace PlayMode {
 
-PlayMode::~PlayMode() {
-
-}
-
-void PlayMode::onStart(void(* setup)(void)) {
+void onStart(void(* setup)(void)) {
 	setup();
 }
 
-void PlayMode::onExecute(WorldModel world, std::vector<Message> messages, void(* execute)(WorldModel, std::vector<Message>, Commands*)) {
-	execute(world, messages, commands);
+void onExecute(WorldModel world, std::vector<Message> messages, void(* execute)(WorldModel, std::vector<Message>)) {
+	execute(world, messages);
 }
 
-void PlayMode::onPreExecute() {
-	commands->flush();
+void onPreExecute() {
+	Commands::flush();
 }
 
-void PlayMode::onPostExecute() {
-	commands->sendCommands();
+void onPostExecute() {
+	Commands::sendCommands();
 }
 
-void PlayMode::onEnd(void(* end)(void)) {
+void onEnd(void(* end)(void)) {
 	end();
+}
+
 }
 
 }

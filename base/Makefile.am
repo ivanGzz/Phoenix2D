@@ -12,6 +12,7 @@ libPhoenixBase_2_1_la_SOURCES = \
 	src/Logger.cpp \
 	src/Message.cpp \
 	src/Messages.cpp \
+	src/Object.cpp \
 	src/Parser.cpp \
 	src/Player.cpp \
 	src/PlayMode.cpp \

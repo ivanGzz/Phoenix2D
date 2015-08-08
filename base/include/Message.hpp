@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
+ * Copyright (c) 2013 - 2015 Nelson I. Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -19,7 +19,7 @@
  *
  * @file Message.hpp
  *
- * @author Nelson Ivan Gonzalez
+ * @author Nelson I. Gonzalez
  */
 
 #ifndef MESSAGE_HPP_
@@ -61,24 +61,24 @@ public:
 	/*!
 	 * @brief Returns message broadcasted by the sender
 	 */
-	std::string getMessage();
+	std::string message();
 	/*!
 	 * @brief Returns team name of the sender
 	 */
-	std::string getTeam();
+	std::string team();
 	/*!
 	 * @brief Returns uniform number of the sender if available, 0 if not
 	 */
-	int getUniformNumber();
+	int uniformNumber();
 	/*!
 	 * @brief Returns relative direction of the sender
 	 */
-	double getDirection();
+	double direction();
 private:
-	std::string message;	///< Message sent by the sender
-	std::string team;		///< Team name of the sender
-	int unum;				///< Uniform number of the sender
-	double direction;		///< Relative direction of the sender
+	std::string _message;	///< Message sent by the sender
+	std::string _team;		///< Team name of the sender
+	int _unum;				///< Uniform number of the sender
+	double _direction;		///< Relative direction of the sender
 };
 
 } // End namespace Phoenix

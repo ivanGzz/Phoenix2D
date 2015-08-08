@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013 Ivan Gonzalez
+ * Copyright (c) 2013 - 2015 Nelson I. Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -16,6 +16,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @file FRule.hpp
+ *
+ * @author Nelson I. Gonzalez
  */
 
 #ifndef FRULE_HPP_
@@ -27,27 +31,51 @@
 
 namespace Fuzzy {
 
+/*!
+ *
+ */
 class FRule {
 friend class FEngine;
 public:
+	/*!
+	 *
+	 */
 	FRule(std::string rule);
+	/*!
+	 *
+	 */
 	~FRule();
+	/*!
+	 *
+	 */
 	void parse();
+	/*!
+	 *
+	 */
 	std::string getOutputName();
+	/*!
+	 *
+	 */
 	std::string getOutputSet();
+	/*!
+	 *
+	 */
 	double getOutput();
+	/*!
+	 *
+	 */
 	void evaluate(double first, double second);
 private:
-	std::string rule;
-	std::map<std::string, FVariable*>* variables;
-	std::string firstVariable;
-	std::string firstSet;
-	std::string secondVariable;
-	std::string secondSet;
-	std::string outputVariable;
-	std::string outputSet;
-	double output;
-	bool parsed;
+	std::string rule;								///<
+	std::map<std::string, FVariable*>* variables;	///<
+	std::string firstVariable;						///<
+	std::string firstSet;							///<
+	std::string secondVariable;						///<
+	std::string secondSet;							///<
+	std::string outputVariable;						///<
+	std::string outputSet;							///<
+	double output;									///<
+	bool parsed;									///<
 };
 
 }

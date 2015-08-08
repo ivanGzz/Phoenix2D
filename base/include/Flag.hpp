@@ -25,6 +25,7 @@
 #ifndef FLAG_HPP_
 #define FLAG_HPP_
 
+#include "Position.hpp"
 #include <string>
 
 /*! @addtogroup phoenix_base
@@ -37,7 +38,7 @@ namespace Phoenix {
  * A Flag object stores information about a flag seen in the visual sensor for a
  * given simulation cycle.  It is used by the localization method.
  */
-class Flag {
+class Flag : public Object {
 public:
 	/*!
 	 * @brief Flag default constructor
@@ -51,81 +52,41 @@ public:
 	 */
 	~Flag();
 	/*!
-	 * @brief This method initializes the flag absolute positions in the fiel
-	 * Since the coordinate axis changes in function of the team assigned side, the
-	 * flags must be initialized after the agent connects and the server sends the
-	 * corresponding side of the agent
+	 *
 	 */
-	static void initializeField();
+	std::string name();
 	/*!
-	 * @brief Returns the flag string name
-	 * @return Flag name
+	 *
 	 */
-	std::string getName();
+	double distance();
 	/*!
-	 * @brief Returns the flag relative distance
-	 * @return Relative distance
+	 *
 	 */
-	double getDistance();
-	/*!
-	 * @brief Returns the relative direction
-	 * @return Relative direction
-	 */
-	double getDirection();
-	/*!
-	 * @brief Returns the absolute flag position in x
-	 * @return Absolute position in x
-	 */
-	double getX();
-	/*!
-	 * @brief Returns the absolute flag position in y
-	 * @return Absolute position in y
-	 */
-	double getY();
-	/*!
-	 * @brief Returns the minimum relative distance the flag could have
-	 * @return Minimum distance
-	 */
-	double getMinDistance();
-	/*!
-	 * @brief Returns the maximum relative distance the flag could have
-	 * @return Maximum distance
-	 */
-	double getMaxDistance();
+	double direction();
 	/*!
 	 * @brief Returns the maximum error in the flag relative distance
 	 * @return Distance error
 	 */
-	double getDistanceError();
-	/*!
-	 * @brief Returns the minimum relative direction the flag could have
-	 * @return Minimum direction
-	 */
-	double getMinDirection();
-	/*!
-	 * @brief Returns the maximum relative direction the flag could have
-	 * @return Maximum direction
-	 */
-	double getMaxDirection();
+	double distanceError();
 	/*!
 	 * @brief Returns the maximum error in the flag relative direction
 	 * @return Direction error
 	 */
-	double getDirectionError();
+	double directionError();
+	double min_distance;		///< flag minimum relative distance
+	double max_distance;		///< flag maximum relative distance
+	double min_direction;	///< flag minimum relative direction
+	double max_direction;	///< flag maximum relative direction
 private:
-	std::string name;		///< flag string name received by the see sensor
-	double distance;		///< flag relative distance received by the see sensor
-	double direction;		///< flag relative direction received by the see sensor
-	double x;				///< flag absolute position in x
-	double y;				///< flag absolute position in y
-	double minDistance;		///< flag minimum relative distance
-	double maxDistance;		///< flag maximum relative distance
-	double minDirection;	///< flag minimum relative direction
-	double maxDirection;	///< flag maximum relative direction
-	double error;			///< flag maximum error in the relative distance
-	double derror;			///< flag maximum error in the relative direction
-	int simulation_time;	///< simulation time the object was created
+	std::string _name;		///< flag string name received by the see sensor
+	double _distance;		///< flag relative distance received by the see sensor
+	double _direction;		///< flag relative direction received by the see sensor
+	double _distance_error;			///< flag maximum error in the relative distance
+	double _direction_error;			///< flag maximum error in the relative direction
+	int _simulation_time;	///< simulation time the object was created
 };
+
+void initField();
 
 } // End namespace Phoenix
 /*! @} */

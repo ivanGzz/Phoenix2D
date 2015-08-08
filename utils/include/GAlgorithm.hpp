@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013 Ivan Gonzalez
+ * Copyright (c) 2013 -2015 Nelson I. Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -16,6 +16,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @file GAlgorithm.hpp
+ *
+ * @author Nelson I. Gonzalez
  */
 
 #ifndef GALGORITHM_HPP_
@@ -26,11 +30,17 @@
 
 namespace Genetics {
 
+/*!
+ *
+ */
 struct Variable {
 	int bits;
 	int ones;
 };
 
+/*!
+ *
+ */
 struct Individual {
 	std::vector<int> variables;
 	double fit;
@@ -85,26 +95,57 @@ struct Individual {
  * }
  *
  */
+
+/*!
+ *
+ */
 class GAlgorithm {
 public:
+	/*!
+	 *
+	 */
 	GAlgorithm(double p_cross, double p_mutation);
+	/*!
+	 *
+	 */
 	~GAlgorithm();
+	/*!
+	 *
+	 */
 	void addVariable(int bits);
+	/*!
+	 *
+	 */
 	void generatePopulation(int size);
+	/*!
+	 *
+	 */
 	void loadPopulation(std::string filename);
+	/*!
+	 *
+	 */
 	void runGeneration(bool per_individual = false);
+	/*!
+	 *
+	 */
 	std::vector<Individual>::iterator begin();
+	/*!
+	 *
+	 */
 	std::vector<Individual>::iterator end();
+	/*!
+	 *
+	 */
 	int getGenerations();
 private:
-	int max_var_size;
-	double p_cross;
-	double p_mutation;
-	std::vector<Variable> variables;
-	std::vector<Individual> generation;
-	int generations;
-	int cross(int ind_a, int ind_b, int index, int bit);
-	int mutate(int ind, int bit);
+	int max_var_size;										///<
+	double p_cross;											///<
+	double p_mutation;										///<
+	std::vector<Variable> variables;						///<
+	std::vector<Individual> generation;						///<
+	int generations;										///<
+	int cross(int ind_a, int ind_b, int index, int bit);	///<
+	int mutate(int ind, int bit);							///<
 };
 
 }

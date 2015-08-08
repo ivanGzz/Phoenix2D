@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
+ * Copyright (c) 2013 - 2015 Nelson I. Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -19,14 +19,14 @@
  *
  * @file Parser.cpp
  *
- * @author Nelson Ivan Gonzalez
+ * @author Nelson I. Gonzalez
  */
 
 #include <iostream>
 #include <cstdlib>
 #include <boost/regex.hpp>
 #include <pthread.h>
-#include <vector>
+#include <list>
 #include <unistd.h>
 #include "Parser.hpp"
 #include "Game.hpp"
@@ -47,15 +47,13 @@
 
 namespace Phoenix {
 
+namespace Parser {
+
 /*------------------------
  | Globals               |
  ------------------------*/
 
 bool processing_body = false;
-Self* self_ptr = 0;
-Game* game_ptr = 0;
-World* world_ptr = 0;
-Messages* messages_ptr = 0;
 static pthread_cond_t sense_body_cond = PTHREAD_COND_INITIALIZER;
 static pthread_mutex_t sense_body_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_t thread_timer = 0;
@@ -65,40 +63,39 @@ pthread_t thread_message = 0;
 pthread_t thread_see = 0;
 pthread_t thread_see_global = 0;
 pthread_attr_t attr;
-std::ofstream see_stream;
-std::ofstream hear_stream;
-std::ofstream fs_stream;
 std::ofstream body_stream;
 
 /*------------------------
  | Timers and Control    |
  ------------------------*/
 
-std::vector<Flag> flags;
-static std::vector<Player> players;
-static std::vector<Player> fs_players;
-static Ball ball;
-static Ball fs_ball;
-std::vector<Message> messages;
-std::vector<Message> out_of_cycle;
+std::list<Flag> flags;
+std::list<Player> players;
+std::list<Player> fs_players;
+Ball ball;
+Ball fs_ball;
+std::list<Message> messages;
+std::list<Message> out_of_cycle;
 int time = 0;
 bool new_cycle = true;
-static bool localized = false;
+bool localized = false;
 
-static int wait = 0;
-static int see_offset = 10;
-static int current_see_time = 0;
+int wait = 0;
+int see_offset = 10;
+int current_see_time = 0;
+bool on_see = false;
 
 void *timer(void* arg) {
 	usleep(1000 * wait);
+	Game::initUpdateTime(time);
 	if ((Controller::AGENT_TYPE == 'p' || Controller::AGENT_TYPE == 'g') && !localized) {
 		std::vector<Flag> empty;
-		self_ptr->localize(empty);
+		Self::localize(empty);
 	}
-	world_ptr->updateWorld(players, ball, fs_players, fs_ball);
-	messages_ptr->setMessages(messages);
+	World::updateWorld(players, ball, fs_players, fs_ball, on_see);
+	Messages::setMessages(messages);
 	new_cycle = false;
-	game_ptr->updateTime(time);
+	Game::updateTime(); // time);
 	return 0;
 }
 
@@ -115,7 +112,7 @@ void *senseBodyHandler(void *arg) {
 		std::cerr << "Parser::process_sense_body(void*) -> cannot lock sense body mutex" << std::endl;
 		return 0;
 	}
-	self_ptr->processSenseBody(sense_body);
+	Self::parseSenseBody(sense_body);
 	processing_body = false;
 	if (pthread_cond_signal(&sense_body_cond) != 0) {
 		std::cerr << "Parser::process_see(void*) -> cannot signal to blocked threads" << std::endl;
@@ -125,14 +122,14 @@ void *senseBodyHandler(void *arg) {
 		return 0;
 	}
 	if (Configs::SAVE_SENSE_BODY) {
-		body_stream << sense_body << std::endl;
+		Logger::body << sense_body << std::endl;
 	}
 	return 0;
 }
 
 /* fullstate handler */
 
-static std::string fullstate;
+std::string fullstate;
 boost::regex fullstate_ball("\\(\\(b\\)\\s+([\\d\\.\\-e]+)\\s+([\\d\\.\\-e]+)\\s+([\\d\\.\\-e]+)\\s+([\\d\\.\\-e]+)\\)");
 boost::regex fullstate_player("\\(\\(p\\s+(l|r)\\s+(\\d+)\\s+(g|\\d+)\\)\\s+" //group 1 group 2 group 3
 	                          "([\\d\\.\\-e]+)\\s+([\\d\\.\\-e]+)\\s+" //group 4 (x) group 5 (y)
@@ -176,7 +173,7 @@ void *fullstateHandler(void* arg) {
 		std::cerr << "Ball not found in fullstate" << std::endl;
 	}
 	if (Configs::SAVE_FULLSTATE) {
-		fs_stream << fullstate << std::endl;
+		Logger::fullstate << fullstate << std::endl;
 	}
 	return 0;
 }
@@ -191,37 +188,42 @@ boost::regex hear_trainer_regex("\\(hear\\s+(\\d+)\\s+coach\\s+([\\\"\\w\\s]*)\\
 boost::regex hear_for_trainer("\\(hear\\s+(\\d+)\\s+\\(p\\s+\"([0-9a-zA-Z]+)\"\\s+(\\d+)\\)\\s+\"([\\w\\s]*)\"\\)");
 boost::regex hear_player_regex("\\(hear\\s+(\\d+)\\s+([\\d\\.\\-e]+)\\s+our\\s+(\\d+)\\s+\"([\\w\\s]+)\"\\)");
 boost::regex hear_opp_regex("\\(hear\\s+(\\d+)\\s+([\\d\\.\\-e]+)\\s+opp\\s+\"([\\w\\s]+)\"\\)");
-std::vector<std::string> hears;
+//std::vector<std::string> hears;
+std::list<std::string> hears;
+
+bool preprocessHear(std::string hear) {
+	return true;
+}
 
 void *hearHandler(void* arg) {
 	std::string hear = *((std::string *)arg);
 	boost::cmatch match;
 	if (boost::regex_match(hear.c_str(), match, hear_referee_regex)) { //from referee to player
-		game_ptr->updatePlayMode(std::string() + match[2]);
+		Game::setPlayMode(std::string() + match[2]);
 	}
 	else if (boost::regex_match(hear.c_str(), match, hear_refereet_regex)) {
-		game_ptr->updatePlayMode(std::string() + match[2]);
+		Game::setPlayMode(std::string() + match[2]);
 	}
 	else if (boost::regex_match(hear.c_str(), match, hear_player_regex)) { //from player to player (same team)
 		double direction = atof((std::string() + match[2]).c_str());
 		int unum = atoi((std::string() + match[3]).c_str());
 		std::string message = std::string() + match[4];
-		Message new_message(direction, "our", unum, message);
+		//Message new_message(direction, "our", unum, message);
 		if (new_cycle) {
-			messages.push_back(new_message);
+			messages.push_back(Message(direction, "our", unum, message)); //new_message);
 		} else {
-			out_of_cycle.push_back(new_message);
+			out_of_cycle.push_back(Message(direction, "our", unum, message)); //new_message);
 		}
 	} 
 	else if (boost::regex_match(hear.c_str(), match, hear_coach_regex)) { //from coach to player (free-form)
 		std::string coach = std::string() + match[2];
 		if (Self::SIDE[0] == coach[13]) {
-			std::string msg = std::string() + match[3];
-			Message new_message(0.0, "coach", msg);
+			std::string message = std::string() + match[3];
+			//Message new_message(0.0, "coach", msg);
 			if (new_cycle) {
-				messages.push_back(new_message);
+				messages.push_back(Message(0.0, "coach", message)); //new_message);
 			} else {
-				out_of_cycle.push_back(new_message);
+				out_of_cycle.push_back(Message(0.0, "coach", message)); //new_message);
 			}
 		}
 	} 
@@ -231,19 +233,19 @@ void *hearHandler(void* arg) {
 	else if (boost::regex_match(hear.c_str(), match, hear_for_trainer)) { //from player to trainer
 		std::string team = std::string() + match[2];
 		int unum = atoi((std::string() + match[3]).c_str());
-		std::string msg = std::string() + match[4];
-		Message new_message(0.0, team, unum, msg);
+		std::string message = std::string() + match[4];
+		//Message new_message(0.0, team, unum, msg);
 		if (new_cycle) {
-			messages.push_back(new_message);
+			messages.push_back(Message(0.0, team, unum, message)); //new_message);
 		} else {
-			out_of_cycle.push_back(new_message);
+			out_of_cycle.push_back(Message(0.0, team, unum, message)); //new_message);
 		}
 	}
 	else {
 		std::cerr << Game::SIMULATION_TIME << ": message not supported " << hear << std::endl;
 	}
 	if (Configs::SAVE_HEAR) {
-		hear_stream << hear << std::endl;
+		Logger::hear << hear << std::endl;
 	}
 	return 0;
 }
@@ -315,18 +317,18 @@ void *seeHandler(void* arg) {
 		search_flags |= boost::match_prev_avail;
 		search_flags |= boost::match_not_bob;
 	}
-	self_ptr->localize(flags);
+	Self::localize(flags);
 	localized = true;
-	const Position* player_position = Self::getPosition();
-	const Geometry::Vector2D* player_velocity = Self::getVelocity();
+	Position player_position = Self::getPosition();
+	Geometry::Vector2D player_velocity = Self::getVelocity();
 	if (raw_ball.compare("") != 0) {
-		ball.initForPlayer(raw_ball, player_position, player_velocity);
+		ball.initForPlayer(raw_ball, &player_position, &player_velocity);
 	}
 	for (std::vector<Player>::iterator it = players.begin(); it != players.end(); ++it) {
-		it->initForPlayer(player_position, player_velocity);
+		it->initForPlayer(&player_position, &player_velocity);
 	}
 	if (Configs::SAVE_SEE) {
-		see_stream << see << std::endl;
+		Logger::see << see << std::endl;
 	}
 	return 0;
 }
@@ -371,58 +373,16 @@ void *seeGlobalHandler(void* arg) {
 	return 0;
 }
 
-/*------------------------
- | Class implementation  |
- ------------------------*/
-
-Parser::Parser(Self* self, World* world, Messages* messages_p) {
-	self_ptr = self;
-	world_ptr = world;
-	messages_ptr = messages_p;
-	game_ptr = new Game();
+void init() {
 	pthread_attr_init(&attr);
 	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 	wait = Configs::CYCLE_OFFSET;
 	if (Server::SYNCH_SEE_OFFSET > wait) {
 		wait = Server::SYNCH_SEE_OFFSET;
 	}
-	std::stringstream ss;
-	ss << Self::TEAM_NAME << "_" << Self::UNIFORM_NUMBER << "_" << std::endl;
-	std::string prefix;
-	std::getline(ss, prefix);
-	if (Configs::SAVE_SEE) {
-		see_stream.open((prefix + "see.log").c_str());
-	}
-	if (Configs::SAVE_FULLSTATE) {
-		fs_stream.open((prefix + "fullstate.log").c_str());
-	}
-	if (Configs::SAVE_SENSE_BODY) {
-		body_stream.open((prefix + "sense_body.log").c_str());
-	}
-	if (Configs::SAVE_HEAR) {
-		hear_stream.open((prefix + "hear.log").c_str());
-	}
 }
 
-Parser::~Parser() {
-	pthread_attr_destroy(&attr);
-	if (game_ptr) delete game_ptr;
-	if (Configs::VERBOSE) std::cout << "Parser out" << std::endl;
-	if (Configs::SAVE_SEE) {
-		see_stream.close();
-	}
-	if (Configs::SAVE_FULLSTATE) {
-		fs_stream.close();
-	}
-	if (Configs::SAVE_SENSE_BODY) {
-		body_stream.close();
-	}
-	if (Configs::SAVE_HEAR) {
-		hear_stream.close();
-	}
-}
-
-void Parser::parseMessage(std::string message) {
+void parseMessage(std::string message) {
 	size_t found = message.find_first_of(" ");
 	std::string message_type = message.substr(1, found - 1);
 	if (message_type.compare("sense_body") == 0) {
@@ -434,7 +394,8 @@ void Parser::parseMessage(std::string message) {
 		fs_ball = Ball();
 		messages.clear();
 		localized = false;
-		for (std::vector<Message>::iterator it = out_of_cycle.begin(); it != out_of_cycle.end(); ++it) {
+		on_see = false;
+		for (std::list<Message>::iterator it = out_of_cycle.begin(); it != out_of_cycle.end(); ++it) {
 			messages.push_back(*it);
 		}
 		out_of_cycle.clear();
@@ -454,7 +415,7 @@ void Parser::parseMessage(std::string message) {
 		players.clear();
 		ball = Ball();
 		messages.clear();
-		for (std::vector<Message>::iterator it = out_of_cycle.begin(); it != out_of_cycle.end(); ++it) {
+		for (std::list<Message>::iterator it = out_of_cycle.begin(); it != out_of_cycle.end(); ++it) {
 			messages.push_back(*it);
 		}
 		out_of_cycle.clear();
@@ -477,14 +438,19 @@ void Parser::parseMessage(std::string message) {
 		return;
 	}
 	else if (message_type.compare("change_player_type") == 0) {
+		std::cout << Game::SIMULATION_TIME << ": " << message << std::endl;
 		return;
 	}
 	else if (message_type.compare("ok") == 0) {
-		if (Configs::VERBOSE) std::cout << Game::SIMULATION_TIME << ": " << message << std::endl;
+		if (Configs::VERBOSE) {
+			std::cout << Game::SIMULATION_TIME << ": " << message << std::endl;
+		}
 		return;
 	}
 	else if (message_type.compare("warning") == 0) {
-		if (Configs::VERBOSE) std::cout << Game::SIMULATION_TIME << ": " << message << std::endl;
+		if (Configs::VERBOSE) {
+			std::cout << Game::SIMULATION_TIME << ": " << message << std::endl;
+		}
 		return;
 	}
 	else if (message_type.compare("error") == 0) {
@@ -493,6 +459,7 @@ void Parser::parseMessage(std::string message) {
 	}
 	if (!new_cycle) return; //we do not accept this messages after the new cycle started
 	if (message_type.compare("see") == 0) {
+		on_see = true;
 		see = message;
 		found = message.find(" ", 5);
 		current_see_time = atoi(message.substr(5, found - 5).c_str());
@@ -512,6 +479,8 @@ void Parser::parseMessage(std::string message) {
 		std::cerr << "Parse::parseMessage(string) -> message " << message << " not recognized" << std::endl;
 		return;
 	}
+}
+
 }
 
 }

@@ -25,7 +25,7 @@
 #ifndef MESSAGES_HPP_
 #define MESSAGES_HPP_
 
-#include <vector>
+#include <list>
 #include "Message.hpp"
 
 /*! @addtogroup phoenix_base
@@ -37,28 +37,19 @@ namespace Phoenix {
  * @brief <STRONG> Messages <BR> </STRONG>
  * The Messages object stores all the messages received in a given simulation cycle.
  */
-class Messages {
-public:
+namespace Messages {
+
 	/*!
-	 * @brief Messages default constructor
+	 *
 	 */
-	Messages();
-	/*!
-	 * @brief Messages default destructor
-	 */
-	~Messages();
-	/*!
-	 * @brief Returns the messages received in the current cycle
-	 */
-	std::vector<Message> getMessages();
+	std::list<Message> messages();
 	/*!
 	 * @brief Set the messages received in the current cycle
 	 * @param messages list of messages recieved in the current cycle
 	 */
-	void setMessages(std::vector<Message> messages);
-private:
-	std::vector<Message> messages;	///< Current messages
-};
+	void setMessages(std::list<Message> messages);
+
+}
 
 } // End namespace Phoenix
 /*! @} */

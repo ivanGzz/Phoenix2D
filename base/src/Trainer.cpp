@@ -56,7 +56,6 @@
 #define _NEQUAL_   0x1C
 #define _CMP_	   0x1D
 
-
 #define _FUNC_     0x20
 #define _CONTROL_  0x21
 #define _NODE_     0x23
@@ -263,7 +262,7 @@ std::string getTextValue(std::string varstr) {
 
 void onSleep(int cycles) {
 	cycle_flag = false;
-	std::cout << "Sleeping for " << cycles << std::endl;
+	//std::cout << "Sleeping for " << cycles << std::endl;
 	for (int i = 0; i < cycles; ++i) {
 		int success = pthread_mutex_lock(&cycle_mutex);
 		if (success) {
@@ -293,26 +292,26 @@ void onPrint(std::string arg) {
 }
 
 void onPlayMode(std::string play_mode) {
-	commands->changeMode(play_mode);
+	Commands::changeMode(play_mode);
 }
 
 void onSend() {
-	commands->sendCommands();
+	Commands::sendCommands();
 }
 
 /*
  * The server only recognizes (ball) although (b), (Ball) and (B) are also defined
  */
 void onBall(double x, double y) {
-	commands->moveObject("(ball)", x, y);
+	Commands::moveObject("(ball)", x, y);
 }
 
 void onRecover() {
-	commands->recover();
+	Commands::recover();
 }
 
 void onStart() {
-	commands->start();
+	Commands::start();
 }
 
 /***********
@@ -501,7 +500,7 @@ int evaluateExpression(phx::expression expression) {
 				} else {
 					right = first.node;
 				}
-				std::cout << "Comparing " << left << " and " << right << std::endl;
+				//std::cout << "Comparing " << left << " and " << right << std::endl;
 				if (left.compare(right) == 0) {
 					return_value = 0;
 				} else {
@@ -717,20 +716,12 @@ bool loadCode(std::string trainer) {
 	return true;
 }
 
-Trainer::Trainer(Commands *ptr_commands) {
-	commands = ptr_commands;
-}
-
-Trainer::~Trainer() {
-
-}
-
-bool Trainer::load(std::string trainer) {
+bool load(std::string trainer) {
 	loadCode(trainer);
 	return true;
 }
 
-void Trainer::execute(WorldModel world, std::vector<Message> messages) {
+void execute(WorldModel world, std::vector<Message> messages) {
 	// We update all the variables
 	Ball* ball = world.getBall();
 	double bx = ball->getPosition()->getX();
@@ -769,7 +760,7 @@ void Trainer::execute(WorldModel world, std::vector<Message> messages) {
 	}
 }
 
-bool Trainer::continueExecution() {
+bool continueExecution() {
 	return newExecution;
 }
 

@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013 Ivan Gonzalez
+ * Copyright (c) 2013 - 2015 Nelson I. Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -16,6 +16,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @file functions.hpp
+ *
+ * @author Nelson I. Gonzalez
  */
 
 #ifndef FUNCTIONS_HPP_
@@ -27,7 +31,7 @@
 
 namespace Math {
 
-/*
+/*!
  * Base struct
  */
 struct Function {
@@ -36,7 +40,7 @@ struct Function {
 	virtual double evaluate(double x) = 0;
 };
 
-/*
+/*!
  * f(x) = (1 / (stdv * sqrt(2 * PI))) * exp(-0.5 * pow(((x - mu) / stdv), 2.0))
  */
 struct Gaussian : public Function {
@@ -55,7 +59,7 @@ struct Gaussian : public Function {
 	};
 };
 
-/*
+/*!
  * f(x) = exp(-0.5 * pow(((x - mu) / stdv), 2.0))
  */
 struct UGaussian : public Function {
@@ -74,7 +78,7 @@ struct UGaussian : public Function {
 	};
 };
 
-/*
+/*!
  * f(x) =
  * 1       /\
  *        /  \
@@ -105,7 +109,7 @@ struct Triangular : public Function {
 	};
 };
 
-/*
+/*!
  * f(x) =
  * 1       _______
  *        /       \
@@ -137,7 +141,7 @@ struct Trapezoidal : public Function {
 	};
 };
 
-/*
+/*!
  * f(x) =
  * 1/(a-b)   _________
  *           |       |
@@ -161,7 +165,7 @@ struct Uniform : public Function {
 	};
 };
 
-/*
+/*!
  * f(x) =
  * 1        ---------
  *         /
@@ -188,7 +192,7 @@ struct RampAsc : public Function {
 	};
 };
 
-/*
+/*!
  * f(x) =
  * 1_____
  *       \
@@ -215,7 +219,7 @@ struct RampDesc : public Function {
 	};
 };
 
-/*
+/*!
  * f(x) = mx + b
  */
 struct Linear : public Function {
@@ -229,7 +233,7 @@ struct Linear : public Function {
 	};
 };
 
-/*
+/*!
  * f(x) = a / (x - b) + c
  */
 struct Inverse : public Function {
@@ -244,7 +248,7 @@ struct Inverse : public Function {
 	}
 };
 
-/*
+/*!
  * f(x) = a * e^(x - b) + c
  */
 struct Exponential : public Function {
@@ -259,10 +263,13 @@ struct Exponential : public Function {
 	}
 };
 
-inline double arcsMean(std::vector<double> arcs) {
+/*!
+ *
+ */
+inline double arcsMean(std::list<double> arcs) {
 	double xs = 0.0;
 	double ys = 0.0;
-	for (std::vector<double>::iterator it = arcs.begin(); it != arcs.end(); ++it) {
+	for (std::list<double>::iterator it = arcs.begin(); it != arcs.end(); ++it) {
 		xs += cos(*it);
 		ys += sin(*it);
 	}
@@ -273,10 +280,13 @@ inline double arcsMean(std::vector<double> arcs) {
 	return atan2(ys, xs);
 }
 
+/*!
+ *
+ */
 template <class T>
-T min(std::vector<T> values) {
+T min(std::list<T> values) {
 	T min = values.at(0);
-	for (typename std::vector<T>::iterator it = values.begin(); it != values.end(); ++it) {
+	for (typename std::list<T>::iterator it = values.begin(); it != values.end(); ++it) {
 		if (*it < min) {
 			min = *it;
 		}
@@ -284,10 +294,13 @@ T min(std::vector<T> values) {
 	return min;
 }
 
+/*!
+ *
+ */
 template <class T>
-T max(std::vector<T> values) {
+T max(std::list<T> values) {
 	T max = values.at(0);
-	for (typename std::vector<T>::iterator it = values.begin(); it != values.end(); ++it) {
+	for (typename std::list<T>::iterator it = values.begin(); it != values.end(); ++it) {
 		if (*it > max) {
 			max = *it;
 		}

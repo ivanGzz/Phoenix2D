@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013 Ivan Gonzalez
+ * Copyright (c) 2013 - 2015 Nelson I. Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -16,6 +16,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @file localization.cpp
+ *
+ * @author Nelson I. Gonzalez
  */
 
 #include "localization.hpp"
@@ -71,7 +75,7 @@ void randomPosition() {
 	std::cout << "New random position: (" << x << ", " << y << ")" << std::endl;
 }
 
-void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages, Commands* commands) {
+void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages) {
 	if (!setup) {
 		if (iteration > -1) {
 			double mean = error_accum / cycles;
@@ -86,8 +90,8 @@ void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages, 
 		double x = -1.0 * fabs((double)xdist(rng) - 52.0); //we need a negative coordinate in x
 		double y = (double)ydist(rng) - 34.0;
 		std::cout << "Moving to: (" << x << ", " << y << ")" << std::endl;
-		commands->changeView("narrow");
-		commands->move(x, y);
+		Commands::changeView("narrow");
+		Commands::move(x, y);
 		setup = true;
 		randomPosition();
 		error_accum = 0.0;
@@ -97,16 +101,15 @@ void executeBeforeKickOff(WorldModel worldModel, std::vector<Message> messages, 
 	}
 }
 
-void executePlayOn(WorldModel worldModel, std::vector<Message> messages, Commands* commands) {
-	const Position* p = Self::getPosition();
+void executePlayOn(WorldModel worldModel, std::vector<Message> messages) {
+	Position p = Self::getPosition();
 	if (fullstate) {
-		Player* pl = worldModel.getOurExactPlayer(Self::UNIFORM_NUMBER);
-		Position* e_p = pl->getPosition();
+		Player* pl = worldModel.ourExactPlayer(Self::UNIFORM_NUMBER);
 //		std::cout << Game::GAME_TIME << ": (" << p->x << ", " << p->y << ", " << p->body << ")"
 //				                     << ", (" << e_p->x << ", " << e_p->y << ", " << e_p->body << ")"
 //				                     << std::endl;
-		error_accum += sqrt(pow(p->x - e_p->x, 2.0) + pow(p->y - e_p->y, 2.0));
-		double min_arc = p->body - e_p->body;
+		error_accum += sqrt(pow(p.x() - pl->x(), 2.0) + pow(p.y() - pl->y(), 2.0));
+		double min_arc = p.body() - pl->body();
 		if (min_arc > 180.0) {
 			min_arc -= 360.0;
 		} else if (min_arc < -180.0) {
@@ -114,16 +117,16 @@ void executePlayOn(WorldModel worldModel, std::vector<Message> messages, Command
 		}
 		dir_accum += fabs(min_arc);
 	}
-	double d = p->getDistanceTo(&positionToGo);
+	double d = p->distanceTo(&positionToGo);
 	if (d > 1.0) {
-		double dir = p->getDirectionTo(&positionToGo);
+		double dir = p->directionTo(&positionToGo);
 		if (fabs(dir) > 10.0) {
-			commands->turn(dir);
+			Commands::turn(dir);
 		} else {
-			commands->dash(50.0, 0.0);
+			Commands::dash(50.0, 0.0);
 		}
 	} else {
-		std::cout << p->x << " " << p->y << " " << p->body << std::endl;
+		std::cout << p.x() << " " << p.y() << " " << p.body() << std::endl;
 		randomPosition();
 	}
 	cycles++;

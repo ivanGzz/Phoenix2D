@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013 Ivan Gonzalez
+ * Copyright (c) 2013 - 2015 Nelson I. Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -16,6 +16,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @file FEngine.hpp
+ *
+ * @author Nelson I. Gonzalez
  */
 
 #ifndef FENGINE_HPP_
@@ -97,20 +101,45 @@ namespace Fuzzy {
  *		return 0;
  * }
  */
+
+/*!
+ *
+ */
 class FEngine : private boost::noncopyable {
 public:
+	/*!
+ 	 *
+ 	 */
 	FEngine();
+	/*!
+ 	 *
+ 	 */
 	~FEngine();
 	void addVariable(FVariable* variable);
+	/*!
+ 	 *
+ 	 */
 	void addRule(FRule rule);
+	/*!
+ 	 *
+ 	 */
 	FVariable* getVariable(std::string name);
+	/*!
+ 	 *
+ 	 */
 	std::vector<FRule>::iterator begin();
+	/*!
+ 	 *
+ 	 */
 	std::vector<FRule>::iterator end();
+	/*!
+ 	 *
+ 	 */
 	std::map<std::string, double> evaluate(std::map<std::string, double> inputs);
 private:
-	std::map<std::string, FVariable*> variables;
-	std::vector<FRule> rules;
-	std::map<std::string, std::map<std::string, double> > outputs;
+	std::map<std::string, FVariable*> variables;					///<
+	std::vector<FRule> rules;										///<
+	std::map<std::string, std::map<std::string, double> > outputs;	///<
 	void reload();
 };
 

@@ -35,23 +35,23 @@ namespace Phoenix {
  * @brief <STRONG> Logger <BR> </STRONG>
  * The Logger object setup the logging feature of a Phoenix2D agent
  */
-class Logger {
-public:
-	/*!
-	 * @brief Logger default constructor
-	 */
-	Logger();
-	/*!
-	 * @brief Logger default destructor
-	 */
-	~Logger();
+namespace Logger {
+
 	/*!
 	 * @brief Starts the logging feature
 	 */
-	void log();
-private:
-	bool logging;	///< If true the stream std::clog will be redirected to the log file
-};
+	void startLoggers();
+	/*!
+	 *
+	 */
+	void endLoggers();
+	std::ofstream commands;
+	std::ofstream body;
+	std::ofstream see;
+	std::ofstream hear;
+	std::ofstream fullstate;
+
+}
 
 } // End namespace Phoenix
 /*! @} */

@@ -28,23 +28,18 @@
 
 namespace Phoenix {
 
-Messages::Messages() {
+namespace Messages {
 
+std::list<Message> _messages;
+
+std::list<Message> messages() {
+	return _messages;
 }
 
-Messages::~Messages() {
-
+void setMessages(std::list<Message> new_messages) {
+	_messages = new_messages;
 }
 
-std::vector<Message> Messages::getMessages() {
-	return messages;
-}
-
-void Messages::setMessages(std::vector<Message> new_messages) {
-	messages.clear();
-	for (std::vector<Message>::iterator it = new_messages.begin(); it != new_messages.end(); ++it) {
-		messages.push_back(*it);
-	}
 }
 
 }

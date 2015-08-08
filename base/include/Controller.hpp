@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
+ * Copyright (c) 2013 - 2015 Nelson I. Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -19,7 +19,7 @@
  *
  * @file Controller.hpp
  * 
- * @author Nelson Ivan Gonzalez
+ * @author Nelson I. Gonzalez
  */
 
 #ifndef CONTROLLER_HPP_
@@ -35,13 +35,11 @@
  */
 namespace Phoenix {
 
-class Commands;
-
 /*!
  * @typedef
  * @brief Function signatures for play modes function
  */
-typedef void (* execute)(WorldModel, std::vector<Message>, Commands*);
+typedef void (* execute)(WorldModel, std::vector<Message>);
 /*!
  * @typedef
  * @brief Function signature for setup and finish function
@@ -55,24 +53,13 @@ typedef void (* control)(void);
  * The Controller is in charge of instantiation of the rest of the inner 
  * objects using the user's parameters. 
  */
-class Controller {
-public:
-	static char AGENT_TYPE; ///< p = Player, g = Goalie, c = Coach, t = Trainer
-	/*!
-	 * @brief Controller default Constructor
-     * @param teamName User Defined Team Name
-     * @param agentType see AGENT_TYPE
-     * @param hostname ip address or host
-     */
-	Controller(std::string teamName, char agentType, std::string hostname);
-	/*!
-	 * @brief Controller default Destructor
-     */
-	~Controller();
+namespace Controller {
+
+	char AGENT_TYPE; ///< p = Player, g = Goalie, c = Coach, t = Trainer
 	/*!
 	 * @brief The main connection, should be called before anything else in Phoenix2D
      */
-	void connect();
+	void connect(std::string tema_name, std::string hostname);
 	/*!
 	 * @return Connection status
      */
@@ -117,10 +104,8 @@ public:
 	/*! @brief Disconnect from the server
      */
 	void disconnect();
-private:
-	bool connected;         ///< Connection status
-	std::string hostname;	///< Host to connect
-};
+
+}
 
 } // End namespace Phoenix
 /*! @} */

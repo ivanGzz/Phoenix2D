@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
+ * Copyright (c) 2013 - 2015 Nelson I. Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -19,7 +19,7 @@
  *
  * @file Controller.cpp
  *
- * @author Nelson Ivan Gonzalez
+ * @author Nelson I. Gonzalez
  */
 
 #include "Controller.hpp"
@@ -44,6 +44,8 @@
 
 namespace Phoenix {
 
+namespace Controller {
+
 std::map<std::string, execute> player;
 std::map<std::string, execute> goalie;
 std::map<std::string, execute> coach;
@@ -51,40 +53,10 @@ std::string script = "";
 control setup;
 control finish;
 
-static World* _world = 0;
-static Commands* _commands = 0;
-static Reader* _reader = 0;
-static Parser* _parser = 0;
-static Messages* _messages = 0;
-static Self* _self = 0;
-static Server* _server = 0;
-static Connect* _connect = 0;
-std::string team_name = "";
-
-char Controller::AGENT_TYPE = 'p';
-
-Controller::Controller(std::string teamName, char agentType, std::string hostname) {
-	this->hostname = hostname;
-	Controller::AGENT_TYPE = agentType;
-	team_name = teamName;
-	connected = false;
-}
-
-Controller::~Controller() {
-	if (_world)    delete _world;
-	if (_commands) delete _commands;
-	if (_reader)   delete _reader;
-	if (_parser)   delete _parser;
-	if (_messages) delete _messages;
-	if (_self)     delete _self;
-	if (_server)   delete _server;
-	if (_connect)  delete _connect;
-}
-
-void Controller::connect() {
+void connect(std::string tema_name, std::string hostname) {
 	std::string message = "(init " + team_name + " (version 15.1)";
 	int port = 6000;
-	switch (Controller::AGENT_TYPE) {
+	switch (AGENT_TYPE) {
 	case 'g':
 		message = message + " (goalie))";
 		break;
@@ -102,9 +74,9 @@ void Controller::connect() {
 	}
 	boost::regex error("\\(error\\s+([\\w\\_]+)\\)"); //i.e (error no_more_team_or_player_or_goalie)
 	boost::cmatch match;
-	_connect = new Connect(hostname, port);
-	_connect->sendMessage(message);
-	message = _connect->receiveMessage();
+	Connect::connect(hostname, port);
+	Connect::sendMessage(message);
+	message = Connect::receiveMessage();
 	if (boost::regex_match(message.c_str(), match, error)) {
 		std::cerr << "Controller::connect() -> " << match[1] << std::endl; //Error
 		return;
@@ -113,7 +85,7 @@ void Controller::connect() {
 		boost::regex coach_response("\\(init\\s+(l|r)\\s+ok\\)");
 		std::string side;
 		int unum = 0;
-		switch (Controller::AGENT_TYPE) {
+		switch (AGENT_TYPE) {
 		case 't':
 			side = "trainer";
 			break;
@@ -137,79 +109,78 @@ void Controller::connect() {
 			}
 			break;
 		}
-		message = _connect->receiveMessage(); //server_params
-		_server = new Server(message);
-		message = _connect->receiveMessage(); //player_params
-		_self = new Self(message, team_name, unum, side);
+		message = Connect::receiveMessage(); //server_params
+		Server::parseServerParams(message);
+		Self::TEAM_NAME = team_name;
+		Self::UNIFORM_NUMBER = unum;
+		Self::SIDE = side;
+		message = Connect::receiveMessage(); //player_params
+		Self::parsePlayerParams(message);
 		// We need to load the team configs before all the objects are created, and after the Self object is
 		// created since it needs the Self object
-		if (Controller::AGENT_TYPE == 'p' || Controller::AGENT_TYPE == 'g') {
+		/*if (Controller::AGENT_TYPE == 'p' || Controller::AGENT_TYPE == 'g') {
 			Configs::loadTeam("");
-		}
+		}*/
 		for (int i = 0; i < Self::PLAYER_TYPES; i++) {
-			message = _connect->receiveMessage(); //player_type
-			_self->addPlayerType(message);
+			message = Connect::receiveMessage(); //player_type
+			Self::addPlayerType(message);
 		}
 		switch (Controller::AGENT_TYPE) {
 		case 'p':
 			//A player use synchronized view as default
-			_connect->sendMessage("(synch_see)");
+			Connect::sendMessage("(synch_see)");
 			break;
 		case 'g':
-			_connect->sendMessage("(synch_see)");
+			Connect::sendMessage("(synch_see)");
 			break;
 		case 'c':
 			//The coaches receive visual information every cycle
-			_connect->sendMessage("(eye on)");
+			Connect::sendMessage("(eye on)");
 			break;
 		default:
-			_connect->sendMessage("(eye on)");
-			_connect->sendMessage("(ear on)");
+			Connect::sendMessage("(eye on)");
+			Connect::sendMessage("(ear on)");
 			break;
 		}
-		_world = new World();
-		_messages = new Messages();
-		_parser = new Parser(_self, _world, _messages);
-		_reader = new Reader(_connect, _parser);
-		_reader->start();
+		Parser::init();
+		Reader::start();
 		connected = true;
 	}
 }
 
-bool Controller::isConnected() {
+bool isConnected() {
 	return connected;
 }
 
-void Controller::registerSetupFunction(control function) {
+void registerSetupFunction(control function) {
 	setup = function;
 }
 
-void Controller::registerFinishFunction(control function) {
+void registerFinishFunction(control function) {
 	finish = function;
 }
 
-void Controller::registerPlayerFunction(std::string play_mode, execute function) {
+void registerPlayerFunction(std::string play_mode, execute function) {
 	player.insert(std::make_pair(play_mode, function));
 }
 
-void Controller::registerGoalieFunction(std::string play_mode, execute function) {
+void registerGoalieFunction(std::string play_mode, execute function) {
 	goalie.insert(std::make_pair(play_mode, function));
 }
 
-void Controller::registerCoachFunction(std::string play_mode, execute function) {
+void registerCoachFunction(std::string play_mode, execute function) {
 	coach.insert(std::make_pair(play_mode, function));
 }
 
-void Controller::registerTrainerScript(std::string trainer) {
+void registerTrainerScript(std::string trainer) {
 	script = trainer;
 }
 
-void Controller::run() {
+void run() {
 	if (!connected) {
 		std::cerr << "Controller::run() -> must connect before run" << std::endl;
 		return;
 	}
-	_commands = new Commands(_connect);
 	if (AGENT_TYPE == 't') {
 		Trainer trainer(_commands);
 		if (trainer.load(script)) {
@@ -245,7 +216,7 @@ void Controller::run() {
 			play_mode.onPreExecute();
 			std::map<std::string, execute>::iterator it = ai->find(current_play_mode);
 			if (it != ai->end()) {
-				play_mode.onExecute(_world->getWorldModel(), _messages->getMessages(), it->second);
+				play_mode.onExecute(World::getWorldModel(), Messages::getMessages(), it->second);
 			} else {
 				std::cerr << "Controller::run(): " << current_play_mode << " handler not found" << std::endl;
 			}
@@ -255,15 +226,17 @@ void Controller::run() {
 	}
 }
 
-void Controller::reconnect() {
+void reconnect() {
 
 }
 
-void Controller::disconnect() {
+void disconnect() {
 	if (isConnected()) {
-		_reader->stop();
+		Reader::stop();
 	}
 	connected = false;
+}
+
 }
 
 }

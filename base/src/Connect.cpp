@@ -1,6 +1,6 @@
 /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
- * Copyright (c) 2013, 2014 Nelson Ivan Gonzalez
+ * Copyright (c) 2013 - 2014 Nelson I. Gonzalez
  *
  * This file is part of Phoenix2D.
  *
@@ -19,7 +19,7 @@
  *
  * @file Connect.cpp
  *
- * @author Nelson Ivan Gonzalez
+ * @author Nelson I. Gonzalez
  */
 
 #include <sys/socket.h>
@@ -33,6 +33,8 @@
 
 namespace Phoenix {
 
+namespace Connect {
+
 struct Socket {
 	int socketfd;
 	struct sockaddr_in server;
@@ -40,7 +42,7 @@ struct Socket {
 
 Socket sock;
 
-void connectToServer(std::string host, int port) {
+bool connect(std::string host, int port) {
 	int sockfd;
 	struct sockaddr_in server_addr;
 	struct hostent *host_0;
@@ -49,7 +51,7 @@ void connectToServer(std::string host, int port) {
 		host_0 = (struct hostent *)gethostbyname(host.c_str());
 		if (host_0 == 0) {
 			std::cerr << "Connect::connectToServer(const char *, int) -> can not get host" << std::endl; //Error: can not get host
-			return;
+			return false;
 		} else {
 			addr_ptr = (struct in_addr *)(*host_0->h_addr_list);
 			host = inet_ntoa(*addr_ptr);
@@ -58,7 +60,7 @@ void connectToServer(std::string host, int port) {
 	sockfd = socket(AF_INET, SOCK_DGRAM, 0);
 	if (sockfd < 0) {
 		std::cerr << "Connect::connectToServer(const char *, int) -> can not open socket" << std::endl; //Error: can not open socket
-		return;
+		return false;
 	}
 	bzero(&server_addr, sizeof(server_addr));
 	server_addr.sin_family = AF_INET;
@@ -66,29 +68,22 @@ void connectToServer(std::string host, int port) {
 	sock.server.sin_addr.s_addr = htonl(INADDR_ANY);
 	if (bind(sockfd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
 		std::cerr << "Connect:connectToServer(const char *, int) -> can not bind host" << std::endl; //Error: can not bind host
-		return;
+		return false;
 	}
 	sock.socketfd = sockfd;
 	bzero(&sock.server, sizeof(sock.server));
 	sock.server.sin_family = AF_INET;
 	sock.server.sin_port = htons(port);
 	sock.server.sin_addr.s_addr = inet_addr(host.c_str());
+	return true;
 }
 
-Connect::Connect(std::string host, int port) {
-	connectToServer(host, port);
-}
-
-Connect::~Connect() {
-	if (Configs::VERBOSE) std::cout << "Connect out" << std::endl;
-}
-
-void Connect::disconnect() {
+void disconnect() {
 	shutdown(sock.socketfd, SHUT_RDWR);
 	close(sock.socketfd);
 }
 
-bool Connect::sendMessage(std::string msg) {
+bool sendMessage(std::string msg) {
 	int size = msg.size() + 1;
 	if (sendto(sock.socketfd, msg.c_str(), size, 0, (struct sockaddr *)&sock.server, sizeof(sock.server)) < 0) {
 		std::cerr << "Connect::sendMessage(string) -> error sending message" << std::endl;
@@ -97,7 +92,7 @@ bool Connect::sendMessage(std::string msg) {
 	return true;
 }
 
-std::string Connect::receiveMessage() {
+std::string receiveMessage() {
 	char msg[4096];
 	socklen_t servlen;
 	struct sockaddr_in serv_addr;
@@ -111,6 +106,8 @@ std::string Connect::receiveMessage() {
 		}
 		return std::string(msg);
 	}
+}
+
 }
 
 }
